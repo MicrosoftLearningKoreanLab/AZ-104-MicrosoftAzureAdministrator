@@ -1,137 +1,138 @@
 ---
 lab:
-    title: '03a - Manage Azure resources by Using the Azure Portal'
-    module: 'Module 03 - Azure Administration'
+    title: '03a - Azure 포털을 사용해 Azure 리소스 관리'
+    module: '모듈 03 - Azure 관리'
 ---
 
-# Lab 03a - Manage Azure resources by Using the Azure Portal
-# Student lab manual
+# 랩 03a - Azure 포털을 사용해 Azure 리소스 관리
 
-## Lab scenario
+# 학생 실습 매뉴얼
 
-You need to explore the basic Azure administration capabilities associated with provisioning resources and organizing them based on resource groups, including moving resources between resource groups. You also want to explore options for protecting disk resources from being accidentally deleted, while still allowing for modifying their performance characteristics and size.
+## 랩 시나리오
 
-## Objectives
+리소스 그룹을 기반으로 리소스 프로비저닝 및 구성과 관련된 기본 Azure 관리 기능을 탐색합니다. 리소스 그룹 간의 리소스 이동 실습을 포함합니다. 또한 디스크 리소스가 실수로 삭제되지 않도록 보호하는 옵션도 살펴볼 것입니다. 또한, 디스크의 성능 특성과 크기를 수정하는 작업을 수행합니다.
 
-In this lab, we will:
+## 목표
 
-+ Task 1: Create resource groups and deploy resources to resource groups
-+ Task 2: Move resources between resource groups
-+ Task 3: Implement and test resource locks
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-## Instructions
++ 작업 1: 리소스 그룹을 생성하고 리소스를 배포
++ 작업 2: 리소스 그룹 간 리소스 이동
++ 작업 3: 리소스 잠금 구현 및 테스트
 
-### Exercise 1
+## 설명
 
-#### Task 1: Create resource groups and deploy resources to resource groups
+### 연습 1
 
-In this task, you will use the Azure portal to create resource groups and create a disk in the resource group.
+#### 작업 1: 리소스 그룹을 생성하고 리소스를 배포
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+이 작업에서는 리소스 그룹 및 디스크를 생성하기 위해 Azure 포털을 사용할 것입니다. 
 
-1. Search for and select **Resource groups**. 
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. On the **Resource groups** blade, click **+ Add** and create a resource group with the following settings:
+1. **리소스 그룹**을 찾아 선택한다. 
 
-    |Setting|Value|
+1. **리소스 그룹** 블레이드에서, **+ 추가** 를 선택하고 다음 설정을 사용하여 리소스 그룹을 만든다.
+
+    |설정|값|
     |---|---|
-    |Subscription| the name of the Azure subscription you will use in this lab |
-    |Resource Group| **az104-03a-rg1**|
-    |Region| the name of any Azure region available in the subscription you will use in this lab |
+    |구독| 이 랩에서 사용할 구독의 이름 |
+    |리소스 그룹| **az104-03a-rg1**|
+    |영역| 이 랩에서 사용할 구독에서 이용 가능한 지역 |
 
-1. Click **Review + Create** and then click **Create**.
+1. **검토 + 만들기**를 클릭한 다음 **만들기**를 클릭한다.
 
-1. In the Azure portal, search for and select **Disks**, click **+ Add**, and specify the following settings:
+1. Azure 포털에서 **Disks**를 검색하고 선택한다. **+ 추가**를 클릭하고, 다음 설정을 사용한다.
 
-    |Setting|Value|
+    |설정|값|
     |---|---|
-    |Subscription| the name of the Azure subscription where you created the resource group |
-    |Resource Group| **az104-03a-rg1** |
-    |Disk name| **az104-03a-disk1** |
-    |Region| the name of the Azure region where you created the resource group |
-    |Availability zone| **None** |
-    |Source type| **None** |
+    |구독| 리소스 그룹을 만든 구독의 이름 |
+    |리소스 그룹| **az104-03a-rg1** |
+    |디스크 이름| **az104-03a-disk1** |
+    |지역| 리소스 그룹을 만들었던 지역 |
+    |가용성 영역| **없음** |
+    |원본 유형| **없음** |
 
-    >**Note**: When creating a resource, you have the option of creating a new resource group or using an existing one.
+    >**참고**: 리소스를 만들 때, 새로운 리소스 그룹을 만들거나 기존의 리소스 그룹을 선택해 사용할 수 있습니다.
 
-1. Change the disk type and size to **Standard HDD** and **32 GiB**, respectively.
+1. 디스크 유형과 크기를 각각 **표준 HDD** 와 **32 GiB**로 변경한다.
 
-1. Click **Review + Create** and then click **Create**.
+1. **검토 + 만들기**를 클릭하고 **만들기**를 클릭한다.
 
-    >**Note**: Wait until the disk is created. This should take less than a minute.
+    >**참고**: 디스크가 다 만들어질 때까지 기다리세요. 이 작업은 1분 미만 소요됩니다. 
 
-#### Task 2: Move resources between resource groups 
+#### 작업 2: 리소스 그룹 간 리소스 이동
 
-In this task, we will move the disk resource you created in the previous task to a new resource group. 
+이 작업에서는 이전 작업에서 만든 디스크 리소스를 새로운 리소스 그룹으로 이동할 것입니다. 
 
-1. Search for and select **Resource groups**. 
+1. **리소스 그룹**을 찾아 선택한다. 
 
-1. On the **Resource groups** blade, click the entry representing the **az104-03a-rg1** resource group you created in the previous task.
+1. **리소스 그룹** 블레이드에서, 이전 작업에서 만들었던 **az104-03a-rg1** 리소스 그룹을 클릭한다.
 
-1. From the **Overview** blade of the resource group, in the list of resource group resources, select the entry representing the newly created disk, click **Move** in the toolbar, and, in the drop-down list, select **Move to another resource group**.
+1. 리소스 그룹의 **개요** 블레이드에서 앞서 이전 작업에서 만들었던 디스크 리소스의 체크박스를 선택한다. 리소스 그룹 툴바의 **이동**을 클릭한 뒤, 드롭다운 리스트에서 **다른 리소스 그룹으로 이동**을 선택한다.
 
-    >**Note**: This method allows you to move multiple resources at the same time. 
+    >**참고**: 이 방법은 여러 리소스를 한 번에 옮기는 작업을 지원합니다.
 
-1. On the **Move resources** blade, click **Create a new group**.
+1. **리소스 이동** 블레이드에서 **새 그룹 만들기**를 클릭한다.
 
-1. In the **Resource group** text box, type **az104-03a-rg2**, select the checkbox **I understand that tools and scripts associated with moved resources will not work until I update them to use new resource IDs**, and click **OK**.
+1. **리소스 그룹** 텍스트 입력 칸에 **az104-03a-rg2**를 입력한다. **새 리소스 ID를 사용하려는 경우 이동한 리소스와 연결된 도구 및 스크립트를 업데이트하지 않으면 정상적으로 작동하지 않는다는 점을 이해합니다**의 체크 박스를 선택하고, **확인**을 클릭한다.
 
-    >**Note**: Do not wait for the move to complete but instead proceed to the next task. The move might take about 10 minutes. You can determine that the operation was completed by monitoring activity log entries of the source or target resource group. Revisit this step once you complete the next task.
+    >**참고**: 작업이 완료될 때까지 기다리지 말고 다음 작업으로 넘어갑니다. 리소스 이동은 약 10분이 소요됩니다. 소스 또는 대상 리소스 그룹의 작업 로그 항목을 모니터링하여 작업이 완료되었는지 확인할 수 있습니다. 다음 작업을 완료한 후 모니터링 하십시오.
 
-#### Task 3: Implement resource locks
+#### 작업 3: 리소스 잠금 구현 및 테스트
 
-In this task, you will apply a resource lock to an Azure resource group containing a disk resource.
+이 작업에서는 디스크 리소스를 포함하는 Azure 리소스 그룹에 대해 리소스 잠금을 적용할 것입니다.
 
-1. In the Azure portal, search for and select **Disks**, click **+ Add**, and specify the following settings:
+1. Azure 포털에서 **Disks**를 검색하고 선택한다. **+ 추가**를 클릭하고, 다음 설정을 사용한다.
 
-    |Setting|Value|
+    |설정|값|
     |---|---|
-    |Subscription| the name of the subscription you are using in this lab |
-    |Resource Group| the name of a new resource group **az104-03a-rg3** |
-    |Disk name| **az104-03a-disk2** |
-    |Region| the name of the Azure region where you created the other resource groups in this lab |
-    |Availability zone| **None** |
-    |Source type| **None** |
+    |구독| 이 랩에서 사용하고 있는 구독의 이름 |
+    |리소스 그룹| 새로 만들기 **az104-03a-rg3** |
+    |디스크 이름| **az104-03a-disk2** |
+    |지역| 이 랩에서 다른 리소스 그룹을 만들었던 지역의 이름 |
+    |가용성 영역| **없음** |
+    |원본 유형| **없음** |
 
-1. Set the disk type and size to **Standard HDD** and **32 GiB**, respectively.
+1. 디스크 유형과 크기를 각각 **표준 HDD** 와 **32 GiB**로 변경한다.
 
-1. Click **Review + Create** and then click **Create**.
+1. *검토 + 만들기**를 클릭하고 **만들기**를 클릭한다.
 
-1. In the Azure portal, search for and select **Resource groups**. 
+1. Azure 포털에서 **리소스 그룹**을 찾아 선택한다. 
 
-1. In the list of resource groups, click the entry representing the **az104-03a-rg3** resource group.
+1. 리소스 그룹 목록에서 **az104-03a-rg3** 리소스 그룹을 찾아 클릭한다.
 
-1. On the **az104-03a-rg3** resource group blade, click **Locks** and add a lock with the following settings:
+1. **az104-03a-rg3** 리소스 그룹 블레이드에서 **잠금**을 클릭한다. **+ 추가**를 클릭하고, 다음 설정을 사용한다.
 
-    |Setting|Value|
+    |설정|값|
     |---|---|
-    |Lock name| **az104-03a-delete-lock** |
-    |Lock type| **Delete** |
+    |잠금 이름| **az104-03a-delete-lock** |
+    |잠금 유형| **삭제** |
 
-1. On the **az104-03a-rg3** resource group blade, click **Overview**, in the list of resource group resources, select the entry representing the disk you created earlier in this task, and click **Delete** in the toolbar. 
+1. **az104-03a-rg3** 리소스 그룹 블레이드에서 **개요**를 클릭한다. 리소스 리스트에서, 이전 작업에서 생성했던 디스크의 체크 박스를 선택한다. 툴바에 있는 **삭제**를 클릭한다. (**태그 지정** 오른쪽에 있는 **삭제**를 클릭한다)
 
-1. When prompted **Do you want to delete all the selected resources?**, in the **Confirm delete** text box, type **yes** and click **Delete**.
+1. **선택한 모든 리소스를 삭제하시겠습니까?**라는 창이 뜨면, 텍스트 상자에 **예**를 입력하고 **삭제**를 클릭한다.
 
-1. You should see an error message, notifying about the failed delete operation. 
+1. 삭제 실패를 알리는 에러 메시지를 확인할 수 있다.
 
-    >**Note**: As the error message states, this is expected due to the delete lock applied on the resource group level.
+    >**참고**: 오류 메시지에 따르면, 리소스 그룹 수준에 적용된 삭제 잠금으로 인해 생긴 오류입니다.
 
-1. Navigate back to the list of resources of the **az104-03a-rg3** resource group and click the entry representing the **az104-03a-disk2** resource. 
+1. 다시 **az104-03a-rg3** 리소스 그룹으로 돌아가서 **az104-03a-disk2** 디스크 리소스를 클릭한다.
 
-1. On the **az104-03a-disk2** blade, in the **Settings** section, click **Configuration**, set the disk type and size to **Premium SSD** and **64 GiB**, respectively, and save the change. Verify that the change was successful.
+1. **az104-03a-disk2** 블레이드에서 **설정** 섹션에 있는 **구성**을 클릭하고, 스토리지 유형과 크기를 각각 **프리미엄 SSD**와 **64 GiB**로 설정하고 저장한다. 변경에 성공한 것을 확인한다. 
 
-    >**Note**: This is expected, since the resource group-level lock applies to delete operations only. 
+    >**참고**: 리소스 그룹 수준 잠금은 삭제에 대해서만 적용했기 때문에 예상된 결과입니다.
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Do not delete resources you deployed in this lab. You will be using them in the next lab of this module. Remove only the resource lock you created in this lab.
+   >**참고**: 이 랩에서 사용한 리소스를 지우지 마십시오. 이 모듈에 대한 다음 랩에서 사용할 예정입니다. 이 랩에서 만들었던 리소스 잠금만 삭제하십시오.
 
-1. Navigate to the **az104-03a-rg3** resource group blade, display its **Locks** blade, and remove the lock **az104-03a-delete-lock** by clicking the **Delete** link on the right-hand side of the **Delete** lock entry.
+1. **az104-03a-rg3** 리소스 그룹 블레이드에서 **잠금**을 클릭한다. **az104-03a-delete-lock** 오른편의 **삭제**를 클릭해 잠금을 삭제한다. 
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Created resource groups and deployed resources to resource groups
-- Moved resources between resource groups
-- Implemented and tested resource locks
+- 리소스 그룹을 만들고 리소스를 배포했습니다.
+- 리소스 그룹 간 리소스를 이동했습니다.
+- 리소스 잠금을 구현하고 테스트했습니다.
