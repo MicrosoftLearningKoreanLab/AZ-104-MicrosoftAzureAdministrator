@@ -1,58 +1,59 @@
 ---
 lab:
-    title: '03b - Manage Azure resources by Using ARM Templates'
-    module: 'Module 03 - Azure Administration'
+    title: '03b - ARM 템플릿을 사용해 Azure 리소스 관리'
+    module: '모듈 03 - Azure 관리'
 ---
 
-# Lab 03b - Manage Azure resources by Using ARM Templates
-# Student lab manual
+# 랩 03b -  ARM 템플릿을 사용해 Azure 리소스 관리
 
-## Lab scenario
-Now that you explored the basic Azure administration capabilities associated with provisioning resources and organizing them based on resource groups by using the Azure portal, you need to carry out the equivalent task by using Azure Resource Manager templates.
+# 학생 실습 매뉴얼
 
-## Objectives
+## 랩 시나리오
+Azure 포털을 사용하여 리소스 그룹을 기반으로 리소스를 프로비저닝하고 구성하는 기본 Azure 관리 기능을 탐색했으므로, Azure Resource Manager 템플릿을 사용하여 동등한 작업을 수행합니다.
 
-In this lab, you will:
+## 목표
 
-+ Task 1: Review an ARM template for deployment of an Azure managed disk
-+ Task 2: Create an Azure managed disk by using an ARM template
-+ Task 3: Review the ARM template-based deployment of the managed disk
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-## Instructions
++ 작업 1: Azure 관리 디스크를 배포하기 위한 ARM 템플릿 검토
++ 작업 2: ARM 템플릿을 사용하여 Azure 관리 디스크 생성
++ 작업 3: ARM 템플릿 기반 관리 디스크 배포 검토
 
-### Exercise 1
+## 설명
 
-#### Task 1: Review an ARM template for deployment of an Azure managed disk
+### 연습 1
 
-In this task, you will create an Azure disk resource by using an Azure Resource Manager template.
+#### 작업 1: Azure 관리 디스크를 배포하기 위한 ARM 템플릿 검토
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+이 작업에서는 Azure 리소스 매니저 템플릿을 사용해 Azure 디스크 리소스를 만듭니다.
 
-1. In the Azure portal, search for and select **Resource groups**. 
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. In the list of resource groups, click **az104-03a-rg1**.
+1. Azure 포털에서 **리소스 그룹**을 찾아 클릭한다. 
 
-1. On the **az104-03a-rg1** resource group blade, in the **Settings** section, click **Deployments**.
+1. 리소스 그룹 목록에서 **az104-03a-rg1**를 클릭한다.
 
-1. On the **az104-03a-rg1 - Deployments** blade, click the first entry in the list of deployments and then click **Template**.
+1. **az104-03a-rg1** 리소스 그룹 블레이드의 **설정** 섹션에서 click **배포**를 클릭한다.
 
-    >**Note**: Review the content of the template and note that you have the option to download it to the local computer, add it to the library, and re-deploy it.
+1. **az104-03a-rg1 - 배포** 블레이드의 배포 목록 중 첫 번째 요소를 클릭하고 **템플릿**을 클릭한다.
 
-1. Click **Download** and save the compressed file containing the template and parameters files to the **Downloads** folder on your lab computer.
+    >**참고**: 템플릿의 내용을 검토하십시오. 로컬 컴퓨터에 다운로드하거나, 라이브러리에 추가하거나, 다시 배포할 수 있는 옵션을 확인하십시오.
 
-1. Extract the content of the downloaded file into the **Downloads** folder on your lab computer.
+1. **다운로드**를 클릭하고 템플릿과 파라미터 파일이 담긴 압축 파일을 랩 컴퓨터의 **다운로드** 폴더에 저장한다. 
 
-    >**Note**: These files are also available as **\\Allfiles\\Labs\\03\\az104-03b-md-template.json** and **\\Allfiles\\Labs\\03\\az104-03b-md-parameters.json**
+1. 랩 컴퓨터의 **다운로드** 폴더에 압축을 해제한다. 
 
-#### Task 2: Create an Azure managed disk by using an ARM template
+    >**참고**: **\\Allfiles\\Labs\\03\\az104-03b-md-template.json** 와 **\\Allfiles\\Labs\\03\\az104-03b-md-parameters.json**을 사용할 수도 있습니다.
 
-1. In the Azure portal, search for and select **Template deployment (deploy using custom templates)**.
+#### 작업 2: ARM 템플릿을 사용하여 Azure 관리 디스크 생성
 
-1. On the **Custom deployment** blade, click **Build your own template in the editor**.
+1. Azure 포털에서 **Template deployment (deploy using custom templates)**를 검색하고 클릭한다.
 
-1. On the **Edit template** blade, click **Load file** and upload the template file you downloaded in the previous step.
+1. **사용자 지정 배포** 블레이드에서 **편집기에서 사용자 고유의 템플릿을 배포합니다**를 클릭한다.
 
-1. Within the editor pane, remove the following lines:
+1. **템플릿 편집** 블레이드에서 click **파일 로드**를 클릭하고 이전 단계에서 다운로드했던 템플릿 파일을 업로드한다. 
+
+1. 편집기 창에서 다음 줄을 제거한다.
 
    ```json
    "sourceResourceId": {
@@ -77,57 +78,57 @@ In this task, you will create an Azure disk resource by using an Azure Resource 
    "osType": "[parameters('osType')]"
    ```
 
-    >**Note**: These parameters are removed since they are not applicable to the current deployment. In particular, sourceResourceId, sourceUri, osType, and hyperVGeneration parameters are applicable to creating an Azure disk from an existing VHD file.
+    >**참고**: 이 파라미터는 현재 배포에 적용되지 않으므로 제거합니다. 특히 sourceResourceId, sourceUri, osType 및 hyperVGeneration 파라미터는 기존 VHD 파일에서 Azure 디스크를 생성하는 데 적용할 수 있습니다.
 
-1. In addition, remove the trailing comma from the following line:
+1. 추가로, 다음 줄 마지막의 쉼표를 제거한다. 
 
    ```json
    "diskSizeGB": "[parameters('diskSizeGb')]",
    ```
 
-    >**Note**: This is necessary to account for the syntax rules of JSON-based ARM templates.
+    >**Note**: 이 작업은 JSON 기반 ARM 템플릿의 구문 규칙을 준수하기 위해 필요합니다.
 
-1. Save the changes.
+1. 변경 사항을 저장한다.
 
-1. Back on the **Custom deployment** blade, click **Edit parameters**. 
+1. **사용자 지정 배포** 블레이드로 돌아가 **매개 변수 편집**을 클릭한다. 
 
-1. On the **Edit parameters** blade, click **Load file** and upload the parameters file **\\Allfiles\\Labs\\03\\az104-03b-md-parameters.json** and save the changes.
+1. **매개 변수 편집** 블레이드에서 **파일 로드**를 클릭한다. 파라미터 파일 **\\Allfiles\\Labs\\03\\az104-03b-md-parameters.json**을 업로드하고 변경 사항을 저장한다.
 
-1. Back on the **Custom deployment** blade, specify the following settings:
+1. **사용자 지정 배포** 블레이드로 돌아가 다음 설정을 사용한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- |--- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | the name of a new resource group **az104-03b-rg1** |
-    | Location | the name of any Azure region available in the subscription you are using in this lab |
+    | 구독 | 이 랩에서 사용하는 구독의 이름 |
+    | 리소스 그룹 | 새로만들기 **az104-03b-rg1** |
+    | 위치 | 이 랩에서 사용할 구독에서 이용 가능한 위치 |
     | Disk Name | **az104-03b-disk1** |
-    | Location | accept the default value |
+    | Location | 기본 값 사용 |
     | Sku | **Standard_LRS** |
     | Disk Size Gb | **32** |
     | Create Option | **empty** |
 
-1. Select the checkbox **I agree to the terms and conditions stated above** and click **Purchase**.
+1. **위에 명시된 사용 약관에 동의함** 체크박스를 선택하고 **구매**를 클릭한다.
 
-1. Verify that the deployment completed successfully.
+1. 배포에 성공했는지 확인한다.
 
-#### Task 3: Review the ARM template-based deployment of the managed disk
+#### 작업 3: ARM 템플릿 기반 관리 디스크 배포 검토
 
-1. In the Azure portal, search for and select **Resource groups**. 
+1. Azure 포털에서 **리소스 그룹**을 찾아 클릭한다. 
 
-1. In the list of resource groups, click **az104-03b-rg1**.
+1. 목록에서 **az104-03b-rg1** 리소스 그룹을 클릭한다.
 
-1. On the **az104-03b-rg1** resource group blade, in the **Settings** section, click **Deployments**.
+1. **az104-03b-rg1** 리소스 블레이드에서 **설정** 섹션의 **배포**를 클릭한다.
 
-1. From the **az104-03b-rg1 - Deployments** blade, click the first entry in the list of deployments and review the content of the **Input** and **Template** blades.
+1. **az104-03b-rg1 - 배포** 블레이드에서 배포 목록의 첫 번째 요소를 클릭하고 **입력**과 **템플릿** 블레이드의 내용을 검토한다.
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Do not delete resources you deployed in this lab. You will reference them in the next lab of this module.
+   >**참고**: 이 랩에서 배포한 리소스를 삭제하지 마십시오. 이 모듈의 다음 랩에서 참조할 것입니다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Reviewed an ARM template for deployment of an Azure managed disk
-- Created an Azure managed disk by using an ARM template
-- Reviewed the ARM template-based deployment of the managed disk
+- Azure 관리 디스크 배포를 위한 ARM 템플릿을 검토했습니다.
+- ARM 템플릿을 사용해 Azure 관리 디스크를 배포했습니다.
+- ARM 템플릿 기반 관리 디스크의 배포를 검토했습니다.
