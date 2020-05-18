@@ -1,55 +1,55 @@
 ---
 lab:
-    title: '07 - Manage Azure storage'
-    module: 'Module 07 - Azure Storage'
+    title: '07 - Azure 스토리지 관리'
+    module: '모듈 07 - Azure 스토리지'
 ---
 
-# Lab 07 - Manage Azure Storage
-# Student lab manual
+# 랩 07 - Azure 스토리지 관리
 
-## Lab scenario
+# 학생 실습 매뉴얼
 
-You need to evaluate the use of Azure storage for storing files residing currently in on-premises data stores. While majority of these files are not accessed frequently, there are some exceptions. You would like to minimize cost of storage by placing less frequently accessed files in lower-priced storage tiers. You also plan to explore different protection mechanisms that Azure Storage offers, including network access, authentication, authorization, and replication. Finally, you want to determine to what extent Azure Files service might be suitable for hosting your on-premises file shares.
+## 랩 시나리오
 
-## Objectives
+ 현재 온프레미스 데이터 저장소에 상주하는 파일을 저장하기 위한 Azure 스토리지의 사용을 평가해야 합니다. 대부분의 파일에는 자주 접속하지 않지만, 몇 가지 예외가 있습니다. 액세스 빈도가 낮은 파일을 저가의 스토리지 계층에 배치하여 스토리지 비용을 최소화할 수 있습니다. 또한 네트워크 액세스, 인증, 권한 부여 및 복제를 포함하여 Azure Storage가 제공하는 다양한 보호 메커니즘에 대해서도 살펴보십시오. 마지막으로 Azure Files 서비스가 온프레미스 파일 공유를 호스팅하는 데 얼마나 적합한지 확인하고자 합니다.
 
-In this lab, you will:
+## 목표
 
-+ Task 1: Provision the lab environment
-+ Task 2: Create and configure Azure Storage accounts 
-+ Task 3: Manage blob storage
-+ Task 4: Manage authentication and authorization for Azure Storage
-+ Task 5: Create and configure an Azure Files shares
-+ Task 6: Manage network access for Azure Storage
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-## Instructions
++ 작업 1: 랩 환경 프로비전
++ 작업 2: Azure 스토리지 계정 생성 및 구성
++ 작업 3: Blob 스토리지 관리
++ 작업 4: Azure 스토리지에 대한 인증 및 권한 부여 관리
++ 작업 5: Azure Files 공유 생성 및 구성
++ 작업 6: Azure 스토리지에 대한 네트워크 접근 관리
 
-### Exercise 1
+## 설명
 
-#### Task 1: Provision the lab environment
+### 연습 1
 
-In this task, you will deploy an Azure virtual machine that you will use later in this lab. 
+#### 작업 1: 랩 환경 프로비전
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+이 작업에서는 이 랩에서 사용할 Azure 가상 머신을 배포할 것입니다. 
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. Azure 포털 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 실행한다.
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다.  
 
-1. In the toolbar of the Cloud Shell pane, click the **Upload/Download files** icon, in the drop-down menu, click **Upload** and upload the files **\\Allfiles\\Module_07\\az104-07-vm-template.json** and **\\Allfiles\\Module_07\\az104-07-vm-parameters.json** into the Cloud Shell home directory.
+    >**참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오. 
 
-1. From the Cloud Shell pane, run the following to create the resource group that will be hosting the virtual machine (replace the `[Azure_region]` placeholder with the name of an Azure region where you intend to deploy the Azure virtual machine):
+1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 선택한다. 드롭다운 메뉴에서 **업로드**를 클릭하고, **\\Allfiles\\Module_07\\az104-07-vm-template.json** 과 **\\Allfiles\\Module_07\\az104-07-vm-parameters.json** 을 Cloud Shell의 홈 디렉토리에 업로드한다.
+
+1. Cloud Shell 창에서 다음 명령을 실행하여 가상 머신에 호스팅 될 리소스 그룹을 만든다. (`[Azure_region]` 부분을 Azure 가상 머신을 배포할 Azure region의 이름으로 대체한다)
 
    ```pwsh
    $location = '[Azure_region]'
-
    $rgName = 'az104-07-rg0'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to deploy thef virtual machine by using the uploaded template and parameter files:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드된 템플릿과 파라미터 파일을 사용해 가상 머신을 배포한다.
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -59,194 +59,196 @@ In this task, you will deploy an Azure virtual machine that you will use later i
       -AsJob
    ```
 
-    >**Note**: Do not wait for the deployments to complete, but proceed to the next task. 
+    >**참고**: 배포가 끝날 때까지 기다리지 않고 다음 작업을 진행합니다.
 
-1. Close the Cloud Shell pane.
+1. Cloud Shell 창을 닫는다. 
 
-#### Task 2: Create and configure Azure Storage accounts 
 
-In this task, you will create and configure an Azure Storage account. 
+#### 작업 2: Azure 스토리지 계정 생성 및 구성 
 
-1. In the Azure portal, search for and select **Storage accounts**, and then click **+ Add**. 
+이 작업에서는 Azure 스토리지 계정을 만들고 구성합니다.
 
-1. On the **Basics** tab of the **Create storage account** blade, specify the following settings (leave others with their default values):
+1. Azure 포털에서 **스토리지 계정**을 검색하고 선택한다. **+ 추가**를 클릭한다. 
 
-    | Setting | Value | 
+1.  **스토리지 계정 만들기** 블레이드의 **기본 사항** 탭을 다음과 같이 설정한다. (다른 값은 기본 설정을 사용한다)
+
+    | 설정 | 값 | 
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | the name of a new resource group **az104-07-rg1** |
-    | Storage account name | any globally unique name between 3 and 24 in length consisting of letters and digits |
-    | Location | the name of an Azure region where you can create an Azure Storage account  |
-    | Performance | **Standard** |
-    | Account kind | **Storage (general purpose v1)** |
-    | Replication | **Read-access geo-redundant storage (RA-GRS)** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 리소스 그룹 | 새로만들기 **az104-07-rg1**  |
+    | 스토리지 계정 이름 | 문자와 숫자로 구성된 고유한 이름 (3~24 글자) |
+    | 위치 | Azure 스토리지를 만들 수 있는 Azure region 이름 |
+    | 성능 | **표준** |
+    | 계정 종류 | **Storage (범용 v1)** |
+    | 복제 | **RA-GRS(읽기 액세스 지역 중복 스토리지)** |
 
-1. Click **Next: Networking >**, on the **Networking** tab of the **Create storage account** blade, review the available options, accept the default option **Public endpoint (all networks}** and click **Next: Advanced >**.
+1. **다음: 네트워킹 >** 을 클릭한다. **스토리지 계정 만들기** 블레이드의 **네트워킹** 탭에서 가능한 옵션을 검토하고 기본 값인 **공용 엔드포인트 (모든 네트워크)** 를 사용한다. **다음: 고급 >** 을 클릭한다.
 
-1. On the **Advanced** tab of the **Create storage account** blade, review the available options, accept the defaults, click **Review + Create**, wait for the validation process to complete and click **Create**.
+1. **스토리지 계정 만들기** 블레이드의 **고급** 탭에서 가능한 옵션을 확인하고 기본 값을 사용한다. **검토 + 만들기**를 클릭하고, 유효성 검사가 끝나면 **만들기**를 클릭한다.
 
-    >**Note**: Wait for the Storage account to be created. This should take about 2 minutes.
+    >**참고**: 스토리지 계정이 만들어질 때까지 기다리십시오. 이 과정은 약 2분 정도 소요됩니다.
 
-1. On the deployment blade, click **Go to resource** to display the Azure Storage account blade. 
+1. 배포 블레이드에서 **리소스로 이동**을 클릭해 Azure 스토리지 계정 블레이드로 이동한다.
 
-1. On the Azure Storage account blade, in the **Settings** section, click **Configuration**.
+1. 스토리지 계정 블레이드 **설정** 섹션의 **구성**을 클릭한다.
 
-1. Click **Upgrade** to change the Storage account kind from **Storage (general purpose v1)** to **StorageV2 (general purpose v2)**. 
+1. **업그레이드**를 클릭해 **Storage (범용 v1)** 를 **StorageV2 (범용 v2)** 로 업그레이드 한다. 
 
-1. On the **Upgrade storage account** blade, review the warning stating that the upgrade is permanent and will result in billing charges, in the **Confirm upgrade** text box, type the name of the storage account, and click **Upgrade**. 
+1. **스토리지 계정 업그레이드** 블레이드에서 업그레이드는 영구적이며 청구 비용이 변경된다는 경고 메시지를 검토한다. **업그레이드 확인** 텍스트 박스에 스토리지 계정의 이름을 입력하고 **업그레이드**를 클릭한다. 
 
-    > **Note**: You have the option to set the account kind to **StorageV2 (general purpose v2)** at the provisioning time. The previous two steps were meant to illustrate that you also have the option to upgrade existing general purpose v1 accounts.
+    > **참고**: 프로비저닝할 때 **StorageV2 (범용 v2)** 로 계정을 설정할 수도 있습니다. 기존 범용 v1 계정을 범용 v2로 업그레이드할 수 있는 옵션을 확인하기 위한 실습입니다. 
 
-    > **Note**: **StorageV2 (general purpose v2)** offers a number of features, such as, for example, access tiering, not available in with general purpose v1 accounts.
+    > **참고**: **StorageV2 (범용 v2)** 는 범용 v1 계정에서는 제공하지 않는 access tiering(액세스 계층) 등 다양한 기능을 제공합니다. 
 
-    > **Note**: Review the other configuration options, including **Access tier (default)**, currently set to **Hot**, which you can change, the **Performance**, currently set to **Standard**, which can be set only during account provisioning, and the **Identity-based Directory Service for Azure File Authentication**, which requires Azure Active Directory Domain Services.
+    > **참고**: 구성 옵션을 검토합니다. **핫**으로 설정된 **액세스 계층 (기본값)**, **표준**으로 설정된 **성능**, Azure 액티브 디렉토리 도메인 서비스가 필요한 **파일 공유에 대한 ID 기반 액세스**가 있습니다. 액세스 계층에 대한 설정은 바꿀 수 있지만, 성능은 계정을 프로비저닝 하는 단계에서만 설정할 수 있습니다.
 
-1. On the Storage account blade, in the **Settings** section, click **Geo-replication** and note the secondary location. Click the **View all** link under the **Storage endpoints** label and review the **Storage account endpoints** blade.  
+1. 스토리지 계정 블레이드의 **설정** 섹션에서 **지역에서 복제**를 클릭하고 보조 지역(secondary location)을 확인한다. **스토리지 엔드포인트** 라벨 밑의 **모두 보기** 링크를 클릭하고, **스토리지 계정 엔드포인트** 블레이드를 검토한다.
 
-    > **Note**: As expected, the **Storage account endpoints** blade contains both primary and secondary endpoints.
+    > **참고**: **스토리지 계정 엔드포인트** 블레이드에서는 기본 엔드포인트와 보조 엔드포인트를 확인할 수 있다. 
 
-1. Switch to the Configuration blade of the Storage account and, in the **Replication** drop-down list, select **Geo-redundant storage (GRS)** and save the change.
+1. 스토리지 계정의 **구성** 블레이드로 돌아간다. **복제** 드롭 다운 리스트에서 **GRS(지역 중복 스토리지)** 를 선택하고 변경 사항을 저장한다. 
 
-1. Switch back to the **Geo-replication** blade and note that the secondary location is still specified. Click the **View all** link under the **Storage endpoints** label and review the **Storage account endpoints** blade.  
+1. **지역에서 복제** 블레이드로 돌아가서 보조 지역이 여전히 명시되어 있는 것을 확인한다. **스토리지 엔드포인트** 라벨 밑의 **모두 보기** 링크를 클릭하고, **스토리지 계정 엔드포인트** 블레이드를 검토한다.
 
-    > **Note**: As expected, the **Storage account endpoints** blade contains only primary endpoints.
+    > **참고**: 이제 **스토리지 계정 엔드포인트** 블레이드에서는 기본 엔드포인트만 확인할 수 있습니다. 
 
-1. Display again the **Configuration** blade of the Storage account, in the **Replication** drop-down list select **Locally redundant storage (LRS)** and save the change.
+1. 스토리지 계정의 **구성** 블레이드로 돌아간다. **복제** 드롭다운 리스트에서 **LRS(로컬 중복 스토리지)** 를 선택하고 변경 사항을 저장한다. 
 
-1. Switch back to the **Geo-replication** blade and note that, at this point, the Storage account has only the primary location.
+1. **지역에서 복제** 블레이드로 돌아가서, 이번에는 스토리지 계정에 기본 지역만 명시되어 있는 것을 확인한다. 
 
-1. Display again the **Configuration** blade of the Storage account and set **Access tier (default)** to **Cool**.
+1. 스토리지 계정의 **구성** 블레이드로 돌아가서 **액세스 계층 (기본)** 을 **쿨**로 설정한다.
 
-    > **Note**: The cool access tier is optimal for data which is not accessed frequently.
+    > **참고**: 쿨 액세스 계층은 자주 접근하지 않는 데이터에 적합합니다.
 
-#### Task 3: Manage blob storage
+#### 작업 3:  Blob 스토리지 관리
 
-In this task, you will create a blob container and upload a blob into it. 
+이 작업에서는 Blob 컨테이너를 만들고 blob을 업로드합니다.
 
-1. On the Storage account blade, in the **Blob service** section, click **Containers**.
+1. 스토리지 계정 블레이드에 **Blob service** 섹션의 **컨테이너**를 클릭한다.
 
-1. Click **+ Container** and create a container with the following settings: 
+1. **+ 컨테이너**를 클릭하고, 다음 설정을 사용한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-07-container**  |
-    | Public access level | **Private (no anonymous access)** |
+    | 이름 | **az104-07-container**  |
+    | 공용 액세스 수준 | **프라이빗 (익명 액세스 없음)** |
 
-1. In the list of containers, click **az104-07-container** and then click **Upload**.
+1. 컨테이너 목록에서 **az104-07-container**를 클릭하고, **업로드**를 클릭한다.
 
-1. Browse to **\\Allfiles\\Module_07\\LICENSE** on your lab computer and click **Open**.
+1. 랩 컴퓨터에서 **\\Allfiles\\Module_07\\LICENSE**를 찾아, **열기**를 클릭한다.
 
-1. On the **Upload blob** blade, expand the **Advanced** section and specify the following settings (leave others with their default values):
+1. **Blob 업로드** 블레이드에서 **고급** 섹션을 확장하고 다음 설정을 사용한다.(다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    |설정 | 값 |
     | --- | --- |
-    | Authentication type | **Account key**  |
-    | Blob type | **Block blob** |
-    | Block size | **4 MB** |
-    | Access tier | **Hot** |
-    | Upload to folder | **licenses** |
+    | 인증 형식 | **계정 키**  |
+    | Blob 유형 | **블록 Blob** |
+    | 블록 크기 | **4 MB** |
+    | 액세스 계층 | **핫** |
+    | 폴더에 업로드 | **licenses** |
 
-    > **Note**: Access tier can be set for individual blobs.
+    > **참고**: 개인 Blob을 위한 액세스 계층을 설정할 수 있습니다. 
 
-1. Click **Upload**.
+1. **업로드**를 클릭한다.
 
-    > **Note**: Note that the upload automatically created a subfolder named **licenses**.
+    > **참고**: 자동으로 생성된 **licenses**라는 하위 폴더에 저장됩니다.
 
-1. Back on the **az104-07-container** blade, click **licenses** and then click **LICENSE**.
+1. **az104-07-container** 블레이드로 돌아가 **licenses**를 클릭하고, **LICENSE**를 클릭힌다.
 
-1. On the **licenses/LICENSE** blade, review the available options. 
+1. **licenses/LICENSE** 블레이드에서 가능한 옵션을 검토한다.
 
-    > **Note**: You have the option to download the blob, change its access tier (it is currently set to **Cool**), acquire a lease, which would change its lease status to **Locked** (it is currently set to **Unlocked**) and protect the blob from being modified or deleted, as well as assign custom metadata (by specifying an arbitrary key and value pairs). You also have the ability to **Edit** the file directly within the Azure portal interface, without downloading it first. You can also create snapshots, as well as generate a SAS token (you will explore this option in the next task). 
+    > **참고**: Blob 다운로드, 액세스 수준 변경(현재 **Cool**로 설정됨), 임대 수준을 **잠금** 상태로 바꾸는 임대 가져오기(현재 **잠금 해제됨**으로 설정됨), 수정이나 삭제로부터 Blob을 보호, 커스텀 메타데이터 할당(임의의 키-값 쌍을 지정) 등 옵션이 있습니다. 다운로드하지 않고 Azure 포털에서 파일을 직접 **수정**할 수 있습니다. 스냅샷을 만들거나 SAS 토큰을 생성할 수도 있습니다. (이 옵션을 다음 작업에서 검토합니다 )
+    
 
-#### Task 4: Manage authentication and authorization for Azure Storage
+#### 작업 4: Azure 스토리지에 대한 인증 및 권한 부여 관리
 
-In this task, you will configure authentication and authorization for Azure Storage.
+이 작업에서는 Azure 스토리지에 대한 인증 및 권한 부여를 관리합니다.
 
-1. On the **licenses/LICENSE** blade, on the **Overview** tab, click **Copy to clipboard** button next to the **URL** entry.
+1. **licenses/LICENSE** 블레이드 **개요** 탭에서 **URL** 옆의 **클립보드로 복사** 버튼을 클릭한다. 
 
-1. Open another browser window by using InPrivate mode and navigate to the URL you copied in the previous step. 
+1. InPrivate 모드를 사용하여 다른 브라우저 창을 열고 이전 단계에서 복사한 URL로 이동한다.
 
-1. You should be presented with an XML-formatted message stating **ResourceNotFound**.
+1. **ResourceNotFound**로 시작하는 XML 형식 메시지가 표시되어야 한다.
 
-    > **Note**: This is expected, since the container you created has the public access level set to **Private (no anonymous access)**.
+    > **참고**: 생성한 컨테이너의 공용 액세스 수준을 **프라이빗 (익명 액세스 없음)** 으로 설정했기 때문입니다.
 
-1. Close the InPrivate mode browser window, return to the browser window showing the **licenses/LICENSE** blade of the Azure Storage container, and switch to the the **Generate SAS** tab.
+1. Close the InPrivate 모드 브라우저 창을 닫고, Azure Storage 컨테이너의 **licenses/LICENSE** 블레이드로 돌아간다. **SAS 생성** 탭을 클릭한다.
 
-1. On the **Generate SAS** tab of the **licenses/LICENSE** blade, specify the following settings (leave others with their default values):
+1. **licenses/LICENSE** 블레이드의 **SAS 생성** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Permissions | **Read** |
-    | Start date | yesterday's date |
-    | Start time | current time |
-    | Expiry date | tomorrow's date |
-    | Expiry time | current time |
-    | Allowed IP addresses | leave blank |
-    | Allowed protocols | **HTTP** |
-    | Signing key | **Key 1** |
+    | 권한 | **읽기** |
+    | 시작 날짜 | 어제 날짜 |
+    | 시작 시간 | 현재 시간 |
+    | 만료 날짜 | 내일 날짜 |
+    | 만료 시간 | 현재 시간 |
+    | 허용되는 IP 주소 | - |
+    | 허용되는 프로토콜 | **HTTP** |
+    | 서명 키 | **키 1** |
 
-1. Click **Generate SAS token and URL**.
+1. **SAS 토큰 및 URL 생성**을 클릭한다.
 
-1. Click **Copy to clipboard** button next to the **Blob SAS URL** entry.
+1. **Blob SAS URL** 주소 옆의 entry. **클립보드로 복사** 버튼을 클릭한다.
 
-1. Open another browser window by using InPrivate mode and navigate to the URL you copied in the previous step. 
+1. InPrivate 모드를 사용하여 다른 브라우저 창을 열고 이전 단계에서 복사한 URL로 이동한다. 
 
-    > **Note**: If you are using Microsoft Edge or Internet Explorer, you should be presented with the **The MIT License (MIT)** page. If you are using Chrome or Firefox, you should be able to view the content of the file by downloading it and opening it with Notepad.
+    > **참고**: Microsoft Edge 또는 Internet Explorer를 사용하는 경우 **The MIT License (MIT)** 페이지가 표시되어야 합니다. Chrome 또는 Firefox를 사용하는 경우 파일을 다운로드하여 메모장으로 열면 파일의 내용을 볼 수 있습니다.
 
-    > **Note**: This is expected, since now your access is authorized based on the newly generated the SAS token. 
+    > **참고**: 새로 생성된 SAS 토큰을 기반으로 액세스 권한이 부여되었으므로 이는 예상된 결과입니다.
 
-    > **Note**: Save the blob SAS URL. You will need it later in this lab.
+    > **참고**: Blob SAS URL을 저장해두십시오. 이 랩의 나중 단계에 사용할 것입니다.
 
-1. Close the InPrivate mode browser window, return to the browser window showing the **licenses/LICENSE** blade of the Azure Storage container, and from there, navigate back to the **az104-07-container** blade.
+1. Close the InPrivate 모드 브라우저 창을 닫고, Azure Storage 컨테이너의 **licenses/LICENSE** 블레이드로 돌아간다. **az104-07-container** 블레이드를 찾아간다.
 
-1. Click the **Switch to the Azure AD User Account** link next to the **Authentication method** label.
+1. **인증 방법** 라벨 옆의 **Azure AD 사용자 계정으로 전환**을 클릭한다.
 
-    > **Note**: At this point, you no longer have access to the container. 
+    > **참고**: 이 시점에서는 더 이상 컨테이너에 접근할 수 없습니다.
 
-1. On the **az104-07-container** blade, click **Access Control (IAM)**.
+1. **az104-07-container** 블레이드에서 **액세스 제어 (IAM)** 를 클릭합니다.
 
-1. In the **Add a role assignment** section, click **Add**.
+1. **역할 할당 추가** 섹션에서 **추가**를 클릭합니다.
 
-1. On the **Add role administrator** blade, specify the following settings:
+1. **Add role administrator역할 할당 추가** 블레이드에서 다음 설정을 사용한다. 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Role | **Storage Blob Data Owner** |
-    | Assign access to | **Azure AD user, group, or service principal** |
-    | Select | the name of your user account |
+    | 역할 | **Storage Blob 데이터 소유자** |
+    | 다음에 대한 액세스 할당 | **Azure AD 사용자, 그룹, 또는 서비스 보안 주체** |
+    | 선택 | 사용자 계정 이름 |
 
-1. Save the change and return to the **Overview** blade of the **az104-07-container** container and verify that you can access to container again.
+1. 변경 사항을 저장하고 **az104-07-container**의 **개요** 블레이드로 돌아간다. 다시 컨테이너에 접근할 수 있는 것을 확인한다.
 
-#### Task 5: Create and configure an Azure Files shares
+#### 작업 5: Azure Files 공유 생성 및 구성
 
-In this task, you will create and configure Azure Files shares.
+이 작업에서는 Azure Files 공유를 생성하고 구성합니다.
 
-   > **Note**: Before you start this task, verify that the virtual machine you provisioned in the first task of this lab is running.
+   > **참고**: 이 작업을 시작하기 전에 이 랩의 첫 번째 작업에서 프로비전한 가상 머신이 작동하고 있는지 확인하십시오.
 
-1. In the Azure portal, navigate back to the blade of the storage account you created in the first task of this lab and, in the **File service** section, click **File shares**.
+1. Azure 포털에서 이 랩의 첫 번째 작업에서 생성한 스토리지 계정의 블레이드를 찾는다. **파일 서비스** 섹션에서 **파일 공유**를 클릭한다.
 
-1. Click **+ File share** and create a file share with the following settings:
+1. **+ 파일 공유**를 클릭하고 다음 설정을 사용해 파일 공유를 생성한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-07-share** |
-    | Quota | **1024** |
+    | 이름 | **az104-07-share** |
+    | 할당량 | **1024** |
 
-1. Click the newly created file share and click **Connect**.
+1. 새로 만든 파일 공유를 클릭하고, **연결**을 클릭한다.
 
-1. On the **Connect** blade, ensure that the **Windows** tab is selected, and click **Copy to clipboard**.
+1. **연결** 블레이드에서 **윈도우** 탭이 선택된 것을 확인하고 **클립보드로 복사**를 클릭한다.
 
-1. In the Azure portal, search for and select **Virtual machines**, and, in the list of virtual machines, click **az104-07-vm0**.
+1. Azure 포털에서 **가상 머신**을 찾아 선택하고, **az104-07-vm0**을 클릭한다.
 
-1. On the **az104-07-vm0** blade, in the **Operations** section, click **Run command**. 
+1. **az104-07-vm0** 블레이드에서 **작업** 섹션의 **실행 명령**을 클릭한다. 
 
-1. On the **az104-07-vm0 - Run command** blade, click **RunPowerShellScript**. 
+1. **az104-07-vm0 - 실행 명령** 블레이드에서 **RunPowerShellScript**를 클릭한다. 
 
-1. On the **Run Command Script** blade, paste the script you copied earlier in this task into the **PowerShell Script** pane and click **Run**.
+1. **실행 명령 스크립트** 블레이드에서, **PowerShell 스크립트**에 이전 단계에서 복사한 스크립트를 붙여넣기한고 **실행**을 클릭한다.
 
-1. Verify that the script completed successfully. 
+1. 스크립트 실행이 성공했는지 확인한다.
 
-1. Replace the content of the **PowerShell Script** pane with the following script and click **Run**:
+1. **PowerShell 스크립트** 창의 콘텐츠를 다음 내용으로 바꾸고 **실행**을 클릭한다. 
 
    ```pwsh
    New-Item -Type Directory -Path 'Z:\az104-07-folder'
@@ -254,74 +256,76 @@ In this task, you will create and configure Azure Files shares.
    New-Item -Type File -Path 'Z:\az104-07-folder\az-104-07-file.txt'
    ```
 
-1. Verify that the script completed successfully. 
+1. 스크립트 실행이 성공했는지 확인한다.
 
-1. Navigate back to the **az104-07-share** file share blade, click **Refresh**, and verify that **az104-07-folder** appears in the list of folders. 
+1. **az104-07-share** 파일 공유 블레이트로 돌아간다. **새로 고침**을 클릭하고, 폴더 목록에서 **az104-07-folder**를 확인한다.
 
-1. Click **az104-07-folder** and verify that **az104-07-file.txt** appears in the list of files.
+1. **az104-07-folder**를 클릭하고, **az104-07-file.txt**가 파일 목록에 있는지 확인한다. 
 
-#### Task 6: Manage network access for Azure Storage
+#### 작업 6: Azure 스토리지에 대한 네트워크 접근 관리
 
-In this task, you will configure network access for Azure Storage.
+이 작업에서는 Azure 스토리지에 대한 네트워크 접근을 구성합니다.
 
-1. In the Azure portal, navigate back to the blade of the storage account you created in the first task of this lab and, in the **Settings** section, click **Firewalls and virtual networks**.
+1. Azure 포털에서 이 랩의 첫 번째 작업에서 생성한 스토리지 계정의 블레이드를 찾는다. **설정** 섹션의 **방화벽 및 가상 네트워크**를 클릭한다.
 
-1. Click the **Selected networks** option and review the configuration settings that become available once this option is enabled.
+1. **선택한 네트워크** 옵션을 클릭하고, 옵션을 허용하면 이용 가능해지는 구성 설정을 검토한다. 
 
-    > **Note**: You can use these settings to configure direct connectivity between Azure virtual machines on designated subnets of virtual networks and the storage account by using service endpoints. 
+    > **참고**: 이 설정을 통해 서비스 엔드포인트를 사용하여 가상 네트워크의 지정된 서브넷에 있는 Azure 가상 시스템과 스토리지 계정 간의 직접 연결을 구성할 수 있습니다.
 
-1. Click the checkbox **Add your client IP address** and save the change.
+1. **클라이언트 IP 주소 추가** 체크박스를 클릭하고 변경 사항을 저장한다. 
 
-1. Open another browser window by using InPrivate mode and navigate to the blob SAS URL you generated in the previous task. 
+1. 모드를 사용하여 다른 브라우저 창을 열고 이전 작업에서 복사한 blob SAS URL로 이동한다. 
 
-1. You should be presented with the content of **The MIT License (MIT)** page.
+1. **The MIT License (MIT)** 페이지가 표시된다.
 
-    > **Note**: This is expected, since you are connecting from your client IP address.
+    > **참고**: 클라이언트 IP 주소로 연결하고 있으므로 예상된 결과입니다.
 
-1. Close the InPrivate mode browser window, return to the browser window showing the **licenses/LICENSE** blade of the Azure Storage container, and open Azure Cloud Shell pane.
+1. InPrivate 모드 브라우저 창을 닫고, Azure 스토리지 컨테이너의 **licenses/LICENSE** 블레이드로 돌아간다. 
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털에서 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 시작한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다.
 
-1. From the Cloud Shell pane, run the following to attempt downloading of the LICENSE blob from the **az104-07-container** container of the storage account (replace the `[blob SAS URL]` placeholder with the blob SAS URL you generated in the previous task):
+1. Cloud Shell 창에서 다음 명령을 실행하여 스토리지 계정의 **az104-07-container** 컨테이너로부터 LICENSE Blob을 다운로드한다. (`[blob SAS URL]` 부분을 이전 작업에서 생성한 blob SAS URL로 대체한다)
+
 
    ```pwsh
    Invoke-WebRequest -URI '[blob SAS URL]'
    ```
-1. Verify that the download attempt failed. 
 
-    > **Note**: You should receive the message stating **AuthorizationFailure: This request is not authorized to perform this operation**. This is expected, since you are connecting from the IP address assigned to an Azure VM hosting the Cloud Shell instance.
+1. 다운로드에 실패한 것을 확인한다.
 
-1. Close the Cloud Shell pane.
+    > **참고**: **AuthorizationFailure: This request is not authorized to perform this operation** 메시지를 확인하십시오. Cloud Shell 인스턴스를 호스팅하는 Azure VM에 할당된 IP 주소에 연결했기 때문에 예상된 결과입니다.
 
-#### Clean up resources
+1. Cloud Shell 창을 닫는다.
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+#### 리소스 삭제
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
+   >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
+
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-07*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-07*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Provisioned the lab environment
-- Created and configured Azure Storage accounts 
-- Managed blob storage
-- Managed authentication and authorization for Azure Storage
-- Created and configured an Azure Files shares
-- Managed network access for Azure Storage
+- 랩 환경을 프로비전했습니다.
+- Azure 스토리지 계정을 만들고 구성했습니다. 
+- Blob 스토리지를 관리했습니다.
+- Azure 스토리지에 대한 인증 및 권한 부여를 관리했습니다.
+- Azure Files 공유를 생성하고 구성했습니다.
+- Azure 스토리지를 위한 네트워크 접근을 관리했습니다.
