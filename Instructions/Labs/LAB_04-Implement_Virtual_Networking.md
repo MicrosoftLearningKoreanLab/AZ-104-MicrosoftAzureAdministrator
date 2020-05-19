@@ -1,80 +1,81 @@
 ---
 lab:
-    title: '04 - Implement Virtual Networking'
-    module: 'Module 04 - Virtual Networking'
+    title: '04 - 가상 네트워킹 구현'
+    module: '모듈 04 - 가상 네트워킹'
 ---
 
-# Lab 04 - Implement Virtual Networking
+# 랩 04 - 가상 네트워킹 구현
 
-# Student lab manual
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-You need to explore Azure virtual networking capabilities. To start, you plan to create a virtual network in Azure that will host a couple of Azure virtual machines. Since you intend to implement network-based segmentation, you will deploy them into different subnets of the virtual network. You also want to make sure that their private and public IP addresses will not change over time. To comply with Contoso security requirements, you need to protect public endpoints of Azure virtual machines accessible from Internet. Finally, you need to implement DNS name resolution for Azure virtual machines both within the virtual network and from Internet.
+Azure 가상 네트워킹 기능을 살펴보십시오. 우선 Azure에 가상 네트워크를 생성하여 Azure 가상 시스템 몇 개를 호스팅할 것입니다. 네트워크 기반 분할을 구현할 예정이므로 가상 네트워크의 다른 서브넷에 배포하십시오. 또한 시간이 지남에 따라 개인 IP 주소와 공용 IP 주소가 변경되지 않도록 하십시오. Contoso 보안 요구 사항을 준수하려면 인터넷에서 액세스할 수 있는 Azure 가상 시스템의 공용 엔드포인트를 보호해야 합니다. 마지막으로 가상 네트워크와 인터넷에서 모두 Azure 가상 시스템에 DNS 이름 확인을 구현해야 합니다.
 
-## Objectives
+## 목표
 
-In this lab, you will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Create and configure a virtual network
-+ Task 2: Deploy virtual machines into the virtual network
-+ Task 3: Configure private and public IP addresses of Azure VMs
-+ Task 4: Configure network security groups
-+ Task 5: Configure Azure DNS for internal name resolution
-+ Task 6: Configure Azure DNS for external name resolution
++ 작업 1: 가상 네트워크 생성 및 구성
++ 작업 2: 가상 네트워크에 가상 머신 배포
++ 작업 3: Azure 가상 머신의 사설 및 공용 IP 주소 설정
++ 작업 4: 네트워크 보안 그룹 구성
++ 작업 5: 내부 이름 확인을 위한 Azure DNS 구성
++ 작업 6: 외부 이름 확인을 위한 Azure DNS 구성
 
-## Instructions
+## 설명
 
-### Exercise 1
+### 연습 1
 
-#### Task 1: Create and configure a virtual network
+#### 작업 1: 가상 네트워크 생성 및 구성
 
-In this task, you will create a virtual network with multiple subnets by using the Azure portal
+이 작업에서는 Azure 포털을 사용해 다수의 서브넷이 있는 가상 네트워크를 만듭니다.
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. In the Azure portal, search for and select **Virtual networks**, and, on the **Virtual networks** blade, click **+ Add**.
+1. Azure 포털에서 **가상 네트워크**를 찾아 선택한다. **가상 네트워크** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. Create a virtual network with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 가상 네트워크를 만든다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you will be using in this lab |
-    | Resource Group | the name of a new resource group **az104-04-rg1** |
-    | Name | **az104-04-vnet1** |
-    | Region | the name of any Azure region available in the subscription you will use in this lab |
-    | IPv4 address space | **10.40.0.0/20** |
-    | Subnet name | **subnet0** |
-    | Subnet address range | **10.40.0.0/24** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 리소스 그룹 | 새로만들기 **az104-04-rg1** |
+    | 이름 | **az104-04-vnet1** |
+    | 지역 | 이 랩에서 사용할 구독에서 이용 가능한 지역의 이름 |
+    | IPv4 주소 공간 | **10.40.0.0/20** |
+    | 서브넷 이름 | **subnet0** |
+    | 서브넷 주소 범위 | **10.40.0.0/24** |
 
-    >**Note:** Wait for the virtual network to be provisioned. This should take less than a minute.
+    >**참고:** 가상 네트워크가 프로비전될 때까지 기다리십시오. 이 작업은 1분 미만 소요됩니다.
 
-1. On the **Virtual networks** blade, click **Refresh** and click **az104-04-vnet1**.
+1. **가상 네트워크** 블레이드에서 **새로 고침**을 하고, **az104-04-vnet1**을 클릭한다.
 
-1. On the **az104-04-vnet1** virtual network blade, click **Subnets** and then click **+ Subnet**. 
+1. **az104-04-vnet1** 가상 네트워크 블레이드에서 **서브넷**을 선택하고, **+ 서브넷**을 클릭한다. 
 
-1. Create a subnet with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 서브넷을 만든다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
     | Name | **subnet1** |
-    | Address range (CIDR block) | **10.40.1.0/24** |
-    | Network security group | **None** |
-    | Route table | **None** |
+    | 주소 범위 (CIDR 블록) | **10.40.1.0/24** |
+    | 네트워크 보안 그룹 | **없음** |
+    | 경로 테이블 | **없음** |
 
-#### Task 2: Deploy virtual machines into the virtual network
+#### 작업 2:  가상 네트워크에 가상 머신 배포
 
-In this task, you will deploy Azure virtual machines into different subnets of the virtual network by using an ARM template
+이 작업에서는 ARM 템플릿을 사용하여 Azure 가상 머신을 가상 네트워크의 다른 서브넷에 배포할 것입니다.
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. 포털에서 오른쪽 위의 이아콘을 클릭하여 **Azure Cloud Shell**을 시작한다. 
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다.
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+    >**참고**: **참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오. 
 
-1. In the toolbar of the Cloud Shell pane, click the **Upload/Download files** icon, in the drop-down menu, click **Upload** and upload the files **\\Allfiles\\Labs\\04\\az104-04-vms-template.json** and **\\Allfiles\\Labs\\04\\az104-04-vms-parameters.json** into the Cloud Shell home directory.
 
-    >**Note**: You might need to upload each file separately.
+1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 선택한다. 드롭다운 메뉴에서 **업로드**를 클릭하고, **\\Allfiles\\Labs\\04\\az104-04-vms-template.json** 와 **\\Allfiles\\Labs\\04\\az104-04-vms-parameters.json** 을 Cloud Shell의 홈 디렉토리에 업로드한다. 
+
+    >**참고**: 파일을 각각 업로드 하십시오.
 
 1. From the Cloud Shell pane, run the following to deploy two virtual machines by using the template and parameter files you uploaded:
 
