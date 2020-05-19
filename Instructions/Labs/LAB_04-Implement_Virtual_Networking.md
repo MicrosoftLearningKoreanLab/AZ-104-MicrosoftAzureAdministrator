@@ -77,7 +77,7 @@ Azure 가상 네트워킹 기능을 살펴보십시오. 우선 Azure에 가상 �
 
     >**참고**: 파일을 각각 업로드 하십시오.
 
-1. From the Cloud Shell pane, run the following to deploy two virtual machines by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일을 이용해 두 개의 가상 머신을 배포한다.
 
    ```pwsh
    $rgName = 'az104-04-rg1'
@@ -88,247 +88,250 @@ Azure 가상 네트워킹 기능을 살펴보십시오. 우선 Azure에 가상 �
       -TemplateParameterFile $HOME/az104-04-vms-parameters.json
    ```
 
-    >**Note**: This method of deploying ARM templates uses Azure PowerShell. You can perform the same task by running the equivalent Azure CLI command **az deployment create** (for more information, refer to [Deploy resources with Resource Manager templates and Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli).
+    >**참고**: ARM 템플릿 배포 방법은 Azure PowerShell을 이용합니다. Azure CLI의 **az deployment create** 명령을 이용하여 동일한 작업을 할 수 있습니다. (추가 정보는 [Deploy resources with Resource Manager templates and Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli) 를 참고하십시오)
 
-    >**Note**: Wait for the deployment to complete before proceeding to the next task. This should take about 2 minutes.
+    >**참고**: 다음 단계로 가기 전에 배포가 끝날 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다.
 
-1. Close the Cloud Shell pane.
+1. Cloud Shell 창을 닫는다. 
 
-#### Task 3: Configure private and public IP addresses of Azure VMs
+#### 작업 3: Azure 가상 머신의 사설 및 공용 IP 주소 설정
 
-In this task, you will configure static assignment of public and private IP addresses assigned to network interfaces of Azure virtual machines.
+이 작업에서는 Azure 가상 머신의 네트워크 인터페이스에 사설 및 공용 IP 주소를 정적으로 할당합니다. 
 
-   >**Note**: Private and public IP addresses are actually assigned to the network interfaces, which, in turn are attached to Azure virtual machines, however, it is fairly common to refer to IP addresses assigned to Azure VMs instead.
+   >**참고**:  개인 및 공용 IP 주소는 실제로 네트워크 인터페이스에 할당되며, 이는 다시 Azure 가상 머신에 연결됩니다. Azure 가상 머신에 할당된 IP 주소를 참조하는 것은 매우 일반적입니다.
+   
+1. Azure 포털에서 **리소스 그룹**을 검색하고 선택한다. **리소스 그룹** 블레이드에서 **az104-04-rg1**를 클릭한다.
 
-1. In the Azure portal, search for and select **Resource groups**, and, on the **Resource groups** blade, click **az104-04-rg1**.
+1. **az104-04-rg1** 리소스 그룹 블레이드의 리소스 리스트에서 **az104-04-vnet1**을 클릭한다.
 
-1. On the **az104-04-rg1** resource group blade, in the list of its resources, click **az104-04-vnet1**.
+1. **az104-04-vnet1** 가상 네트워크 블레이드에서 **연결된 디바이스** 섹션에서 두개의 네트워크 인터페이스 **az104-04-nic0**와 **az104-04-nic1**를 확인한다. 
 
-1. On the **az104-04-vnet1** virtual network blade, review the **Connected devices** section and verify that there are two network interfaces **az104-04-nic0** and **az104-04-nic1** attached to the virtual network.
+1. **az104-04-nic0**를 클릭하고, **az104-04-nic0** 블레이드에서 **IP 구성**을 클릭한다. 
 
-1. Click **az104-04-nic0** and, on the **az104-04-nic0** blade, click **IP configurations**. 
+    >**참고**: **ipconfig1**이 현재 동적 IP 주소로 설정되어 있는 것을 확인한다. 
 
-    >**Note**: Verify that **ipconfig1** is currently set up with a dynamic private IP address.
+1. IP 구성 리스트에서 **ipconfig1**을 클릭한다.
 
-1. In the list IP configurations, click **ipconfig1**.
+1. **ipconfig1** 블레이드에서 **할당**을 **정적**으로 바꾼다. 기본으로 설정된 **IP 주소** 값 **10.40.0.4**을 사용한다.
 
-1. On the **ipconfig1** blade, set **Assignment** to **Static**, leave the default value of **IP address** set to **10.40.0.4**.
+1. **ipconfig1** 블레이드에서 **공용 IP 주소**를 **연결**로 설정하고 **IP 주소 - 필수 설정 구성**을 클릭한다. 
 
-1. On the **ipconfig1** blade, set **Public IP address** to **Enabled** and then click **IP address - Configure required settings**. 
+1. **공용 IP 주소 선택** 블레이드에서 , click **+ 새로 만들기**를 클릭하고 다음 설정으로 새로운 공용 IP 주소를 만든다.
 
-1. On the **Choose public IP address blade**, click **+ Create new** and create a new public IP address with the following settings:
-
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-04-pip0** |
-    | SKU | **Standard** |
+    | 이름 | **az104-04-pip0** |
+    | SKU | **표준** |
 
-1. Back on the **ipconfig1** blade, save the changes.
+1. **ipconfig1** 블레이드로 돌아가서 변경 사항을 저장한다. 
 
-1. Navigate back to the **az104-04-vnet1** blade and repeat the previous six steps to change the IP address assignment of **ipconfig1** of **az104-04-nic1** to **Static** and associate **az104-04-nic1** with a new Standard SKU public IP address named **az104-04-pip1**.
+1. **az104-04-vnet1** 블레이드로 돌아가서 앞선 단계를 반복하여 **az104-04-nic1**의 **ipconfig1** IP 주소를 **정적**으로 바꾸고, **az104-04-nic1**를 새로운 **표준** SKU 공용 IP 주소 **az104-04-pip1**과 연결한다. 
 
-1. Navigate back to the **az104-04-rg1** resource group blade, in the list of its resources, click **az104-04-vm0**, and from the **az104-04-vm0** virtual machine blade, note the public IP address entry.
+1. **az104-04-rg1** 리소스 그룹 블레이드로 돌아가서 **az104-04-vm0**을 클릭한다. **az104-04-vm0** 가상 머신 블레이드에서 공용 IP 주소를 메모해둔다.
 
-1. Navigate back to the **az104-04-rg1** resource group blade, in the list of its resources, click **az104-04-vm1**, and from the **az104-04-vm1** virtual machine blade, note the public IP address entry.
+1. **az104-04-rg1** 리소스 그룹 블레이드에서 **az104-04-vm1**을 클릭한다. **az104-04-vm1** 가상 머신 블레이드에서 공용 IP 주소를 메모해둔다. 
 
-    >**Note**: You will need both IP addresses in the last task of this lab. 
+    >**참고**: 두 IP 주소를 이 랩의 마지막 단계에 사용할 예정입니다. 
 
 
-#### Task 4: Configure network security groups
+#### 작업 4: 네트워크 보안 그룹 구성
 
-In this task, you will configure network security groups in order to allow for restricted connectivity to Azure virtual machines.
+이 작업에서는 Azure 가상 머신에 제한된 연결을 허용하기 위헤 네트워크 보안 그룹을 구성할 것입니다. 
 
-1. In the Azure portal, navigate back to the **az104-04-rg1** resource group blade, and in the list of its resources, click **az104-04-vm0**.
+1. In the Azure 포털 **az104-04-rg1** 리소스 그룹 블레이드의 리소스 목록에서 **az104-04-vm0**를 클릭힌다.
 
-1. On the **az104-04-vm0** blade, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-04-vm0** 블레이드에서 **연결**을 클릭합니다. 드롭다운 메뉴에서 **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **RDP 파일 다운로드**를 클릭하고 원격 데스크톱 세션을 시작한다. 
 
-1. Note that the connection attempt fails.
+1. 연결에 실패한 것을 확인한다.
 
-    >**Note**: This is expected, because public IP addresses of the Standard SKU, by default, require that the network interfaces to which they are assigned are protected by a network security group. In order to allow Remote Desktop connections, you will create a network security group explicitly allowing inbound RDP traffic from Internet and assign it to network interfaces of both virtual machines.
+    >**참고**: 이는 표준 SKU의 공용 IP 주소가 기본적으로 할당되는 네트워크 인터페이스는 네트워크 보안 그룹에 의해 보호되어야 하기 때문입니다. 원격 데스크톱 연결을 허용하려면 인터넷에서 인바운드 RDP 트래픽을 명시적으로 허용하는 네트워크 보안 그룹을 생성하고 이를 두 가상 시스템의 네트워크 인터페이스에 할당하십시오.
 
-1. In the Azure portal, search for and select **Network security groups**, and, on the **Network security groups** blade, click **+ Add**.
+1. Azure 포털에서 **네트워크 보안 그룹**을 검색하여 선택한다. **네트워크 보안 그룹** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. Create a network security group with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 네트워크 보안 그룹을 만든다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | **az104-04-rg1** |
-    | Name | **az104-04-nsg01** |
-    | Region | the name of the Azure region where you deployed all other resources in this lab |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 리소스 그룹 | **az104-04-rg1** |
+    | 이름 | **az104-04-nsg01** |
+    | 지역 | 이 랩에서 다른 모든 리소스가 배포된 지역의 이름 |
 
-    >**Note**: Wait for the deployment to complete. This should take about 2 minutes.
+    >**참고**: 배포가 완료될 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다.
 
-1. On the deployment blade, click **Go to resource** to open the **az104-04-nsg01** network security group blade. 
+1. 배포 블레이드에서 **리소스로 이동**울 클릭하고, **az104-04-nsg01** 네트워크 보안 그룹 블레이드로 이동한다. 
 
-1. On the **az104-04-nsg01** network security group blade, in the **Settings** section, click **Inbound security rules**. 
+1. **az104-04-nsg01** 네트워크 보안 그룹 블레이드에서 network security group blade, in the **설정** 섹션의  section, click **인바운드 보안 규칙**을 클릭한다.  
 
-1. Add an inbound rule with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 인바운드 규칙을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Source | **Any** |
-    | Source port ranges | * |
-    | Destination | **Any** |
-    | Destination port ranges | **3389** |
-    | Protocol | **TCP** |
-    | Action | **Allow** |
-    | Priority | **300** |
-    | Name | **AllowRDPInBound** |
+    | 소스 | **Any** |
+    | 원본 포트 범위 | * |
+    | 대상 주소 | **Any** |
+    | 대상 포트 범위 | **3389** |
+    | 프로토콜 | **TCP** |
+    | 작업 | **허용** |
+    | 우선순위 | **300** |
+    | 이름 | **AllowRDPInBound** |
 
-1. On the **az104-04-nsg01** network security group blade, in the **Settings** section, click **Network interfaces** and then click **+ Associate**.
+1. **az104-04-nsg01** 네트워크 보안 그룹 블레이드에서 **설정** 섹션의 **네트워크 인터페이스**를 클릭하고 **+ 연결**을 클릭한다.
 
-1. Associate the **az104-04-nsg01** network security group with the **az104-04-nic0** and **az104-04-nic1** network interfaces.
+1. **az104-04-nsg01** 네트워크 보안 그룹을 네트워크 인터페이스 **az104-04-nic0** 와 **az104-04-nic1**에 연결한다.
 
-    >**Note**: It may take up to 5 minutes for the rules from the newly created Network Security Group to be applied to the Network Interface Card.
+    >**참고**: 새로 만든 네트워크 보안 그룹을 네트워크 인터페이스 카드에 적용하는 작업은 약 5분 소요됩니다.
 
-1. Navigate back to the **az104-04-vm0** virtual machine blade.
+1. **az104-04-vm0** 가상 머신 블레이드로 돌아간다.
 
-    >**Note**: Now verify that you can successfully to the target virtual machine and sign in by using the **Student** username and **Pa55w.rd1234** password.
+    >**참고**: 이제 해당 가상 머신에 사용자 이름 **Student**와 패스워드 **Pa55w.rd1234**를 이용해 연결할 수 있습니다.
 
-1. On the **az104-04-vm0** blade, click **Connect**, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-04-vm0** 블레이드에서 **연결**을 클릭하고, 드롭다운 메뉴에서 **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **Download RDP 파일 다운로드**를 클릭하여 원격 데스크톱 세션을 시작한다.  
 
-    >**Note**: This step refers to connecting via Remote Desktop from a Windows computer. On a Mac, you can use Remote Desktop Client from the Mac App Store and on Linux computers you can use an open source RDP client software.
+    >**참고**: 이 단계는 Windows 컴퓨터에서 원격 데스크톱을 통해 연결하는 방법을 설명합니다. Mac 환경에서는 Mac App Store에서 원격 데스크톱 클라이언트를 사용할 수 있으며, Linux 시스템에서는 오픈 소스 RDP 클라이언트 소프트웨어를 사용할 수 있습니다.
 
-    >**Note**: You can ignore any warning prompts when connecting to the target virtual machines.
+    >**참고**: 가상 머신에 연결할 때 나타나는 경고는 무시할 수 있습니다.
 
-1. When prompted, sign in by using the **Student** username and **Pa55w.rd1234** password.
+1. 연결되면 사용자 이름 **Student**와 **Pa55w.rd1234** 패스워드를 사용하여 로그인합니다. 
 
-    >**Note**: Leave the Remote Desktop session open. You will need it in the next task.
+    >**참고**: 데스크톱 세션을 그대로 두십시오. 다음 단계에 필요합니다.
 
-#### Task 5: Configure Azure DNS for internal name resolution
+#### 작업 5: 내부 이름 확인을 위한 Azure DNS 구성
 
-In this task, you will configure DNS name resolution within a virtual network by using Azure private DNS zones.
 
-1. In the Azure portal, search for and select **Private DNS zones** and, on the **Private DNS zones** blade, click **+ Add**.
+이 작업에서는 Azure 프라이빗 DNS 영역을 이용하여 가상 네트워크 내의 DNS 이름 확인을 구성합니다. 
 
-1. Create a private DNS zone with the following settings (leave others with their default values):
+1. Azure 포털에서  **프라이빗 DNS 영역**을 찾아 선택한다. **프라이빗 DNS 영역** 블레이드에서 **+ 추가**를 클릭한다.
 
-    | Setting | Value |
+1. 다음 설정을 사용하여 프라이빗 DNS 영역을 구성한다. (다른 값은 기본 설정을 사용한다)
+
+    | 구성 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | **az104-04-rg1** |
-    | Name | **contoso.org** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 리소스 그룹 | **az104-04-rg1** |
+    | 이름 | **contoso.org** |
 
-    >**Note**: Wait for the private DNS zone to be created. This should take about 2 minutes.
+    >**참고**: 프라이빗 DNS 영역이 만들어질 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다.
 
-1. Click **Go to resource** to open the **contoso.org** DNS private zone blade. 
+1. **리소스로 이동**을 클릭해 **contoso.org** 프라이빗 DNS 영역으로 이동한다.
 
-1. On the **contoso.org** private DNS zone blade, in the **Settings** section, click **Virtual network links**
+1. **contoso.org** 프라이빗 DNS 영역 블레이드에서 **설정** 섹션의 **가상 네트워크 링크**를 클릭한다.
 
-1. Add a virtual network link with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 가상 네트워크 링크를 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 구성 | 값 |
     | --- | --- |
-    | Link name | **az104-04-vnet1-link** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Virtual network | **az104-04-vnet1** |
-    | Enable auto registration | enabled |
+    | 링크 이름 | **az104-04-vnet1-link** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 가상 네트워크 | **az104-04-vnet1** |
+    | 자동 등록 사용 | 사용 |
 
-    >**Note:** Wait for the virtual network link to be created. This should take less than 1 minute.
+    >**참고:** 가상 네트워크 링크가 생성될 때까지 기다리십시오. 이 작업은 1분 미만 소요됩니다. 
 
-1. On the **contoso.org** private DNS zone blade, in the **Settings** section, click **Overview**
+1. **contoso.org** 프라이빗 DNS 영역의 **개요**를 클릭한다.
 
-1. Verify that the DNS records for **az104-04-vm0** and **az104-04-vm1** appear in the list of record sets as **Auto registered**.
+1. **az104-04-vm0** 과 **az104-04-vm1**에 대한 DNS 레코드가 **자동 등록됨**으로 나타나는 것을 확인한다.
 
-    >**Note:** You might need to wait a few minutes and refresh the page if the record sets are not listed.
+    >**참고:** 레코드 집합 목록이 나타나지 않으면 몇 분 기다려야 합니다. 
 
-1. Switch to the Remote Desktop session to **az104-04-vm0**, right-click the **Start** button and, in the right-click menu, click **Windows PowerShell (Admin)**.
+1. **az104-04-vm0** 원격 데스크톱 세션으로 돌아가서 **시작** 버튼을 마우스 우클릭 하고, 메뉴에서 **Windows PowerShell (Admin)**을 선택한다.
 
-1. In the Windows PowerShell console window, run the following to test internal name resolution of the **az104-04-vm1** DNS record set in the newly created private DNS zone:
+1. Windows PowerShell 콘솔 창에 다음 명령을 입력해, 새로 만든 프라이빗 DNS 영역에서 **az104-04-vm1** DNS 레코드 집합의 내부 이름 확인을 테스트 한다.
 
    ```pwsh
    nslookup az104-04-vm1.contoso.org
    ```
-1. Verify that the output of the command includes the private IP address of **az104-04-vm1** (**10.40.1.4**).
+1. 실행 명령의 결과가 **az104-04-vm1**의 사설 IP를 포함하고 있음을 확인한다. (**10.40.1.4**)
 
-#### Task 6: Configure Azure DNS for external name resolution
+#### 작업 6: 외부 이름 확인을 위한 Azure DNS 구성
 
-In this task, you will configure external DNS name resolution by using Azure public DNS zones.
+이 작업에서는 공용 DNS 영역을 이용하여 외부 DNS 이름 확인을 구성합니다.
 
-1. In the Azure portal, search for and select **DNS zones** and, on the **DNS zones** blade, click **+ Add**.
+1. Azure 포털에서 **DNS 영역**을 찾아 선택하고, **DNS 영역** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. Create a DNS zone with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 DNS 영역을 구성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | **az104-04-rg1** |
-    | Name | **contoso.org** |
+    | 구독 | 이 랩에서 사용하고 있는 Azure 구독의 이름 |
+    | 리소스 그룹 | **az104-04-rg1** |
+    | 이름 | **contoso.org** |
 
-    >**Note**: Wait for the DNS zone to be created. This should take about 2 minutes. 
+    >**참고**: DNS 영역이 만들어질 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다. 
 
-1. Click **Go to resource** to open the **contoso.org** DNS zone blade. 
+1. **리소스로 이동**을 클릭하여 **contoso.org** DNS 영역 블레이드로 이동한다. 
 
-1. On the **contoso.org** DNS zone blade, click **+ Record set**.
+1. **contoso.org** DNS 영역 블레이드에서 **+ 레코드 집합**을 클릭한다.
 
-1. Add a record set with the following settings (leave others with their default values):
+1. 다음 설정을 사용해 레코드 집합을 구성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-04-vm0** |
-    | Type | **A** |
-    | Alias record set | **No** |
+    | 이름 | **az104-04-vm0** |
+    | 유형 | **A** |
+    | 별칭 레코드 집합 | **아니요** |
     | TTL | **1** |
-    | TTL unit | **Hours** |
-    | IP address | the public IP address of **az104-04-vm0** which you identified in the third exercise of this lab |
+    | TTL 단위 | **시간** |
+    | IP 주소 | 이 랩의 세 번째 연습에서 확인했던 **az104-04-vm0**의 공용 IP 주소 |
 
-1. Add a record set with the following settings (leave others with their default values):
+1. 다음 설정을 사용해 레코드 집합을 구성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-04-vm1** |
-    | Type | **A** |
-    | Alias record set | **No** |
+    | 이름 | **az104-04-vm1** |
+    | 유형 | **A** |
+    | 별칭 레코드 집합 | **아니요** |
     | TTL | **1** |
-    | TTL unit | **Hours** |
-    | IP address | the public IP address of **az104-04-vm1** which you identified in the third exercise of this lab |
+    | TTL 단위 | **시간** |
+    | IP 주소 | 이 랩의 세 번째 연습에서 확인했던 **az104-04-vm1**의 공용 IP 주소 |
 
-1. On the **contoso.org** DNS zone blade, note the name of the **Name server 1** entry.
+1. **contoso.org**의 DNS 영역 블레이드에서 **이름 서버 1** 엔트리를 복사한다.
 
-1. In the Azure portal, open the **PowerShell** session in **Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털에서 오른쪽 위의 아이콘을 클릭하여 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
 
-1. From the Cloud Shell pane, run the following to test external name resolution of the **az104-04-vm0** DNS record set in the newly created DNS zone (replace the placeholder `[Name server 1]` with the name of **Name server 1** you noted earlier in this task):
+1. Cloud Shell 창에서 다음 명령을 실행하여 **az104-04-vm0** DNS 레코드 집합의 외부 이름 확인을 테스트한다.
+(`[Name server 1]`을 이전 작업에서 복사한 **이름 서버 1**로 대체한다)
 
    ```pwsh
    nslookup az104-04-vm0.contoso.org [Name server 1]
    ```
-1. Verify that the output of the command includes the public IP address of **az104-04-vm0**.
+1. 명령 결과가 **az104-04-vm0**의 공용 IP를 포함하는 것을 확인한다.
 
-1. From the Cloud Shell pane, run the following to test external name resolution of the **az104-04-vm1** DNS record set in the the newly created DNS zone (replace the placeholder `[Name server 1]` with the name of **Name server 1** you noted earlier in this task):
+1. Cloud Shell 창에서 다음 명령을 실행하여 **az104-04-vm1** DNS 레코드 집합의 외부 이름 확인을 테스트한다.
+(`[Name server 1]`을 이전 작업에서 복사한 **이름 서버 1**로 대체한다)
 
    ```pwsh
    nslookup az104-04-vm1.contoso.org [Name server 1]
    ```
-1. Verify that the output of the command includes the public IP address of **az104-04-vm1**.
+1. 명령 결과가 **az104-04-vm1**의 공용 IP를 포함하는 것을 확인한다.
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+   >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다. 
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-04*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-04*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Created and configured a virtual network
-- Deployed virtual machines into the virtual network
-- Configured private and public IP addresses of Azure VMs
-- Configured network security groups
-- Configured Azure DNS for internal name resolution
-- Configured Azure DNS for external name resolution
+- 가상 네트워크를 만들고 구성했습니다.
+- 가상 머신을 가상 네트워크에 배포했습니다.
+- Azure 가상 머신의 사설 및 공용 IP를 구성했습니다.
+- 네트워크 보안 그룹을 구성했습니다.
+- 내부 이름 확인을 위한 Azure DNS를 구성했습니다.
+- 외부 이름 확인을 위한 Azure DNS를 구성했습니다. 
