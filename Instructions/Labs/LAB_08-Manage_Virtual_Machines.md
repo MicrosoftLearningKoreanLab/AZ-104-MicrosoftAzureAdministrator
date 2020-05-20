@@ -1,138 +1,138 @@
 ---
 lab:
-    title: '08 - Manage Virtual Machines'
-    module: 'Module 08 - Virtual Machines'
+    title: '08 - 가상 머신 관리'
+    module: '모듈 08 - 가상 머신'
 ---
 
-# Lab 08 - Manage Virtual Machines
-# Student lab manual
+# 랩 08 - 가상 머신 관리
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-You were tasked with identifying different options for deploying and configuring Azure virtual machines. First, you need to determine different compute and storage resiliency and scalability options you can implement when using Azure virtual machines. Next, you need to investigate compute and storage resiliency and scalability options that are available when using Azure virtual machine scale sets. You also want to explore the ability to automatically configure virtual machines and virtual machine scale sets by using the Azure Virtual Machine Custom Script extension.
+Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식별하는 작업을 수행합니다. 첫째, Azure 가상 머신을 사용할 때 구현할 수 있는 다양한 컴퓨팅 및 스토리지 복원력과 확장성 옵션을 결정해야 합니다. 다음으로 Azure 가상 시스템 확장 집합을 사용할 때 이용할 수 있는 컴퓨팅 및 스토리지 복원력 및 확장성 옵션을 조사합니다. 또한 Azure Virtual Machine Custom Script 확장 기능을 사용하여 가상 머신 및 가상 머신 확장 집합을 자동으로 구성하는 기능도 살펴보십시오.
 
-## Objectives
+## 목표
 
-In this lab, you will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Deploy zone-resilient Azure virtual machines by using the Azure portal and an Azure Resource Manager template
-+ Task 2: Configure Azure virtual machines by using virtual machine extensions
-+ Task 3: Scale compute and storage for Azure virtual machines
-+ Task 4: Deploy zone-resilient Azure virtual machine scale sets by using the Azure portal
-+ Task 5: Configure Azure virtual machine scale sets by using virtual machine extensions
-+ Task 6: Scale compute and storage for Azure virtual machine scale sets (optional)
++ 작업 1: Azure 포털과 Azure 리소스 매니저 템플릿을 사용하여 가상 머신을 배포
++ 작업 2: 가상 머신 확장 기능을 이용하여 Azure 가상 머신 설정
++ 작업 3: Azure 가상 머신을 위한 컴퓨트와 스토리지 확장
++ 작업 4: Azure 포털을 사용하여 Azure 가상 머신 확장 집합 배포
++ 작업 5: 가상 머신 확장 기능을 사용하여 Azure 가상 머신 확장 집합 구성
++ 작업 6: Azure 가상 머신 확장 집합을 위한 컴퓨트와 스토리지 확장 (선택 사항)
 
-## Instructions
+## 설명
 
-### Exercise 1
+### 연습 1
 
-#### Task 1: Deploy zone-resilient Azure virtual machines by using the Azure portal and an Azure Resource Manager template
+#### 작업 1: Azure 포털과 Azure 리소스 매니저 템플릿을 사용하여 가상 머신을 배포
 
-In this task, you will deploy Azure virtual machines into different availability zones by using the Azure portal and an Azure Resource Manager template.
+이 작업에서는 Azure 포털과 portal and an Azure 리소스 매니저 템플릿을 사용하여 서로 다른 가용 영역에 Azure 가상 머신을 배포합니다.
 
-1. Sign in to the [Azure portal](http://portal.azure.com).
+1. [Azure portal](http://portal.azure.com)에 로그인한다.
 
-1. In the Azure portal, search for and select **Virtual machines** and, on the **Virtual machines** blade, click **+ Add**.
+1. Azure 포털에서 **가상 머신**을 찾아 선택하고 **가상 머신** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. On the **Basics** tab of the **Create a virtual machine** blade, specify the following settings (leave others with their default values):
+1. **가상 머신 만들기** 블레이드의 **기본 사항** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Subscription | the name of the Azure subscription you will be using in this lab |
-    | Resource group | the name of a new resource group **az104-08-rg01** |
-    | Virtual machine name | **az104-08-vm0** |
-    | Region | select one of the regions that support availability zones and where you can provision Azure virtual machines | 
-    | Availability options | **Availability zone** |
-    | Availability zone | **1** |
-    | Image | **Windows Server 2019 Datacenter** |
-    | Azure Spot instance | **No** |
-    | Size | **Standard D2s v3** |
-    | Username | **Student** |
-    | Password | **Pa55w.rd1234** |
-    | Public inbound ports | **None** |
-    | Already have a Windows Server license | **No** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 리소스 그룹 | 새로만들기 **az104-08-rg01** |
+    | 가상 머신 이름 | **az104-08-vm0** |
+    | 지역 | 가용성 영역을 지원하는 지역 이름 선택 | 
+    | 가용성 옵션 | **가용성 영역** |
+    | 가용성 영역 | **1** |
+    | 이미지 | **Windows Server 2019 Datacenter** |
+    | Azure Spot 인스턴스 | **아니요** |
+    | 크기 | **표준 D2s v3** |
+    | 사용자 이름 | **Student** |
+    | 암호 | **Pa55w.rd1234** |
+    | 공용 인바운드 포트 | **없음** |
+    | 이미 Windows Server 라이선스가 있나요? | **아니요** |
 
-1. Click **Next: Disks >** and, on the **Disks** tab of the **Create a virtual machine** blade, specify the following settings (leave others with their default values):
+1. **다음: 디스크 >**를 클릭하고 **가상 머신 만들기** 블레이드의 **디스크** 탭에 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | OS disk type | **Standard HDD** |
-    | Enable Ultra Disk compatibility | **No** |
+    | OS 디스크 유형 | **표준 HDD** |
+    | Ultra Disk 호환성 사용 | **아니요** |
 
-1. Click **Next: Networking >** and, on the **Networking** tab of the **Create a virtual machine** blade, click **Create new** below the **Virtual network** textbox.
+1. **다음: 네트워킹 >**을 클릭하고 **가상 머신 만들기** 블레이드의 **네트워킹** 탭에서 **가상 네트워크** 아래 **새로 만들기**를 클릭한다. 
 
-1. On the **Create virtual network** blade, specify the following settings (leave others with their default values):
+1. **가상 네트워크 만들기** 블레이드에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Name | **az104-08-rg01-vnet** |
-    | Address range | **10.80.0.0/20** |
-    | Subnet name | **subnet0** |
-    | Subnet range | **10.80.0.0/24** |
+    | 이름 | **az104-08-rg01-vnet** |
+    | 주소 공간 | **10.80.0.0/20** |
+    | 서브넷 이름 | **subnet0** |
+    | 서브넷 주소 범위 | **10.80.0.0/24** |
  
-1. Click **OK** and, back on the **Networking** tab of the **Create a virtual machine** blade, specify the following settings (leave others with their default values):
+1. **확인**을 누르고 **가상 머신 만들기** 블레이드의 **네트워킹** 탭으로 돌아가서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Public IP | **None** |
-    | NIC network security group | **None** |
-    | Accelerated networking | **Off** |
-    | Place this virtual machine behind an existing load balancing solution? | **No** |
+    | 공용 IP | **없음** |
+    | NIC 네트워크 보안 그룹 | **없음** |
+    | 가속화된 네트워킹 | **끄기** |
+    | 기존 부하 분산 솔루션 뒤에 이 가상 머신을 배치하시겠습니까? | **아니요** |
 
-1. Click **Next: Management >** and, on the **Management** tab of the **Create a virtual machine** blade, specify the following settings (leave others with their default values):
+1. **다음: 관리 >**를 클릭하고 **가상 머신 만들기** 블레이드의 **관리** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Boot diagnostics | **Off** |
+    | 부트 진단 | **끄기** |
 
-1. Click **Next: Advanced >**, on the **Management** tab of the **Create a virtual machine** blade, review the available settings without modifying any of them, and click **Review + Create**.
+1. Click **다음: 고급 >**을 클릭하고 가능한 설정을 검토한 후, 기본 값으로 두고 **검토 + 만들기**를 클릭한다. 
 
-1. On the **Review + Create** blade, click **Create**.
+1. 유효성 검사를 통과하면 **만들기**를 클릭한다.
 
-1. On the deployment blade, click **Template**.
+1. 배포 블레이드에서 **템플릿**을 클릭한다.
 
-1. Review the template representing the deployment in progress and click **Deploy**.
+1. 배포중인 템플릿을 검토하고, **배포**를 클릭한다.
 
-    >**Note**: You will use this option to deploy the second virtual machine with matching configuration except for the availability zone. 
+    >**참고**: 이 옵션을 사용해 같은 구성의 두 번째 가상 머신을 배포합니다. (가용성 영역 설정 제외)
 
-1. On the **Custom deployment** blade, specify the following settings (leave others with their default values):
+1. **사용자 지정 배포** 블레이드에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Resource group | **az104-08-rg01** |
+    | 리소스 그룹 | **az104-08-rg01** |
     | Network Interface Name | **az104-08-vm1-nic1** |
     | Virtual Machine Name | **az104-08-vm1** |
     | Admin Username | **Student** |
     | Admin Password | **Pa55w.rd1234** |
     | Zone | **2** |
 
-    >**Note**: You need to modify parameters corresponding to the properties of the distinct resources you are deploying by using the template, including the virtual machine and its network interface. You also need to specify a different availability zone if you want your deployment consisting of two virtual machines to be zone redundant.
+    >**참고**: 템플릿을 사용하여 배포하는 고유 리소스의 속성에 해당하는 매개 변수를 수정해야 합니다. 이는 가상 머신과 해당 네트워크 인터페이스를 포함합니다. 또한 두 개의 가상 머신을 영역 중복으로 배포하려면 다른 가용성 영역을 지정하십시오.
 
-1. Enable the checkbox **I agree to the terms and conditions stated above** and click **Purchase**.
+1. **위에 명시된 사용 약관에 동의함**에 체크하고 **구매**를 클릭한다.
 
-    >**Note**: Wait for both deployments to complete before you proceed to the next task. This might take about 5 minutes.
+    >**참고**: 다음 작업을 시작하기 전에 가상 머신 배포가 모두 끝날 때까지 기다리십시오. 이 작업은 약 5분 소요됩니다.
 
-#### Task 2: Configure Azure virtual machines by using virtual machine extensions
+#### 작업 2: 가상 머신 확장 기능을 이용하여 Azure 가상 머신 설정
 
-In this task, you will install Windows Server Web Server role on the two Azure virtual machines you deployed in the previous task by using the Custom Script virtual machine extension. 
+이 작업에서는 사용자 지정 스크립트 가상 머신 확장 기능을 사용하여 이전 작업에서 배포한 두 Azure 가상 머신에  Windows Web Server role을 설치합니다.
 
-1. In the Azure portal, search for and select **Virtual machines** and, on the **Virtual machines** blade, click **az104-08-vm0**.
+1. Azure 포털에서 **가상 머신**을 찾아 클릭하고, **가상 머신** 블레이드에서 **az104-08-vm0**을 클릭한다.
 
-1. On the **az104-08-vm0** virtual machine blade, in the **Settings** section, click **Extensions**, and the click **+ Add**.
+1. **az104-08-vm0** 가상 머신 블레이드에서 **설정** 섹션의 **확장**을 선택하고, **+ 추가**를 클릭한다.
 
-1. On the **New resource** blade, click **Custom Script Extension** and then click **Create**.
+1. **새 리소스** 블레이드에서 **Custom Script Extension**을 선택하고, **만들기**를 클릭한다.
 
-1. From the **Install extension** blade, upload the script **az104-08-install_IIS.ps1** from **\\Allfiles\\Labs\\08** and click **OK**.
+1. **확장 설치** 블레이드에서 **\\Allfiles\\Labs\\08**의 **az104-08-install_IIS.ps1** 스크립트를 업로드하고 **확인**을 클릭한다.
 
-1. In the Azure portal, search for and select **Virtual machines** and, on the **Virtual machines** blade, click **az104-08-vm1**.
+1. Azure 포털에서 **가상 머신**을 찾아 **az104-08-vm1**을 클릭한다.
 
-1. On the **az104-08-vm1** blade, in the **Settings** section, click **Export template**.
+1. **az104-08-vm1** 블레이드에서 **설정** 섹션의 **템플릿 내보내기**를 클릭한다.
 
-1. On the **az104-08-vm1 - Export template** blade, click **Deploy**. 
+1. **az104-08-vm1 - 템플릿 내보내기** 블레이드에서 **배포**를 클릭한다. 
 
-1. On the **Custom deployment** blade, click **Edit template**.
+1. **사용자 지정 배포** 블레이드에서 **템플릿 편집**을 클릭한다.
 
-1. On the **Edit template** blade, in the section displaying the content of the template, insert the following code starting with line **20** (directly underneath the `    "resources": [` line):
+1. On the **템플릿 편집** 블레이드에서 **20**번째 줄에 다음 내용을 추가한다. (`    "resources": [` 줄 바로 아래)
 
    ```json
         {
@@ -156,64 +156,64 @@ In this task, you will install Windows Server Web Server role on the two Azure v
 
    ```
 
-    >**Note**: This section of the template defines the same Azure virtual machine custom script extension that you deployed earlier to the first virtual machine via Azure PowerShell.
+    >**참고**: 템플릿의 해당 섹션은 Azure PowerShell을 통해 첫 번째 가상 머신에 이전에 배포한 것과 동일한 Azure 가상 머신 사용자 지정 스크립트 확장을 정의합니다.
 
-1. Click **Save** and, back on the **Custom template** blade, enable the checkbox **I agree to the terms and conditions stated above** and click **Purchase**.
+1. **저장**하고, **사용자 지정 배포** 블레이드에서 **위에 명시된 사용 약관에 동의함**에 체크하고 **구매**를 클릭한다.
 
-    >**Note**: Disregard the message stating **The resource group is in a location that is not supported by one or more resources in the template. Please choose a different resource group**. This is expected and can be ignored in this case.
+    >**참고**: **템플릿에 있는 하나 이상의 리소스가 지원하지 않는 위치에 리소스 그룹이 있습니다 다른 리소스 그룹을 선택하세요** 메시지는 이 작업에서 무시하십시오. 
 
-    >**Note**: Wait for the template deployment to complete. You can monitor its progress from the **Extensions** blade of the **az104-08-vm0** and **az104-08-vm1** virtual machines. This should take no more than 3 minutes.
+    >**참고**: 템플릿 배포 작업이 끝날 때까지 기다리십시오. **az104-08-vm0** 과 **az104-08-vm1** 가상 머신의 **확장** 블레이드에서 배포 과정을 모니터링할 수 있습니다. 이 작업은 3분 미만 소요됩니다.
 
-1. To verify that the Custom Script extension-based configuration was successful, navigate back on the **az104-08-vm1** blade, in the **Operations** section, click **Run command**, and, in the list of commands, click **RunPowerShellScript**.
+1. **az104-08-vm1**블레이드의 **작업** 섹션에서 **실행 명령**을 클릭하고 **RunPowerShellScript**를 선택하여 Custom Script extension 구성의 결과를 확인하십시오.
 
-1. On the **Run Command Script** blade, type the following and click **Run** to access the web site hosted on **az104-08-vm0**:
+1. **실행 명령 스크립트** 블레이드에서 다음 명령을 입력하고 **실행**을 클릭하여 **az104-08-vm0**에 호스팅된 웹 사이트에 접근한다.
 
    ```pwsh
    Invoke-WebRequest -URI http://10.80.0.4 -UseBasicParsing
    ```
 
-    >**Note**: The **-UseBasicParsing** parameter is necessary to eliminate dependency on Internet Explorer to complete execution of the cmdlet
+    >**참고**: The **-UseBasicParsing** 파라미터는 cmdlet 실행을 완료하기 위해 Internet Explorer(인터넷 익스플로러)에 대한 종속성을 제거합니다.
 
-    >**Note**: You can also connect to **az104-08-vm0** and run `Invoke-WebRequest -URI http://10.80.0.5` to access the web site hosted on **az104-08-vm1**.
+    >**참고**: **az104-08-vm0**에 연결하고 `Invoke-WebRequest -URI http://10.80.0.5`를 실행하여 **az104-08-vm1**에 호스팅된 웹 사이트에 접근할 수도 있습니다. 
 
-#### Task 3: Scale compute and storage for Azure virtual machines
+#### 작업 3: Azure 가상 머신을 위한 컴퓨트와 스토리지 확장
 
-In this task you will scale compute for Azure virtual machines by changing their size and scale their storage by attaching and configuring their data disks.
+이 작업에서는 Azure 가상 시스템의 크기를 변경하여 컴퓨팅을 확장하고. 데이터 디스크를 연결 및 구성하여 가상 시스템의 스토리지를 확장합니다.
 
-1. In the Azure portal, search for and select **Virtual machines** and, on the **Virtual machines** blade, click **az104-08-vm0**.
+1. Azure 포털 **가상 머신** 블레이드에서 **az104-08-vm0**을 클릭한다.
 
-1. On the **az104-08-vm0** virtual machine blade, click **Size** and set the virtual machine size to **Standard DS1_v2**
+1. **az104-08-vm0** 가상 머신 블레이드에서 **크기**를 클릭하고 가상 머신 크기를 **표준 DS1_v2**로 조정한다.
 
-    >**Note**: Choose another size if **Standard DS1_v2** is not available.
+    >**참고**: **표준 DS1_v2**을 사용할 수 없다면 다른 크기를 선택하십시오. 
 
-1. On the **az104-08-vm0** virtual machine blade, click **Disks**, click **+ Add data disk**, and, in the **Name** drop down list, click **Create disk**.
+1. **az104-08-vm0** 블레이드에서 **디스크**를 클릭하고, **+ 데이터 디스크 추가**를 클릭한다. **이름** 드롭 다운 리스트에서 **디스크 생성**을 클릭한다.
 
-1. Create a managed disk with the following settings (leave others with their default values):
+1. 다음 설정을 사용해 관리 디스크를 생성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Disk name | **az104-08-vm0-datadisk-0** |
-    | Source type | **None** |
-    | Account type | **Premium SSD** |
-    | Size | **1024 GiB** |
+    | 디스크 이름 | **az104-08-vm0-datadisk-0** |
+    | 원본 유형 | **없음** |
+    | 스토리지 유형 | **프리미엄 SSD** |
+    | 크기 | **1024 GiB** |
 
 
-1. Back on the **az104-08-vm0 - Disks** blade, click **+ Add data disk**, and, in the **Name** drop down list, click **Create disk**.
+1. **az104-08-vm0 - 디스크** 블레이드에서 **+ 데이터 디스크 추가** 를 클릭하고, **이름** 드롭다운 리스트에서 **디스크 생성**을 클릭한다.
 
-1. Create a managed disk with the following settings (leave others with their default values):
+1. 다음 설정을 사용해 관리 디스크를 생성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Disk name | **az104-08-vm0-datadisk-1** |
-    | Source type | **None** |
-    | Account type | **Premium SSD** |
-    | Size | **1024 GiB** |
+    | 디스크 이름 | **az104-08-vm0-datadisk-1** |
+    | 원본 유형 | **없음** |
+    | 스토리지 유형 | **프리미엄 SSD** |
+    | 크기 | **1024 GiB** |
 
-1. Back on the **az104-08-vm0 - Disks** blade, click **Save**.
+1. **az104-08-vm0 - 디스크** 블레이드에서 **저장**을 클릭한다.
 
-1. On the **az104-08-vm0** blade, in the **Operations** section, click **Run command**, and, in the list of commands, click **RunPowerShellScript**.
+1. **az104-08-vm0** 블레이드에서 **작업** 섹션의 **실행 명령**을 클릭한다. 목록에서 **RunPowerShellScript**을 클릭한다.
 
-1. On the **Run Command Script** blade, type the following and click **Run** to create a drive Z: consisting of the two newly attached disks with the simple layout and fixed provisioning:
+1. **실행 명령 스크립트** 블레이드에서 다음 명령을 입력하고 **실행**을 클릭하여 단순한 레이아웃과 고정 프로비저닝을 사용하여 새로 연결된 두 개의 디스크로 구성된 Z 드라이브를 생성한다. 
 
    ```pwsh
    New-StoragePool -FriendlyName storagepool1 -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
@@ -225,27 +225,27 @@ In this task you will scale compute for Azure virtual machines by changing their
    New-Partition -DiskNumber 4 -UseMaximumSize -DriveLetter Z
    ```
 
-    > **Note**: Wait for the confirmation that the commands completed successfully.
+    > **참고**: **스크립트 실행 완료** 확인 메시지를 기다리십시오.
 
-1. In the Azure portal, search for and select **Virtual machines** and, on the **Virtual machines** blade, click **az104-08-vm1**.
+1. Azure 포털 **가상 머신** 블레이드에서 **az104-08-vm1**을 클릭한다.
 
-1. On the **az104-08-vm1** blade, in the **Settings** section, click **Export template**.
+1. **az104-08-vm1** 블레이드의 **설정** 섹션에서 **템플릿 내보내기**를 클릭한다.
 
-1. On the **az104-08-vm1 - Export template** blade, click **Deploy**. 
+1. **az104-08-vm1 - Export template** 블레이드에서 **배포**를 클릭한다. 
 
-1. On the **Custom deployment** blade, click **Edit template**.
+1. **사용자 지정 배포** 블레이드에서 **템플릿 편집**을 클릭한다.
 
-1. On the **Edit template** blade, in the section displaying the content of the template, replace the line **30** `                    "vmSize": "Standard_D2s_v3"` with the following line):
+1. **템플릿 편집** 블레이드에서 스크립트의 **30**번째 줄 (`                    "vmSize": "Standard_D2s_v3"`)을 다음 내용으로 교체한다. 
 
    ```json
                     "vmSize": "Standard_DS1_v2"
 
    ```
 
-    >**Note**: This section of the template defines the same Azure virtual machine size as the one you specified for the first virtual machine via the Azure portal.
+    >**참고**: 해당 템플릿 섹션은 Azure 포털을 통해 구성한 첫 번째 가상 머신의 크기와 동일한 가상 머신 크기를 정의합니다.
 
 
-1. On the **Edit template** blade, in the section displaying the content of the template, replace line **49** (`                    "dataDisks": [ ]` line) with the following code :
+1. **템플릿 편집** 블레이드에서 스크립트의 **49**번째 줄 (`                    "dataDisks": [ ]`)을 다음 내용으로 교체한다.
 
    ```json
                     "dataDisks": [
@@ -266,17 +266,17 @@ In this task you will scale compute for Azure virtual machines by changing their
                     ]
    ```
 
-    >**Note**: This section of the template creates two managed disks and attaches them to **az104-08-vm1**, similarly to the storage configuration of the first virtual machine via the Azure portal.
+    >**참고**: 템플릿의 해당 섹션은 **az104-08-vm1**에 연결된 두 관리 디스크를 생성합니다. Azure 포털을 통한 첫 번째 가상 머신의 스토리지 구성과 유사한 작업입니다.  
 
-1. Click **Save** and, back on the **Custom template** blade, enable the checkbox **I agree to the terms and conditions stated above** and click **Purchase**.
+1. **저장**하고 **사용자 지정 배포** 블레이드로 돌아와 **위에 명시된 사용 약관에 동의함**에 체크하고 **구매**를 클릭한다.
 
-    >**Note**: Disregard the message stating **The resource group is in a location that is not supported by one or more resources in the template. Please choose a different resource group**. This is expected and can be ignored in this case.
+    >**참고**: **템플릿에 있는 하나 이상의 리소스가 지원하지 않는 위치에 리소스 그룹이 있습니다 다른 리소스 그룹을 선택하세요** 메시지는 이 작업에서 무시하십시오. 
 
-    >**Note**: Wait for the template deployment to complete. You can monitor its progress from the **Extensions** blade of the **az104-08-vm1** virtual machine. This should take no more than 3 minutes.
+    >템플릿 배포 작업이 끝날 때까지 기다리십시오.  **az104-08-vm1** 가상 머신의 **확장** 블레이드에서 배포 과정을 모니터링할 수 있습니다. 이 작업은 3분 미만 소요됩니다.
 
-1. Back on the **az104-08-vm1** blade, in the **Operations** section, click **Run command**, and, in the list of commands, click **RunPowerShellScript**.
+1. **az104-08-vm1** 블레이드의 **작업** 섹션에서 **실행 명령**을 선택하고, 목록에서 **RunPowerShellScript**을 클릭한다.
 
-1. On the **Run Command Script** blade, type the following and click **Run** to create a drive Z: consisting of the two newly attached disks with the simple layout and fixed provisioning:
+1.  **실행 명령 스크립트** 블레이드에서 다음 명령을 입력하고 **실행**을 클릭하여 단순한 레이아웃과 고정 프로비저닝을 사용하여 새로 연결된 두 개의 디스크로 구성된 Z 드라이브를 생성한다. 
 
    ```pwsh
    New-StoragePool -FriendlyName storagepool1 -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
@@ -287,191 +287,191 @@ In this task you will scale compute for Azure virtual machines by changing their
 
    New-Partition -DiskNumber 4 -UseMaximumSize -DriveLetter Z
    ```
-    > **Note**: Wait for the confirmation that the commands completed successfully.
+    > **참고**: **스크립트 실행 완료** 확인 메시지를 기다리십시오.
 
-#### Task 4: Deploy zone-resilient Azure virtual machine scale sets by using the Azure portal
+#### 작업 4: Azure 포털을 사용하여 Azure 가상 머신 확장 집합 배포
 
-In this task, you will deploy Azure virtual machine scale set across availability zones by using the Azure portal.
+이 작업에서는 Azure 포털을 사용하여 가용성 영역에 가상 머신 확장 집합을 배포합니다.
 
-1. In the Azure portal, search for and select **Virtual machine scale sets** and, on the **Virtual machine scale sets** blade, click **+ Add**.
+1. Azure 포털에서 **Virtual machine scale sets**을 찾아 선택하고, **Virtual machine scale sets** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. On the **Basics** tab of the **Create a virtual machine scale set** blade, specify the following settings (leave others with their default values) and click **Next : Disks >**:
+1. **가상 머신 확장 집합 만들기** 블레이드의 **기본 사항** 탭에서 다음 설정을 사용하여 구성하고, **다음 : 디스크 >**를 클릭한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |    
-    | Resource group | the name of a new resource group **az104-08-rg02** |    
-    | Virtual machine scale set name | **az10408vmss0** |
-    | Region | select one of the regions that support availability zones and where you can provision Azure virtual machines different from the one you used to deploy virtual machines earlier in this lab | 
-    | Availability zone | **Zones 1, 2, 3** |
-    | Image | **Windows Server 2016 Datacenter** |
-    | Azure Spot instance | **No** |
-    | Size | **Standard D2s_v3** |    
-    | Username | **Student** |
-    | Password | **Pa55w.rd1234** |
-    | Already have a Windows Server license? | **No** |
+    | 구독 | 이 랩에서 사용하는 구독 |    
+    | 리소스 그룹 | 새로만들기 **az104-08-rg02** |    
+    | 가상 머신 확장 집합 이름 | **az10408vmss0** |
+    | 지역 | 가용성 영역을 지원하는 지역 | 
+    | 가용성 영역 | **영역 1, 2, 3** |
+    | 이미지 | **Windows Server 2016 Datacenter** |
+    | Azure Spot 인스턴스 | **No** |
+    | 크기 | **표준 D2s_v3** |    
+    | 관리자 계정 | **Student** |
+    | 암호 | **Pa55w.rd1234** |
+    | 이미 Windows Server 라이선스가 있나요? | **No** |
 
-    >**Note**: For the list of Azure regions which support deployment of Windows virtual machines to availability zones, refer to [What are Availability Zones in Azure?](https://docs.microsoft.com/en-us/azure/availability-zones/az-overview)
+    >**참고**: 가용성 영역에 Windows 가상 머신 배포를 지원하는 지역 목록은 [What are Availability Zones in Azure?](https://docs.microsoft.com/en-us/azure/availability-zones/az-overview)을 참고하십시오
 
-1. On the **Disks** tab of the **Create a virtual machine scale set** blade, accept the default values and click **Next : Networking >**.
+1. **디스크** 탭에서 **가상 머신 확장 집합 만들기** 블레이드의 **디스크** 탭에서 기본 설정을 검토하고 **다음 : 네트워킹 >**을 클릭한다.
 
-1. On the **Networking** tab of the **Create a virtual machine scale set** blade, click the **Create virtual network** link below the **Virtual network** textbox and create a new virtual network with the following settings (leave others with their default values):
+1. **가상 머신 확장 집합 만들기** 블레이드의 **네트워킹** 탭에서 **가상 네트워크 만들기** 링크를 클릭하고 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Name | **az104-08-rg02-vnet** |
-    | Address range | **10.82.0.0/20** |
-    | Subnet name | **subnet0** |
-    | Subnet range | **10.82.0.0/24** |
+    | 이름 | **az104-08-rg02-vnet** |
+    | 주소 범위 | **10.82.0.0/20** |
+    | 서브넷 이름 | **subnet0** |
+    | 서브넷 주소 범위 | **10.82.0.0/24** |
  
-    >**Note**: Once you create a new virtual network and return to the **Networking** tab of the **Create a virtual machine scale set** blade, the **Virtual network** value will be automatically set to **az104-08-rg02-vnet**.
+    >**참고**: 새로운 가상 머신을 만들고 **가상 머신 확장 집합 만들기** 블레이드의 **네트워킹** 탭으로 돌아가면, **가상 네트워크** 값은 **az104-08-rg02-vnet**으로 자동 설정됩니다.
 
-1. Back on the **Networking** tab of the **Create a virtual machine scale set** blade, click the **Edit network interface** icon to the right of the network interface entry. 
+1. **가상 머신 확장 집합 만들기** 블레이드의 **네트워킹**탭으로 돌아와서 네트워크 인터페이스 목록 오른쪽의 **네트워크 인터페이스 편집** 아이콘을 클릭한다.  
 
-1. On the **Edit network interface** blade, in the **NIC network security group** section, click **Advanced** and click **Create new** under the **Configure network security group** drop-down list.
+1. **네트워크 인터페이스 편집** 블레이드의 **NIC 네트워크 보안 그룹** 섹션에서 **고급**을 클릭하고 **네트워크 보안 그룹 구성** 밑의 **새로만들기**를 클릭한다. 
 
-1. On the **Create network security group** blade, specify the following settings (leave others with their default values):
+1. **네트워크 보안 그룹 만들기** 블레이드에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Name | **az10408vmss0-nsg** |
+    | 이름 | **az10408vmss0-nsg** |
 
-1. Click **Add an inbound rule** and add an inbound security rule with the following settings (leave others with their default values):
+1. **인바운드 규칙 추가**를 클릭하고 다음 설정을 사용하여 인바운드 보안 규칙을 추가한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Source | **Any** |
-    | Source port ranges | **\*** |
-    | Destination | **Any** |
-    | Destination port ranges | **80** |
-    | Protocol | **TCP** |
-    | Action | **Allow** |
-    | Priority | **1010** | 
-    | Name | **custom-allow-http** |
+    | 소스 | **Any** |
+    | 원본 포트 범위 | **\*** |
+    | 대상 주소 | **Any** |
+    | 대상 포트 범위 | **80** |
+    | 프로토콜 | **TCP** |
+    | 작업 | **Allow** |
+    | 우선순위 | **1010** | 
+    | 이름 | **custom-allow-http** |
 
-1. Click **Add** and, back on the **Create network security group** blade, click **OK**.
+1. **추가**를 클릭하고 **네트워크 보안 그룹 만들기** 블레이드에서 **확인**을 클릭한다.
 
-1. Back on the **Edit network interface** blade, in the **Public IP address** section, click **Enabled** and click **OK**.
+1. **네트워크 인터페이스 편집** 블레이드에서 **공용 IP 주소** 섹션을 **사용**으로 설정하고, **확인**을 클릭한다.
 
-1. Back on the **Networking** tab of the **Create a virtual machine scale set** blade, specify the following settings (leave others with their default values) and click **Next : Scaling >**:
+1. **가상 머신 확장 집합 만들기** 블레이드의 **네트워킹**탭으로 돌아와서 다음 설정을 사용하고 **다음 : 확장 중 >**을 클릭한다. 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Use a load balancer | **Yes** |
-    | Load balancing options | **Azure load balancer** |
-    | Select a load balancer | **(new) az10408vmss0-lb** |
-    | Select a backend pool | **(new) bepool** |
+    | 부하 분산 장치 사용 | **예** |
+    | 부하 분산 옵션 | **Azure load balancer** |
+    | 부하 분산 장치 선택 | **(new) az10408vmss0-lb** |
+    | 백 엔드 풀 선택 | **(new) bepool** |
     
-1. On the **Scaling** tab of the **Create a virtual machine scale set** blade, specify the following settings (leave others with their default values) and click **Next : Management >**:
+1.  **가상 머신 확장 집합 만들기** 블레이드의 **확장 중** 탭에서 다음 설정을 사용하고, **다음 : 관리 >**를 클릭한다.
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Initial instance count | **2** |
-    | Scaling policy | **Manual** |
+    | 초기 인스턴스 수 | **2** |
+    | 크기 조정 정책 | **수동** |
 
-1. On the **Management** tab of the **Create a virtual machine scale set** blade, specify the following settings (leave others with their default values) and click **Next : Health >**:
+1. **가상 머신 확장 집합 만들기** 블레이드의 **관리** 탭에서 다음 설정을 사용하고, **다음 : 상태 >**를 클릭한다.
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Boot diagnostics | **Off** |
+    | 부트 진단 | **끄기** |
     
-1. On the **Health** tab of the **Create a virtual machine scale set** blade, review the default settings without making any changes and click **Next : Advanced >**.
+1. **가상 머신 확장 집합 만들기** 블레이드의 **상태** 탭에서 기본 설정을 검토하고 **다음 : 고급 >**을 클릭한다. 
 
-1. On the **Advanced** tab of the **Create a virtual machine scale set** blade, specify the following settings (leave others with their default values) and click **Review + create**.
+1.  **가상 머신 확장 집합 만들기** 블레이드의 **고급** 탭에서 다음 설정을 사용하고, **검토 : 만들기 >**를 클릭한다. 
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
-    | Spreading algorithm | **Fixed spreading (not recommended with zones)** |
+    | 분산 알고리즘 | **고정 분산(영역에서 권장되지 않음)** |
 
-    >**Note**: The **Max spreading** setting is currently not functional.
+    >**참고**: **최대 분산** 설정은 현재 작동하지 않음. 
 
-1. On the **Review + create** tab of the **Create a virtual machine scale set** blade, ensure that the validation passed and click **Create**.
+1.**가상 머신 확장 집합 만들기** 블레이드의 **검토 + 만들기** 탭에서 유효성 검사 통과를 확인하고 **만들기**를 클릭한다.
 
-    >**Note**: Wait for the virtual machine scale set deployment to complete. This should take about 5 minutes.
+    >**참고**: 가상 머신 배포가 완료될 때까지 기다리십시오. 이 작업은 약 5분 소요됩니다. 
 
+#### 작업 5: 가상 머신 확장 기능을 사용하여 Azure 가상 머신 확장 집합 구성
 
-#### Task 5: Configure Azure virtual machine scale sets by using virtual machine extensions
-
-In this task, you will install Windows Server Web Server role on the instances of the Azure virtual machine scale set you deployed in the previous task by using the Custom Script virtual machine extension. 
-
-1. In the Azure portal, refresh the **Virtual machine scale sets** blade and click **az10408vmss0**.
-
-1. On the **az10408vmss0** blade, click **Extensions**, and the click **+ Add**.
-
-1. On the **New resource** blade, click **Custom Script Extension** and then click **Create**.
-
-1. From the **Install extension** blade, upload the script **az104-08-install_IIS.ps1** from **\\Allfiles\\Labs\\08** and click **OK**.
-
-    >**Note**: Wait for the installation of the extension to complete before proceeding to the next step.
-
-1. In the **Settings** section of the **az10408vmss0** blade, click **Instances**, select the checkboxes next to the two instances of the virtual machine scale set, click **Upgrade**, and then, when prompted for confirmation, click **Yes**.
-
-    >**Note**: Wait for the upgrade to complete before proceeding to the next step.
-
-1. In the Azure portal, search for and select **Load balancers** and, in the list of load balancers, click **az10408vmss0lb**.
-
-1. On the **az10408vmss0lb** blade, note the value of the **Public IP address** assigned to the frontend of the load balancer, open an new browser tab, and navigate to that IP address.
-
-    >**Note**: Verify that the browser page displays the name of one of the instances of the Azure virtual machine scale set **az10408vmss0**.
+이 작업에서는 사용자 지정 스크립트 가상 시스템 확장을 사용하여 이전 작업에서 배포한 Azure 가상 시스템 확장 집합의 인스턴스에 Windows Server Web Server role을 설치합니다.
 
 
-#### Task 6: Scale compute and storage for Azure virtual machine scale sets
+1. Azure 포털에서 **Virtual machine scale sets** 블레이드를 새로고침하고 **az10408vmss0**를 클릭한다. 
 
-In this task, you will change the size of virtual machine scale set instances, configure their autoscaling settings, and attach disks to them.
+1. **az10408vmss0** 블레이드에서 **확장**을 선택하고, **+ 추가**를 클릭한다.
 
-1. In the Azure Portal, on the **az10408vmss0** blade, click **Size**.
+1. **새 리소스** 블레이드에서 **Custom Script Extension**을 선택하고, **만들기**를 클릭한다.
 
-1. In the list of available sizes, select **Standard DS1_v2** and click **Resize**.
+1. **확장 설치** 블레이드에서 **\\Allfiles\\Labs\\08**의 **az104-08-install_IIS.ps1**를 업로드하고, **확인**을 클릭한다.
 
-1. In the **Settings** section, click **Instances**, select the checkboxes next to the two instances of the virtual machine scale set, click **Upgrade**, and then, when prompted for confirmation, click **Yes**.
+    >**참고**: 다음 단계를 진행하기 전에 확장 설치가 완료될 때까지 기다리십시오. 
 
-1. In the list of instances, click the entry representing the first instance and, on the scale set instance blade, note its **Location** (it should be one of the zones in the target Azure region into which you deployed the Azure virtual machine scale set). 
+1. **az10408vmss0** 블레이드 **설정** 섹션의 **인스턴스**를 클릭한다. 가상머신 확장 집합의 두 인스턴스를 선택하고 **업그레이드**를 클릭한다. 확인 창이 뜨면 **예**를 클릭한다. 
 
-1. Return to the **az10408vmss0 - Instances** blade, click the entry representing the second instance and, on the scale set instance blade, note its **Location** (it should be one of the other two zones in the target Azure region into which you deployed the Azure virtual machine scale set). 
+    >**참고**: 다음 단계를 진행하기 전에 업그레이드가 완료될 때까지 기다리십시오.
 
-1. Return to the **az10408vmss0 - Instances** blade and click **Scaling**.
+1. Azure 포털에서 **부하 분산 장치**를 검색하고 선택한다. 목록에서 **az10408vmss0lb**를 클릭한다. 
 
-1. On the **az10408vmss0 - Scaling** blade, select the **Custom autoscale** option and configure autoscale with the following settings (leave others with their default values):
+1. On the **az10408vmss0lb** 블레이드에서 부하 분산 장치의 프론트엔드에 할당된 **공용 IP 주소** 값을 기록해둔다. 브라우저 창을 띄우고, IP 주소로 접속한다. 
 
-    | Setting | Value |
+    >**참고**: 브라우저 페이지에 Azure 가상 머신 확장 집합 **az10408vmss0**의 인스턴스 이름이 나타나는 것을 확인하십시오.
+
+
+#### Task 6: Azure 가상 머신 확장 집합을 위한 컴퓨트와 스토리지 확장
+
+이 작업에서는 가상 머신 확장 집합 인스턴스의 크기를 바꾸고 자동확장 설정을 구성하고 디스크를 연결합니다.
+
+1. Auzre 포털의 **az10408vmss0** 블레이드에서 **크기**를 클릭한다. 
+
+1. 사용할 수 있는 크기 목록에서 **표준 DS1_v2**를 선택하고 **크기 조정**을 클릭한다.
+
+1. **설정** 섹션의 **인스턴스**를 클릭한다. 가상머신 확장 집합의 두 인스턴스를 선택하고 **업그레이드**를 클릭한다. 확인 창이 뜨면 **예**를 클릭한다. 
+
+1. 인스턴스 목록에서 첫 번째 인스턴스를 클릭하고, 확장 집합 인스턴스 블레이드에서 **위치**를 확인한다. (해당 위치는 Azure 가상 시스템 확장 집합을 배포한 대상 Azure 영역의 영역 중 하나여야 한다) 
+
+1. **az10408vmss0 - 인스턴스** 블레이드로 돌아간다. 인스턴스 목록에서 두 번째 인스턴스를 클릭하고, 확장 집합 인스턴스 블레이드에서 **위치**를 확인한다. (해당 위치는 Azure 가상 시스템 확장 집합을 배포한 대상 Azure 영역 중 하나여야 한다) 
+
+1. **az10408vmss0 - 인스턴스** 블레이드로 돌아가서 **확장 중**을 클릭한다.
+
+1. **az10408vmss0 - 확장 중** 블레이드에서 **사용자 지정 자동 크기 조정** 옵션을 선택하고 다음 설정을 사용하여 자동확장을 구성한다. (다른 값은 기본 설정을 사용한다)
+
+    | 설정 | 값 |
     | --- |--- |
-    | Scale mode | **Scale based on a metric** | 
+    | 크기 조정 모드 | **메트릭 기준 크기 조정** | 
 
-1. Click the **+ Add a rule** link and, on the **Scale rule** blade, specify the following settings (leave others with their default values):
+1. **+ 규칙 추가** 링크를 클릭하고 **크기 조정 규칙** 블레이드에서 다음 설정을 사용하여 자동확장을 구성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- |--- |
-    | Metric source | **Current resource (az10480vmss0)** |
-    | Time aggregation | **Maximum** |
-    | Metric namespace | **Virtual Machine Host** |
-    | Metric name | **Network In Total** |
-    | Operator | **Greater than** |
-    | Metric threshold to trigger scale action | **10** |
-    | Duration (in minutes) | **1** |
-    | Time grain statistic | **Maximum** |
-    | Operation | **Increase count by** |
-    | Instance count | **1** |
-    | Cool down (minutes) | **5** |
+    | 메트릭 원본 | **현재 리소스 (az10480vmss0)** |
+    | 시간 집계 | **최대값** |
+    | 메트릭 네임스페이스 | **가상 머신 호스트** |
+    | 메트릭 이름 | **Network In Total** |
+    | 연산자 | **보다 큼** |
+    | 크기 조정 작업을 트리거하는 메트릭 임계값 | **10** |
+    | 기간(분) | **1** |
+    | 시간 조직 통계 | **최대값** |
+    | 작업 | **다음을 기준으로 개수 늘이기** |
+    | 인스턴스 수 | **1** |
+    | 휴지 기간(분) | **5** |
 
-    >**Note**: Obviously these values do not represent a realistic configuration, since their purpose is to trigger autoscaling as soon as possible, without extended wait period. 
+    >**참고**: 이 값의 목적은 대기 시간 지연 없이 가능한 한 빨리 자동 스케일링을 트리거하는 것이기 때문에 이 값은 현실적인 구성을 나타내지 않습니다.
 
-1. Click **Add** and, back on the **az10408vmss0 - Scaling** blade, specify the following settings (leave others with their default values):
+1. **추가**를 클릭하고 **az10408vmss0 - 확장중** 블레이드로 돌아가서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- |--- |
-    | Instance limits Minimum | **1** |
-    | Instance limits Maximum | **3** |
-    | Instance limits Default | **1** |
+    | 인스턴스 제한 최소값 | **1** |
+    | 인스턴스 제한 최대값 | **3** |
+    | 인스턴스 제한 기본값 | **1** |
 
-1. Click **Save**.
+1. **저장**을 클릭한다.
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 실행한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다.  
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+    >**참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오. 
 
-1. From the Cloud Shell pane, run the following to identify the public IP address of the load balancer in front of the Azure virtual machine scale set **az10408vmss0**.
+1. Cloud Shell 창에서 다음을 실행하여 Azure 가상 머신 확장 집합 **az10408vmss0** 앞단의 로드 밸런서의 공용 IP 주소를 식별한다. 
 
    ```pwsh
    $rgName = 'az104-08-rg02'
@@ -480,44 +480,44 @@ In this task, you will change the size of virtual machine scale set instances, c
 
    $pip = (Get-AzPublicIpAddress -ResourceGroupName $rgName -Name $lbpipName).IpAddress
    ```
-1. From the Cloud Shell pane, run the following to start and infinite loop that sends the HTTP requests to the web sites hosted on the instances of Azure virtual machine scale set **az10408vmss0**.
+1. Cloud Shell 창에서 다음을 실행하여 HTTP 요청을 Azure 가상 머신 확장 집합 **az10408vmss0**에 호스팅된 웹 사이트에 전송하는 무한 루프를 시작한다. 
 
    ```pwsh
    while ($true) { Invoke-WebRequest -Uri "http://$pip" }
    ```
 
-1. Minimize the Cloud Shell pane but do not close it, switch back to the **az10408vmss0 - Instances** blade and monitor the number of instances.
+1. Cloud Shell 창을 최소화해놓고, **az10408vmss0 - 인스턴스** 블레이드로 돌아가서 인스턴스의 숫자를 모니터링한다.
 
-    >**Note**: You might need to wait a couple of minutes and click **Refresh**.
+    >**참고**: 잠시 기다리거나 **새로고침** 하십시오. 
 
-1. Once the third instance is provisioned, navigate to its blade to determine its **Location** (it should be different than the first two zones you identified earlier in this task. 
+1. 세 번째 인스턴스가 프로비저닝되면 블레이드로 이동하여 **위치**을 확인한다. (이 작업에서 앞서 식별한 처음 두 영역과 달라야 한다)
 
-1. Close Cloud Shell pane. 
+1. Cloud Shell 창을 닫는다.  
 
-1. On the **az10408vmss0** blade, click **Storage**, click **+ Add data disk**, and attach a new managed disk with the following settings (leave others with their default values):
+1. **az10408vmss0** 블레이드에서 **디스크**를 클릭하고, **+ 데이터 디스크 추가**를 클릭한다. 다음 설정을 사용해 새 관리 디스크를 연결한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value | 
+    | 설정 | 값 | 
     | --- | --- |
     | LUN | **0** |
-    | Size | **32** |
-    | Account type | **Standard HDD** |
-    | Host caching | **None** |
+    | 크기 | **32** |
+    | 스토리지 계정 형식 | **표준 HDD** |
+    | 호스트 캐싱 | **없음** |
 
-1. Save the change, in the **Settings** section of the **az10408vmss0** blade, click **Instances**, select the checkboxes next to the two instances of the virtual machine scale set, click **Upgrade**, and then, when prompted for confirmation, click **Yes**.
+1. 변경 사항을 저장하고, **az10408vmss0** 블레이드의 **설정** 섹션에서 **인스턴스**를 클릭한다. 가상머신 확장 집합의 두 인스턴스를 선택하고 **업그레이드**를 클릭한다. 확인 창이 뜨면 **예**를 클릭한다. 
 
-    >**Note**: The disk attached in the previous step is a raw disks. Before it can be used, it is necessary to create a partition, create a filesystem, and mount it. To accomplish this, you will use Azure virtual machine Custom Script extension. First, you will need to remove the existing Custom Script Extension.
+    >**참고**: 이전 단계에서 만든 디스크는 원시 디스크입니다. 사용하기 전에 먼저 파티션을 만들고 파일 시스템을 생성하고 탑재해야 합니다. 이 작업을 수행하려면 Azure 가상 시스템 사용자 지정 스크립트 확장 기능을 사용하십시오. 먼저 기존 사용자 지정 스크립트 확장을 제거하십시오.
 
-1. In the **Settings** section of the **az10408vmss0** blade, click **Extensions**, click **CustomScriptExtension**, and then click **Uninstall**.
+1. **az10408vmss0** 블레이드의 **설정** 섹션에서 **확장**을 클릭한다. **CustomScriptExtension**를 선택하고 **제거**를 클릭한다.
 
-    >**Note**: Wait for uninstallation to complete.
+    >**참고**: 삭제 작업이 완료될 때까지 기다리십시오.
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 실행한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다.  
 
-1. In the toolbar of the Cloud Shell pane, click the **Upload/Download files** icon, in the drop-down menu, click **Upload** and upload the file **\\Allfiles\\Labs\\08\\az104-08-configure_VMSS_disks.ps1** into the Cloud Shell home directory.
+1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 클릭한다. 드롭다운 메뉴에서 **업로드**를 클릭하고 **\\Allfiles\\Labs\\08\\az104-08-configure_VMSS_disks.ps1** 파일을 Cloud Shell의 홈 디렉터리에 업로드한다. 
 
-1. From the Cloud Shell pane, run the following to display the content of the script:
+1. Cloud Shell 창에서 다음 명령을 실행하여 스크립트 내용을 표시한다.
 
    ```pwsh
    Set-Location -Path $HOME
@@ -525,45 +525,47 @@ In this task, you will change the size of virtual machine scale set instances, c
    Get-Content -Path ./az104-08-configure_VMSS_disks.ps1
    ```
 
-    >**Note**: The script installs a custom script extension that configures the attached disk.
+    >**참고**: 이 스크립트는 연결된 디스크를 구성하는 사용자 지정 스크립트 확장을 설치합니다.
 
-1. From the Cloud Shell pane, run the following to excecute the script and configure disks of Azure virtual machine scale set:
+1. Cloud Shell 창에서 다음을 명령으로 스크립트를 실행하고 Azure 가상 시스템 확장 집합의 디스크를 구성하십시오.
 
    ```pwsh
    ./az104-08-configure_VMSS_disks.ps1
    ```
 
-1. Close the Cloud Shell pane.
+1. Cloud Shell 창을 닫는다.
 
-1. In the **Settings** section of the **az10408vmss0** blade, click **Instances**, select the checkboxes next to the two instances of the virtual machine scale set, click **Upgrade**, and then, when prompted for confirmation, click **Yes**.
+1. **az10408vmss0** 블레이드의 **설정** 섹션에서 blade, click **인스턴스**를 클릭한다. 가상머신 확장 집합의 두 인스턴스를 선택하고 **업그레이드**를 클릭한다. 확인 창이 뜨면 **예**를 클릭한다. 
 
-#### Clean up resources
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+#### 리소스 삭제
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
+   >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
+
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-08*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-08*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Deployed zone-resilient Azure virtual machines by using the Azure portal and an Azure Resource Manager template
-- Configured Azure virtual machines by using virtual machine extensions
-- Scaled compute and storage for Azure virtual machines
-- Deployed zone-reslient Azure virtual machine scale sets by using the Azure portal
-- Configured Azure virtual machine scale sets by using virtual machine extensions
-- Scaled compute and storage for Azure virtual machine scale sets
+- Azure 포털과 Azure 리소스 매니저 템플릿을 사용하여 가상 머신을 배포했습니다.
+- 가상 머신 확장 기능을 이용하여 Azure 가상 머신을 설정했습니다.
+- Azure 가상 머신을 위한 컴퓨트와 스토리지를 확장했습니다.
+- Azure 포털을 사용하여 Azure 가상 머신 스케일 집합을 배포했습니다.
+- 가상 머신 확장 기능을 사용하여 Azure 가상 머신 스케일 집합을 구성했습니다.
+- Azure 가상 머신 확장 집합을 위한 컴퓨트와 스토리지를 확장했습니다. (선택 사항)
+
