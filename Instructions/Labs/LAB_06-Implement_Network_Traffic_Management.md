@@ -1,46 +1,46 @@
 ---
 lab:
-    title: '06 - Implement Traffic Management'
-    module: 'Module 06 - Network Traffic Management'
+    title: '06 - 트래픽 관리 구현'
+    module: '모듈 06 - 네트워크 트래픽 관리'
 ---
 
-# Lab 06 - Implement Traffic Management
-# Student lab manual
+# 랩 06 - 트래픽 관리 구현
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-You were tasked with testing managing network traffic targeting Azure virtual machines in the hub and spoke network topology, which Contoso considers implementing in its Azure environment (instead of creating the mesh topology, which you tested in the previous lab). This testing needs to include implementing connectivity between spokes by relying on user defined routes that force traffic to flow via the hub, as well as traffic distribution across virtual machines by using layer 4 and layer 7 load balancers. For this purpose, you intend to use Azure Load Balancer (layer 4) and Azure Application Gateway (layer 7).
+Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머신을 타겟팅하는 네트워크 트래픽 관리를 테스트합니다. 이 테스트는 트래픽이 허브를 통해 흐르도록 하는 사용자 정의 경로에 의존하여 스포크 간의 연결성을 구현하는 것은 물론, 4 계층 및 7 계층 부하 분산 장치를 사용하여 가상 머신에 걸친 트래픽 분배를 포함합니다. 이러한 목적을 위해 Azure 부하 분산 장치(4계층)와 Azure Application Gateway(7계층)를 사용합니다.
 
-## Objectives
+## 목표
 
-In this lab, you will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Provision the lab environment
-+ Task 2: Configure the hub and spoke network topology
-+ Task 3: Test transitivity of virtual network peering
-+ Task 4: Configure routing in the hub and spoke topology
-+ Task 5: Implement Azure Load Balancer
-+ Task 6: Implement Azure Application Gateway
++ 작업 1: 랩 환경 프로비전
++ 작업 2: 허브와 스포크 네트워크 토폴로지 구성
++ 작업 3: 가상 네트워크 피어링의 전이성(Transitivity) 테스트
++ 작업 4: 허브와 스포크 라우팅 구성
++ 작업 5: Azure 부하 분산 장치 구현
++ 작업 6: Azure 애플리케이션 게이트웨이 구현
 
-## Instructions
+## 설명
 
-### Exercise 1
+### 연습 1
 
-#### Task 1: Provision the lab environment
+#### 작업 1: 랩 환경 프로비전
 
-In this task, you will deploy four virtual machines into the same Azure region. The first two will reside in a hub virtual network, while each of the remaining to will reside in a separate spoke virtual network.
+이 작업에서는 같은 Azure 지역에 네 개의 가상 머신을 배포합니다. 처음 두개는 허브 가상 네트워크에, 나머지 두 가상 머신은 서로 다른 스포크 가상 네트워크에 각각 배치합니다. 
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 실행한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다. 
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+    >**참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오.
 
-1. In the toolbar of the Cloud Shell pane, click the **Upload/Download files** icon, in the drop-down menu, click **Upload** and upload the files **\\Allfiles\\Module_06\\az104-06-vms-template.json**, **\\Allfiles\\Labs\\06\\az104-06-vm-template.json**, and **\\Allfiles\\Labs\\06\\az104-06-vm-parameters.json** into the Cloud Shell home directory.
+1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 선택한다. 드롭다운 메뉴에서 **업로드**를 클릭하고, **\\Allfiles\\Module_06\\az104-06-vms-template.json**, **\\Allfiles\\Labs\\06\\az104-06-vm-template.json**, **\\Allfiles\\Labs\\06\\az104-06-vm-parameters.json** 을 Cloud Shell의 홈 디렉토리에 업로드한다.
 
-1. From the Cloud Shell pane, run the following to create the first resource group that will be hosting the first virtual network and the pair of virtual machines (replace the `[Azure_region]` placeholder with the name of an Azure region where you intend to deploy Azure virtual machines):
+1. Cloud Shell 창에서 다음 명령을 실행하여 첫 번째 가상 네트워크와 가상 머신들을 호스팅할 리소스 그룹을 생성한다. (`[Azure_region]` 부분을 Azure 가상 머신을 배포할 Azure 지역의 이름으로 대체한다) 
 
    ```pwsh
    $location = '[Azure_region]'
@@ -49,7 +49,7 @@ In this task, you will deploy four virtual machines into the same Azure region. 
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the first virtual network and deploy a pair of virtual machines into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 첫 번째 가상 네트워크를 만들고 한 쌍의 가상 머신을 배포한다. 
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -59,14 +59,13 @@ In this task, you will deploy four virtual machines into the same Azure region. 
       -AsJob
    ```
 
-1. From the Cloud Shell pane, run the following to create the second resource group that will be hosting the second virtual network and the third virtual machine
-
+1. Cloud Shell 창에서 다음 명령을 실행하여 두번째 가상 네트워크와 세번째 가상 머신을 배포할 두 번째 리소스 그룹을 생성한다.
    ```pwsh
    $rgName = 'az104-06-rg2'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the second virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 두번째 가상 네트워크를 만들고 가상 머신을 배포한다.
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -76,14 +75,13 @@ In this task, you will deploy four virtual machines into the same Azure region. 
       -nameSuffix 2 `
       -AsJob
    ```
-1. From the Cloud Shell pane, run the following to create the third resource group that will be hosting the third virtual network and the fourth virtual machine:
-
+1. Cloud Shell 창에서 다음 명령을 실행하여 세번째 가상 네트워크와 네번째 가상 머신을 배포할 세번째 리소스 그룹을 생성한다. 
    ```pwsh
    $rgName = 'az104-06-rg3'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the third virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 세번째 가상 네트워크를 만들고 가상 머신을 배포한다.
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -93,166 +91,165 @@ In this task, you will deploy four virtual machines into the same Azure region. 
       -nameSuffix 3 `
       -AsJob
    ```
-    >**Note**: Wait for the deployments to complete before proceeding to the next task. This should take about 5 minutes.
+    >**참고**: 다음 작업을 시작하기 전에 배포가 끝날 때까지 기다리십시오. 이 작업은 약 5분 소요됩니다. 
 
-    >**Note**: To verify the status of the deployments, you can examine the properties of the resource groups you created in this task.
+    >**참고**: 배포 상태를 확인하려면 이 작업에서 생성했던 리소스 그룹의 속성을 검토하십시오.
 
-1. Close the Cloud Shell pane.
+1. Cloud Shell 창을 닫는다. 
 
-#### Task 2: Configure the hub and spoke network topology
+#### 작업 2: 허브와 스포크 네트워크 토폴로지 구성
 
-In this task, you will configure local peering between the virtual networks you deployed in the previous tasks in order to create a hub and spoke network topology.
+이 작업에서는 이전 작업에서 배포한 가상 네트워크 사이에 로컬 피어링을 구성하여 허브와 스포크 네트워크 토폴로지를 만듭니다.
 
-1. In the Azure portal, search for and select **Virtual networks**.
+1. Azure 포털에서 **가상 네트워크**를 찾아 선택한다.
 
-1. Review the virtual networks you created in the previous task. 
+1. 이전 작업에서 만든 가상 네트워크를 검토한다.
 
-    >**Note**: The template you used for deployment of the three virtual networks ensures that the IP address ranges of the three virtual networks do not overlap.
+    >**참고**: 세 개의 가상 네트워크를 배포할 때 사용했던 템플릿은 가상 네트워크의 IP 주소 범위가 중첩되지 않는 것을 보장합니다. 
 
-1. In the list of virtual networks, click **az104-06-vnet01**.
+1. 가상 네트워크 목록에서 **az104-06-vnet01**를 클릭한다.
 
-1. On the **az104-06-vnet01** virtual network blade, in the **Settings** section, click **Peerings** and then click **+ Add**.
+1. **az104-06-vnet01** 가상 네트워크 블레이드에서 **설정** 섹션의 **피어링**에서 **+ 추가**를 클릭한다.
 
-1. Add a peering with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 피어링을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name of the peering from az104-06-vnet01 to remote virtual network | **az104-06-vnet01_to_az104-06-vnet2** |
-    | Virtual network deployment model | **Resource manager** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Virtual network | **az104-06-vnet2 (az104-06-rg2)** |
-    | Name of the peering from az104-06-vnet2 to az104-06-vnet01 | **az104-06-vnet2_to_az104-06-vnet01** |
-    | Allow virtual network access from az104-06-vnet01 to az104-06-vnet2 | **Enabled** |
-    | Allow virtual network access from az104-06-vnet2 to az104-06-vnet01 | **Enabled** |
-    | Allow forwarded traffic from az104-06-vnet2 to az104-06-vnet01 | **Enabled** |
-    | Allow forwarded traffic from az104-06-vnet01 to az104-06-vnet2 | **Enabled** |
-    | Allow gateway transit | **(Uncheck Box)** |
+    | az104-06-vnet01에서 원격 가상 네트워크(으)로 피어링 이름 | **az104-06-vnet01_to_az104-06-vnet2** |
+    | 가상 네트워크 배포 모델 | **Resource manager** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 가상 네트워크 | **az104-06-vnet2 (az104-06-rg2)** |
+    | az104-06-vnet2에서 az104-06-vnet01(으)로 피어링 이름 | **az104-06-vnet2_to_az104-06-vnet01** |
+    | az104-06-vnet01에서 az104-06-vnet2(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-06-vnet2에서 az104-06-vnet01(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-06-vnet2에서 az104-06-vnet01(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | az104-06-vnet01에서 az104-06-vnet2(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | 게이트웨이 전송 설정 구성 | **(체크하지 않음)** |
 
-    >**Note**: Wait for the operation to complete.
+    >**참고**: 작업이 끝날 때까지 기다리십시오. 
 
-    >**Note**: This step establishes two local peerings - one from az104-06-vnet01 to az104-06-vnet2 and the other from az104-06-vnet2 to az104-06-vnet01.
+    >**참고**: 이 과정은 두개의 로컬 피어링을 설정합니다. - az104-06-vnet01에서 az104-06-vnet2로 향하는 피어링, az104-06-vnet2에서 az104-06-vnet01로 향하는 피어링
 
-    >**Note**: **Allow forwarded traffic** needs to be enabled in order to facilitate routing between spoke virtual networks, which you will implement later in this lab.
+    >**참고**: **전달되는 트래픽 허용**은 스포크 가상 네트워크 사이 라우팅을 구현하기 위하여 사용됩니다. 이 랩의 다른 단계에서 구현할 예정입니다.
 
-1. On the **az104-06-vnet01** virtual network blade, in the **Settings** section, click **Peerings** and then click **+ Add**.
+1. **az104-06-vnet01** 가상 네트워크 블레이드에서 **설정** 섹션의 **피어링**에서 **+ 추가**를 클릭한다.
 
-1. Add a peering with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 피어링을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name of the peering from az104-06-vnet01 to remote virtual network | **az104-06-vnet01_to_az104-06-vnet3** |
-    | Virtual network deployment model | **Resource manager** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Virtual network | **az104-06-vnet3 (az104-06-rg3)** |
-    | Name of the peering from az104-06-vnet3 to az104-06-vnet01 | **az104-06-vnet3_to_az104-06-vnet01** |
-    | Allow virtual network access from az104-06-vnet01 to az104-06-vnet3 | **Enabled** |
-    | Allow virtual network access from az104-06-vnet3 to az104-06-vnet01 | **Enabled** |
-    | Allow forwarded traffic from az104-06-vnet3 to az104-06-vnet01 | **Enabled** |
-    | Allow forwarded traffic from az104-06-vnet01 to az104-06-vnet3 | **Enabled** |
-    | Allow gateway transit | **(Uncheck Box)** |
+    | az104-06-vnet01에서 원격 가상 네트워크(으)로 피어링 이름 | **az104-06-vnet01_to_az104-06-vnet3** |
+    | 가상 네트워크 배포 모델 | **Resource manager** |
+    | 구독 | 이 랩에서 사용할 Azure 구독의 이름 |
+    | 가상 네트워크 | **az104-06-vnet3 (az104-06-rg3)** |
+    | az104-06-vnet3에서 az104-06-vnet01(으)로 피어링 이름 | **az104-06-vnet3_to_az104-06-vnet01** |
+    | az104-06-vnet01에서 az104-06-vnet3(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-06-vnet3에서 az104-06-vnet01(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-06-vnet3에서 az104-06-vnet01(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | az104-06-vnet01에서 az104-06-vnet3(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | 게이트웨이 전송 설정 구성 | **(체크하지 않음)** |
 
-    >**Note**: This step establishes two local peerings - one from az104-06-vnet01 to az104-06-vnet3 and the other from az104-06-vnet3 to az104-06-vnet01. This completes setting up the hub and spoke topology (with two spoke virtual networks).
+    >**참고**: 이 과정은 두개의 로컬 피어링을 설정합니다. - az104-06-vnet01에서 az104-06-vnet3으로 향하는 피어링, az104-06-vnet3에서 az104-06-vnet01로 향하는 피어링. 이 작업은 허브와 스포크 토폴로지 구현을 완료합니다. (두 개의 스포크 가상 네트워크)
 
-    >**Note**: **Allow forwarded traffic** needs to be enabled in order to facilitate routing between spoke virtual networks, which you will implement later in this lab.
+    >**참고**: **전달되는 트래픽 허용**은 스포크 가상 네트워크 사이 라우팅을 구현하기 위하여 사용됩니다. 이 랩의 다른 단계에서 구현할 예정입니다.
 
-#### Task 3: Test transitivity of virtual network peering
+#### 작업 3: 가상 네트워크 피어링의 전이성(Transitivity) 테스트
 
-In this task, you will test transitivity of virtual network peering by using Network Watcher.
+이 작업에서는 Networmk Watcher를 사용하여 가상 네트워크 피어링의 전이성을 조사합니다. 
 
-1. In the Azure portal, search for and select **Network Watcher**.
+1. Azure 포털에서 **Network Watcher**를 검색하고 선택한다.
 
-1. On the **Network Watcher** blade, expand the listing of Azure regions and verify that the service is enabled in the Azure into which you deployed resources in the first task of this lab.
+1. **Network Watcher** 블레이드에서 지역 목록을 확장하고, 이 랩의 첫번째 작업에서 리소스를 배포한 지역에서 이용 가능한 서비스인지 확인한다. 
 
-1. On the **Network Watcher** blade, navigate to the **Connection troubleshoot**.
+1. **Network Watcher** 블레이드에서 **연결 문제 해결**을 찾는다.
 
-1. On the **Network Watcher - Connection troubleshoot** blade, initiate a check with the following settings (leave others with their default values):
+1. **Network Watcher - 연결 문제 해결** 블레이드에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-06-rg01** |
-    | Source type | **Virtual machine** |
-    | Virtual machine | **az104-06-vm0** |
-    | Destination | **Specify manually** |
-    | URI, FQDN or IPv4 | **10.62.0.4** |
-    | Protocol | **TCP** |
-    | Destination Port | **3389** |
+    | 구독 | 이 랩에서 사용하는 구독 |
+    | 리소스 그룹 | **az104-06-rg01** |
+    | 원본 유형 | **가상 머신** |
+    | 가상 머신 | **az104-06-vm0** |
+    | 대상 주소 | **수동으로 지정** |
+    | URI, FQDN 또는 IPv4 | **10.62.0.4** |
+    | 프로토콜 | **TCP** |
+    | 대상 포트 | **3389** |
 
-    > **Note**: **10.62.0.4** represents the private IP address of **az104-06-vm2**
+    > **참고**: **10.62.0.4**는 **az104-06-vm2**의 사설 IP 주소를 나타냅니다.
 
-1. Click **Check** and wait until results of the connectivity check are returned. Verify that the status is **Reachable**. Review the network path and note that the connection was direct, with no intermediate hops in between the VMs.
+1. **선택**을 클릭하고 연결 확인 결과를 기다린다. **연결 가능** 상태를 확인하고, 네트워크 경로를 검토하여 VM 사이 중간 홉 없이 직접 연결되어 있는 것을 확인한다.
 
-    > **Note**: This is expected, since the hub virtual network is peered directly with the first spoke virtual network.
+    > **참고**: 허브 가상 네트워크는 첫번째 스포크 가상 네트워크에 직접 피어링됩니다. 
 
-    > **Note**: The initial check can take about 2 minutes because it requires installation of the Network Watcher Agent virtual machine extension on **az104-06-vm0**.
+    > **참고**: **az104-06-vm0**에 Network Watcher Agent 가상 머신 확장 설치가 필요하기 때문에 초기 확인 시간은 약 2분 소요됩니다.
 
-1. On the **Network Watcher - Connection troubleshoot** blade, initiate a check with the following settings (leave others with their default values):
-
-    | Setting | Value |
+1. **Network Watcher - 연결 문제 해결** 블레이드에서 다음 설정을 사용하여 확인을 시작한다. (다른 값은 기본 설정을 사용한다)
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-06-rg01** |
-    | Source type | **Virtual machine** |
-    | Virtual machine | **az104-06-vm0** |
-    | Destination | **Specify manually** |
-    | URI, FQDN or IPv4 | **10.63.0.4** |
-    | Protocol | **TCP** |
-    | Destination Port | **3389** |
+    | 구독 | 이 랩에서 사용하는 구독 |
+    | 리소스 그룹 | **az104-06-rg01** |
+    | 원본 유형 | **가상 머신** |
+    | 가상 머신 | **az104-06-vm0** |
+    | 대상 주소 | **수동으로 지정** |
+    | URI, FQDN 또는 IPv4 | **10.63.0.4** |
+    | 프로토콜 | **TCP** |
+    | 대상 포트 | **3389** |
 
-    > **Note**: **10.63.0.4** represents the private IP address of **az104-06-vm3**
+    > **참고**: **10.63.0.4**는 **az104-06-vm3**의 사설 IP 주소를 나타냅니다.
 
-1. Click **Check** and wait until results of the connectivity check are returned. Verify that the status is **Reachable**. Review the network path and note that the connection was direct, with no intermediate hops in between the VMs.
+1. **선택**을 클릭하고 연결 확인 결과를 기다린다. **연결 가능** 상태를 확인하고, 네트워크 경로를 검토하여 VM 사이 중간 홉 없이 직접 연결되어 있는 것을 확인한다.
 
-    > **Note**: This is expected, since the hub virtual network is peered directly with the second spoke virtual network.
+    > **참고**: 허브 가상 네트워크는 두번째 스포크 가상 네트워크에 직접 피어링됩니다. 
 
-1. On the **Network Watcher - Connection troubleshoot** blade, initiate a check with the following settings (leave others with their default values):
+1. **Network Watcher - 연결 문제 해결** 블레이드에서 다음 설정을 사용하여 확인을 시작한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-06-rg2** |
-    | Source type | **Virtual machine** |
-    | Virtual machine | **az104-06-vm2** |
-    | Destination | **Specify manually** |
-    | URI, FQDN or IPv4 | **10.63.0.4** |
-    | Protocol | **TCP** |
-    | Destination Port | **3389** |
+    | 구독 | 이 랩에서 사용하는 구독 |
+    | 리소스 그룹 | **az104-06-rg2** |
+    | 원본 유형 | **가상 머신** |
+    | 가상 머신 | **az104-06-vm2** |
+    | 대상 주소 | **수동으로 지정** |
+    | URI, FQDN 또는 IPv4 | **10.63.0.4** |
+    | 프로토콜 | **TCP** |
+    | 대상 포트 | **3389** |
 
-1. Click **Check** and wait until results of the connectivity check are returned. Note that the status is **Unreachable**. 
+1. **선택**을 클릭하고 연결 확인 결과를 기다린다. **연결할 수 없음** 상태를 확인한다.
 
-    > **Note**: This is expected, since the two spoke virtual networks are not peered with each other (virtual network peering is not transitive).
+    > **참고**: 두 스포크 가상 네트워크는 서로 피어링되지 않았습니다. (가상 네트워크 피어링은 전이성(transitive)이 없습니다)
 
-#### Task 4: Configure routing in the hub and spoke topology
+#### 작업 4: 허브와 스포크 라우팅 구성
 
-In this task, you will configure and test routing between the two spoke virtual networks by enabling IP forwarding on the network interface of the **az104-06-vm0** virtual machine, enabling routing within its operating system, and configuring user-defined routes on the spoke virtual network.
+이 작업에서는 **az104-06-vm0** 가상 머신의 네트워크 인터페이스에서 IP 전달과 운영 체제 내의 라우팅을 활성화하며, 스포크 가상 네트워크에서 사용자 정의 경로를 구성하여 두 스포크 가상 네트워크 간의 라우팅을 구성하고 테스트합니다.
 
-1. In the Azure portal, search and select **Virtual machines**.
+1. Azure 포털에서 **가상 머신**을 찾아 선택한다.
 
-1. On the **Virtual machines** blade, in the list of virtual machines, click **az104-06-vm0**.
+1. **가상 머신** 목록에서 **az104-06-vm0**을 클릭한다.
 
-1. On the **az104-06-vm0** virtual machine blade, in the **Settings** section, click **Networking**.
+1. **az104-06-vm0** 가상 머신 블레이드에서 **설정** 섹션의 **네트워킹**을 클릭한다.
 
-1. Click the **az104-06-nic0** link next to the **Network interface** label, and then, on the **az104-06-nic0** network interface blade, in the **Settings** section, in the **Settings** section, click **IP configurations**. 
+1. **네트워크 인터페이스** 라벨 옆의 **az104-06-nic0** 링크를 클릭한다. **az104-06-nic0** 네트워크 인터페이스 블레이드의 **설정** 섹션에서 **IP 구성**을 클릭한다. 
 
-1. Set **IP forwarding** to **Enabled** and save the change. 
+1. **IP 전달**을 **사용**으로 설정하고 저장한다.
 
-   > **Note**: This setting is required in order for **az104-06-vm0** to function as a router, which will route traffic between two spoke virtual networks.
+   > **참고**: 이 설정은 **az104-06-vm0**가 라우터로 동작하여 두 스포크 가상 네트워크 사이 트래픽을 라우팅합니다. 
 
-   > **Note**: Now you need to configure operating system of the **az104-06-vm0** virtual machine to support routing.
+   > **참고**: 이제 라우팅을 지원하기 위해 **az104-06-vm0** 가상 머신의 작업 시스템을 구성해야 합니다. 
 
-1. In the Azure portal, navigate back to the **az104-06-vm0** Azure virtual machine blade and click **Overview**.
+1. Azure 포털의 **az104-06-vm0** 가상 머신 블레이드로 돌아가 **개요**를 클릭한다.
 
-1. On the **az104-06-vm0** blade, in the **Operations** section, click **Run command**, and, in the list of commands, click **RunPowerShellScript**.
+1. **az104-06-vm0** 블레이드에서 **작업** 섹션의 **실행 명령**을 클릭하고, 명령 목록에서 **RunPowerShellScript**을 클릭한다.
 
-1. On the **Run Command Script** blade, type the following and click **Run** to install the Remote Access Windows Server role.
+1. **Run Command Script** 블레이드에서 다음 명령을 입력하고 **실행**하여 Remote Access Windows Server role을 설치한다.
 
    ```pwsh
    Install-WindowsFeature RemoteAccess -IncludeManagementTools
    ```
 
-   > **Note**: Wait for the confirmation that the command completed successfully.
+   > **참고**: **스크립트 실행 완료** 확인 메시지를 기다리십시오.
 
-1. On the **Run Command Script** blade, type the following and click **Run** to install the Routing role service.
+1. **실행 명령 스크립트** 블레이드에서 다음 명령을 **실행**하여 Routing role service를 설치한다.
 
    ```pwsh
    Install-WindowsFeature -Name Routing -IncludeManagementTools -IncludeAllSubFeature
@@ -264,321 +261,325 @@ In this task, you will configure and test routing between the two spoke virtual 
    Get-NetAdapter | Set-NetIPInterface -Forwarding Enabled
    ```
 
-   > **Note**: Wait for the confirmation that the command completed successfully.
+   > **참고**: **스크립트 실행 완료** 확인 메시지를 기다리십시오.
 
-   > **Note**: Now you need to create and configure user defined routes on the spoke virtual networks.
+   > **참고**: 이제 스포크 가상 네트워크에 대한 사용자 정의 경로를 만들고 구성해야 합니다. 
 
-1. In the Azure portal, search and select **Route tables** and, on the **Route tables** blade, click **+ Add**.
+1. Azure 포털에서 **경로 테이블**울 검색하고, **경로 테이블** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. Create a route table with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 경로 테이블을 생성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-06-rt23** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-06-rg2** |
-    | Location | the name of the Azure region in which you created the virtual networks |
-    | Virtual network gateway route propagation | **Disabled** |
+    | 이름 | **az104-06-rt23** |
+    | 구독 | 이 랩에서 사용하는 구독의 이름 |
+    | 리소스 그룹 | **az104-06-rg2** |
+    | 지역 | 가상 네트워크를 만든 Azure 지역의 이름 |
+    | 가상 네트워크 게이트웨이 경로 전파 | **사용 안 함** |
 
-   > **Note**: Wait for the route table to be created. This should take about 3 minutes.
+   > **참고**: 경로 테이블 생성이 완료될 때까지 기다리십시오. 이 작업은 약 3분 소요됩니다.
 
-1. Back on the **Route tables** blade, click **Refresh** and then click **az104-06-rt23**.
+1. **경로 테이블** 블레이드에서 **새로 고침**하고 **az104-06-rt23**을 클릭한다.
 
-1. On the **az104-06-rt23** route table blade, click **Routes** and then click **+ Add**.
+1. **az104-06-rt23** 경로 테이블 블레이드에서 **경로**를 선택하고 **+ 추가**를 클릭한다.
 
-1. Add a new route with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 새로운 경로를 추가한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Route name | **az104-06-route-vnet2-to-vnet3** |
-    | Address prefix | **10.63.0.0/20** |
-    | Next hop type | **Virtual appliance** |
-    | Next hop address | **10.60.0.4** |
+    | 경로 이름 | **az104-06-route-vnet2-to-vnet3** |
+    | 주소 접두사 | **10.63.0.0/20** |
+    | 다음 홉 형식 | **가상 어플라이언스** |
+    | 다음 홉 주소 | **10.60.0.4** |
 
-1. Back on the **az104-06-rt23** route table blade, click **Subnets** and then click **+ Associate**.
+1. **az104-06-rt23** 경로 테이블 블레이드로 돌아가 **서브넷**을 선택하고 **+ 연결**을 클릭한다.
 
-1. Associate the route table **az104-06-rt23** with the following subnet:
+1. 다음 설정을 사용하여 서브넷에 **az104-06-rt23** 경로 테이블을 연결한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Virtual network | **az104-06-vnet2** |
-    | Subnet | **subnet0** |
+    | 가상 네트워크 | **az104-06-vnet2** |
+    | 서브넷 | **subnet0** |
 
-1. Navigate back to **Route tables** blade and click **+ Add**.
+1. **경로 테이블** 블레이드로 돌아가 **+ 추가**를 클릭한다.
 
-1. Create a route table with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 경로 테이블을 생성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-06-rt32** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-06-rg3** |
-    | Location | the name of the Azure region in which you created the virtual networks |
-    | Virtual network gateway route propagation | **Disabled** |
+    | 이름 | **az104-06-rt32** |
+    | 구독 | 이 랩에서 사용하는 구독의 이름 |
+    | 리소스 그룹 | **az104-06-rg3** |
+    | 지역 | 가상 네트워크를 만든 Azure 지역의 이름 |
+    | 가상 네트워크 게이트웨이 경로 전파 | **사용 안 함** |
 
-   > **Note**: Wait for the route table to be created. This should take about 3 minutes.
+   > **참고**: 경로 테이블 생성이 완료될 때까지 기다리십시오. 이 작업은 약 3분 소요됩니다. 
 
-1. Back on the **Route tables** blade, click **Refresh** and then click **az104-06-rt32**.
+1. **경로 테이블** 블레이드에서 **새로 고침**하고 **az104-06-rt32**를 클릭한다.
 
-1. On the **az104-06-rt32** route table blade, click **Routes** and then click **+ Add**.
+1. **az104-06-rt32** 경로 테이블 블레이드에서 **경로**를 선택하고 **+ 추가**를 클릭한다.
 
-1. Add a new route with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 새로운 경로를 추가한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Route name | **az104-06-route-vnet3-to-vnet2** |
-    | Address prefix | **10.62.0.0/20** |
-    | Next hop type | **Virtual appliance** |
-    | Next hop address | **10.60.0.4** |
+    | 경로 이름 | **az104-06-route-vnet3-to-vnet2** |
+    | 주소 접두사 | **10.62.0.0/20** |
+    | 다음 홉 형식 | **가상 어플라이언스** |
+    | 다음 홉 주소 | **10.60.0.4** |
 
-1. Back on the **az104-06-rt32** route table blade, click **Subnets** and then click **+ Associate**.
+1. **az104-06-rt32** 경로 테이블 블레이드로 돌아가 **서브넷**을 선택하고 **+ 연결**을 클릭한다.
 
-1. Associate the route table **az104-06-rt32** with the following subnet:
+1. 다음 설정을 사용하여 서브넷에 **az104-06-rt32** 경로 테이블을 연결한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Virtual network | **az104-06-vnet3** |
-    | Subnet | **subnet0** |
+    | 가상 네트워크 | **az104-06-vnet3** |
+    | 서브넷 | **subnet0** |
 
-1. In the Azure portal, navigate back to the **Network Watcher - Connection troubleshoot** blade.
+1. Azure 포털의 **Network Watcher - 연결 문제 해결** 블레이드로 돌아간다.
 
-1. On the **Network Watcher - Connection troubleshoot** blade, initiate a check with the following settings (leave others with their default values):
+1. **Network Watcher - 연결 문제 해결** 블레이드에서 다음 설정을 사용하여 확인을 시작한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-06-rg2** |
-    | Source type | **Virtual machine** |
-    | Virtual machine | **az104-06-vm2** |
-    | Destination | **Specify manually** |
-    | URI, FQDN or IPv4 | **10.63.0.4** |
-    | Protocol | **TCP** |
-    | Destination Port | **3389** |
+    | 구독 | 이 랩에서 사용하는 구독의 이름 |
+    | 리소스 그룹 | **az104-06-rg2** |
+    | 원본 유형 | **Virtual machine** |
+    | 가상 머신 | **az104-06-vm2** |
+    | 대상 주소 | **수동으로 지정** |
+    | URI, FQDN 또는 IPv4 | **10.63.0.4** |
+    | 프로토콜 | **TCP** |
+    | 대상 포트 | **3389** |
 
-1. Click **Check** and wait until results of the connectivity check are returned. Verify that the status is **Reachable**. Review the network path and note that the traffic was routed via **10.60.0.4**, assigned to the **az104-06-nic0** network adapter.
+1. **선택**을 클릭하고 연결 확인 결과를 기다린다. **연결 가능** 상태를 확인한다. 네트워크 경로를 검토하여 트래픽이 **az104-06-nic0** 네트워크 어댑터에 할당된 **10.60.0.4**를 통해 라우팅되는 것을 확인한다.
 
-    > **Note**: This is expected, since the traffic between spoke virtual networks is now routed via the virtual machine located in the hub virtual network, which functions as a router. 
+    > **참고**: 스포크 가상 네트워크 사이의 트래픽이 라우터 역할을 하는 허브 가상 네트워크에 있는 가상 머신을 통해 라우팅됩니다. 
 
-    > **Note**: You can use **Network Watcher** to view topology of the network.
+    > **참고**: **Network Warcher**를 사용하여 네트워크 토폴로지를 확인할 수 있습니다. 
 
-#### Task 5: Implement Azure Load Balancer
+#### 작업 5: Azure 부하 분산 장치 구현
 
-In this task, you will implement an Azure Load Balancer in front of the two Azure virtual machines in the hub virtual network
+이 작업에서는 허브 가상 네트워크에 있는 두 Azure 가상 머신의 앞단에 Azure 부하 분산 장치를 구현합니다. 
 
-1. In the Azure portal, search and select **Load balancers** and, on the **Load balancers** blade, click **+ Add**.
+1. Azure 포털에서 **부하 분산 장치**를 검색하고 선택한다. **부하 분산 장치** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. Create a load balancer with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 부하 분산 장치를 생성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | the name of a new resource group **az104-06-rg4** |
-    | Name | **az104-06-lb4** |
-    | Region| name of the Azure region into which you deployed all other resources in this lab |
-    | Type | **Public** |
-    | SKU | **Standard** |
-    | Public IP address | **Create new** |
-    | Public IP address name | **az104-06-pip4** |
-    | Availability zone | **Zone-redundant** |
-    | Add a public IPv6 address | **No** |
+    | 구독 | 이 랩에서 사용하는 구독의 이름 |
+    | 리소스 그룹 | 새로 만들기 **az104-06-rg4** |
+    | 이름 | **az104-06-lb4** |
+    | 지역 | 이 랩에서 다른 리소스들을 배포한 지역의 이름 |
+    | 형식 | **공개** |
+    | SKU | **표준** |
+    | 공용 IP 주소 | **새로 만들기** |
+    | 공용 IP 주소 이름 | **az104-06-pip4** |
+    | 가용성 영역 | **영역 중복** |
+    | 공용 IPv6 주소 추가 | **아니요** |
 
-    > **Note**: Wait for the Azure load balancer to be provisioned. This should take about 2 minutes. 
+    > **참고**: 부하 분산 장치가 프로비전될 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다. 
 
-1. On the deployment blade, click **Go to resource**.
+1. 배포 블레이드에서 **리소스로 이동**을 클릭한다.
 
-1. On the **az104-06-lb4** load balancer blade, click **Backend pools** and click **+ Add**.
+1. **az104-06-lb4** 부하 분산 장치 블레이드의 **백 엔드 풀**에서 **+ 추가**를 클릭한다.
 
-1. Add a backend pool with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 백 엔드 풀을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-06-lb4-be1** |
-    | Virtual network | **az104-06-vnet01** |
-    | IP version | **IPv4** |
-    | Virtual machine | **az104-06-vm0** | 
-    | Virtual machine IP address | **ipconfig1 (10.60.0.4)** |
-    | Virtual machine | **az104-06-vm1** |
-    | Virtual machine IP address | **ipconfig1 (10.60.1.4)** |
+    | 이름 | **az104-06-lb4-be1** |
+    | 가상 네트워크 | **az104-06-vnet01** |
+    | IP 버전 | **IPv4** |
+    | 가상 머신 | **az104-06-vm0** | 
+    | 가상 머신 IP 주소 | **ipconfig1 (10.60.0.4)** |
+    | 가상 머신 | **az104-06-vm1** |
+    | 가상 머신 IP 주소 | **ipconfig1 (10.60.1.4)** |
 
-1. Wait for the backend pool to be created, click **Health probes**, and then click **+ Add**.
+1. 백 엔드 풀이 추가될 때까지 기다린 후, **상태 프로브**에서 **+ 추가**를 클릭한다.
 
-1. Add a health probe with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 상태 프로브를 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-06-lb4-hp1** |
-    | Protocol | **TCP** |
-    | Port | **80** |
-    | Interval | **5** |
-    | Unhealthy threshold | **2** |
+    | 이름 | **az104-06-lb4-hp1** |
+    | 프로토콜 | **TCP** |
+    | 포트 | **80** |
+    | 간격 | **5** |
+    | 비정상 임계값 | **2** |
 
-1. Wait for the health probe to be created, click **Load balancing rules**, and then click **+ Add**.
+1. 상태 프로브가 만들어질 때까지 기다린 후, **부하 분산 규칙**에서 **+ 추가**를 클릭한다. 
 
-1. Add a load balancing rule with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 부하 분산 규칙을 생성한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-06-lb4-lbrule1** |
-    | IP Version | **IPv4** |
-    | Protocol | **TCP** |
-    | Port | **80** |
-    | Backend port | **80** |
-    | Backend pool | **az104-06-lb4-be1** |
-    | Health probe | **az104-06-lb4-hp1** |
-    | Session persistence | **None** |
-    | Idle timeout (minutes) | **4** |
-    | TCP reset | **Disabled** |
-    | Floating IP (direct server return) | **Disabled** |
-    | Create implicit outbound rules | **Yes** |
+    | 이름 | **az104-06-lb4-lbrule1** |
+    | IP 버전 | **IPv4** |
+    | 프로토콜 | **TCP** |
+    | 포트 | **80** |
+    | 백 엔드 포트 | **80** |
+    | 백 엔드 풀 | **az104-06-lb4-be1** |
+    | 상태 프로브 | **az104-06-lb4-hp1** |
+    | 세션 지속성 | **None** |
+    | 유휴 제한 시간(분) | **4** |
+    | TCP 재설정 | **사용 안 함** |
+    | 유동 IP (Direct server return) | **사용 안 함** |
+    | 암시적 아웃바운드 규칙 만들기 | **예** |
 
-1. Wait for the load balancing rule to be created, click **Overview**, and note the value of the **Public IP address**.
+1. 부하 분산 규칙이 만들어질 때까지 기다린 후, **개요**의 **공용 IP 주소**를 클릭한다. 
 
-1. Start another browser window and navigate to the IP address you identified in the previous step.
+1. 브라우저 창을 열고 IP 주소로 접속한다. 
 
-1. Verify that the browser window displays the message **Hello World from az104-06-vm0** or **Hello World from az104-06-vm1**.
+1. 브라우저 창에 **Hello World from az104-06-vm0** 또는 **Hello World from az104-06-vm1**의 메시지가 나타난 것을 확인한다.
 
-1. Open another browser window but this time by using InPrivate mode and verify whether the target vm changes (as indicated by the message). 
+1. InPrivate 모드를 사용하여 다른 브라우저 창을 열고, 출력된 메시지를 통해 vm이 변경되었는지 확인한다.
 
-    > **Note**: You might need to refresh the browser window or open it again by using InPrivate mode.
+    > **참고**: 브라우저 창을 새로고침 하거나 InPrivate 모드를 사용해 브라우저 창을 다시 열어야 합니다. 
 
-#### Task 6: Implement Azure Application Gateway
+#### 작업 6: Azure 애플리케이션 게이트웨이 구현
 
-In this task, you will implement an Azure Application Gateway in front of the two Azure virtual machines in the spoke virtual networks.
+ 작업에서는 스포크 가상 네트워크의 두 Azure 가상 머신 앞단에 Azure 애플리케이션 게이트웨이를 구현합니다. 
 
-1. In the Azure portal, search and select **Virtual networks**.
+1. Azure 포털에서 **가상 네트워크**를 찾아 선택한다.
 
-1. On the **Virtual networks** blade, in the list of virtual networks, click **az104-06-vnet01**.
+1. **가상 네트워크** 블레이드의 목록에서 **az104-06-vnet01**를 클릭한다.
 
-1. On the  **az104-06-vnet01** virtual network blade, in the **Settings** section, click **Subnets**, and then click **+ Add**.
+1. **az104-06-vnet01** 가상 네트워크 블레이드에서 **설정** 섹션의 **서브넷**을 선택하고, **+ 서브넷**을 클릭한다.
 
-1. Add a subnet with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 서브넷을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **subnet-appgw** |
-    | Address range (CIDR block) | **10.60.3.224/27** |
-    | Network security group | **None** |
-    | Route table | **None** |
+    | 이름 | **subnet-appgw** |
+    | 주소 범위 (CIDR 블록) | **10.60.3.224/27** |
+    | 네트워크 보안 그룹 | **없음** |
+    | 경로 테이블 | **없음** |
 
-    > **Note**: This subnet will be used by the Azure Application Gateway instances, which you will deploy later in this task. The Application Gateway requires a dedicated subnet of /27 or larger size.
+    > **참고**: 이 서브넷은 나중에 이 작업에서 배포될 Azure Application Gateway 인스턴스에서 사용됩니다. 애플리케이션 게이트웨이는 /27 이상의 전용 서브넷이 필요합니다.
 
-1. In the Azure portal, search and select **Application Gateways** and, on the **Application Gateways** blade, click **+ Add**.
+1. Azure 포털에서 **애플리케이션 게이트웨이**를 찾아 선택한다. **애플리케이션 게이트웨이** 블레이드에서 **+ 추가**를 클릭한다.
 
-1. On the **Basics** tab of the **Create an application gateway** blade, specify the following settings (leave others with their default values):
+1. **애플리케이션 게이트웨이 만들기** 블레이드의 **기본 사항** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | the name of a new resource group **az104-06-rg5** |
-    | Application gateway name | **az104-06-appgw5** |
-    | Region | name of the Azure region into which you deployed all other resources in this lab |
-    | Tier | **Standard V2** |
-    | Enable autoscaling | **No** |
-    | Instances | **1** |
-    | Availability zone | **1, 2, 3** |
-    | HTTP/2 | **Disabled** |
-    | Virtual network | **az104-06-vnet01** |
-    | Subnet | **subnet-appgw** |
+    | 구독 | 이 랩에서 사용하는 구독의 이름 |
+    | 리소스 그룹 | 새로 만들기 **az104-06-rg5** |
+    | 게이트웨이 이름 | **az104-06-appgw5** |
+    | 지역 | 이 랩의 모든 다른 리소스를 배포한 지역의 이름 |
+    | 계층 | **표준 V2** |
+    | 자동 크기 조정 | **아니요** |
+    | 배율 단위 | **1** |
+    | 가용성 영역 | **영역 1, 2, 3** |
+    | HTTP2 | **사용 안 함** |
+    | 가상 네트워크 | **az104-06-vnet01** |
+    | 서브넷 | **subnet-appgw** |
 
-1. Click **Next: Frontends >** and, on the **Frontends** tab of the **Create an application gateway** blade, specify the following settings (leave others with their default values):
+1. **다음: 프런트 엔드 >**를 클릭하고, 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Frontend IP address type | **Public** |
-    | Public IP address| the name of a new public ip address **az104-06-pip5** |
+    | 프런트 엔드 IP 형식 | **공용** |
+    | 방화벽 퍼블릭 IP 주소 | 새로 추가 **az104-06-pip5** |
 
-1. Click **Next: Backends >**, on the **Backends** tab of the **Create an application gateway** blade, click **+ Add a backend pool**, and, on the **Add a backend pool** blade, specify the following settings (leave others with their default values):
+1. **다음: 백 엔드 >**를 클릭하고, **+ 백 엔드 풀 추가**를 클릭한다. 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-06-appgw5-be1** |
-    | Add backend pool without targets | **No** |
-    | Target type | **IP address or hostname** |
-    | Target | **10.62.0.4** |
-    | Target type | **IP address or hostname** |
-    | Target | **10.63.0.4** |
+    | 이름 | **az104-06-appgw5-be1** |
+    | 대상 없이 백 엔드 풀 추가 | **아니요** |
+    | 대상 유형 | **IP 주소 또는 FQDN** |
+    | 대상 | **10.62.0.4** |
+    | 대상 유형 | **IP 주소 또는 FQDN** |
+    | 대상 | **10.63.0.4** |
 
-    > **Note**: The targets represent the private IP addresses of virtual machines in the spoke virtual networks **az104-06-vm2** and **az104-06-vm3**.
+    > **참고**: 대상은 스포크 가상 네트워크에 있는 가상 머신 **az104-06-vm2**와 **az104-06-vm3**의 사설 IP 주소를 나타냅니다.
 
-1. Click **Add**, click **Next: Configuration >** and, on the **Configuration** tab of the **Create an application gateway** blade, click **+ Add a rule**. 
+1. **추가**하고 **다음: 구성 >**을 클릭한다. **구성** 탭에서 **+ 회람 규칙 추가**를 클릭한다.
 
-1. On the **Add a routing rule** blade, on the **Listener** tab, specify the following settings (leave others with their default values):
+1. **회람 규칙 추가** 블레이드의 **수신기** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Rule name | **az104-06-appgw5-rl1** |
-    | Listener name | **az104-06-appgw5-rl1l1** |
-    | Frontend IP | **Public** |
-    | Protocol | **HTTP** |
-    | Port | **80** |
-    | Listener type | **Basic** |
-    | Error page url | **No** |
+    | 규칙 이름 | **az104-06-appgw5-rl1** |
+    | 수신기 이름 | **az104-06-appgw5-rl1l1** |
+    | 프런트 엔드 IP | **공용** |
+    | 프로토콜 | **HTTP** |
+    | 포트 | **80** |
+    | 수신기 유형 | **기본** |
+    | 오류 페이지 url | **아니요** |
 
-1. Switch to the **Backend targets** tab of the **Add a routing rule** blade and specify the following settings (leave others with their default values):
+1. **백 엔드 대상** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Target type | **Backend pool** |
-    | Backend target | **az104-06-appgw5-be1** |
+    | 대상 유형 | **백 엔드 풀** |
+    | 백 엔드 대상 | **az104-06-appgw5-be1** |
 
-1. On the **Backend targets** tab of the **Add a routing rule** blade, click **Create new** next to the **HTTP setting** text box, and, on the **Add an HTTP setting** blade, specify the following settings (leave others with their default values):
+1. **회람 규칙 추가** 블레이드의 **HTTP 설정** 텍스트 박스 아래 **새로 추가**를 클릭하고 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | HTTP setting name | **az104-06-appgw5-http1** |
-    | Backend protocol | **HTTP** |
-    | Backend port | **80** |
-    | Cookie-based affinity | **Disable** |
-    | Connection draining | **Disable** |
-    | Request time-out (seconds) | **20** |
+    | HTTP 설정 이름 | **az104-06-appgw5-http1** |
+    | 백 엔드 프로토콜 | **HTTP** |
+    | 백 엔드 포트 | **80** |
+    | 쿠키 기반 선호도 | **사용 안 함** |
+    | 연결 드레이닝 | **사용 안 함** |
+    | 요청 시간 제한(초) | **20** |
 
-1. Click **Add** on the **Add an HTTP setting** blade, and back on the **Add a routing rule** blade, clik **Add**.
+1. **추가**를 클릭하고, **회람 규칙 추가** 블레이드로 돌아가 **추가**를 클릭한다.
 
-1. Click **Next: Tags >**, followed by **Next: Review + create >** and then click **Create**.
+1. **다음: 태그 >**, **다음: 검토 + 만들기 >**, **만들기**를 이어서 클릭한다.
 
-    > **Note**: Wait for the Application Gateway instance to be created. This might take about 8 minutes.
+    > **참고**: 애플리케이션 게이트웨이 인스턴스가 만들어질 때까지 기다리십시오. 이 작업은 약 8분 소요됩니다.
 
-1. In the Azure portal, search and select **Application Gateways** and, on the **Application Gateways** blade, click **az104-06-appgw5**.
 
-1. On the **az104-06-appgw5** Application Gateway blade, note the value of the **Frontend public IP address**.
+1. Azure 포털에서 **애플리케이션 게이트웨이**를 찾아 선택하고, **az104-06-appgw5**를 클릭한다.
 
-1. Start another browser window and navigate to the IP address you identified in the previous step.
+1. **az104-06-appgw5** 애플리케이션 게이트웨이 블레이드에서 **Frontend public IP address** 값을 확인한다.
 
-1. Verify that the browser window displays the message **Hello World from az104-06-vm2** or **Hello World from az104-06-vm3**.
+1. 브라우저 창을 열어서 이전 작업에서 확인했던 IP 주소로 접속한다. 
 
-1. Open another browser window but this time by using InPrivate mode and verify whether the target vm changes (based on the message displayed on the web page). 
+1. 브라우저 창에서 **Hello World from az104-06-vm2** 또는 **Hello World from az104-06-vm3** 메시지가 출력되는 것을 확인한다. 
 
-    > **Note**: You might need to refresh the browser window or open it again by using InPrivate mode.
+1. InPrivate 모드를 사용하여 다른 브라우저 창을 열고, 출력된 메시지를 통해 vm이 변경되었는지 확인한다.
 
-    > **Note**: Targeting virtual machines on multiple virtual networks is not a common configuration, but it is meant to illustrate the point that Application Gateway is capable of targeting virtual machines on multiple virtual networks (as well as endpoints in other Azure regions or even outside of Azure), unlike Azure Load Balancer, which load balances across virtual machines in the same virtual network.
+    > **참고**: 브라우저 창을 새로고침 하거나 InPrivate 모드를 사용해 브라우저 창을 다시 열어야 합니다. 
 
-#### Clean up resources
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+    > **참고**: 여러 가상 네트워크에서 가상 머신을 타겟팅하는 것은 일반적인 구성은 아닙니다. 이 랩의 과정은 Application Gateway가 같은 가상 네트워크 내의 가상 머신 간 부하를 분산하는 Azure 부하 분산 장치와는 달리, 여러 가상 네트워크의(다른 Azure 지역 또는 Azure 외부의 엔드포인트도 포함하여) 가상 머신도 타겟팅할 수 있다는 것을 설명하기 위한 것입니다.
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+#### 리소스 삭제
+
+   >**Note**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
+
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
+
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-06*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
+
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-06*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+   >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Provisioned the lab environment
-- Configured the hub and spoke network topology
-- Tested transitivity of virtual network peering
-+ Task 4: Configure routing in the hub and spoke topology
-+ Task 5: Implement Azure Load Balancer
-+ Task 6: Implement Azure Application Gateway
+- 랩 환경을 프로비전했습니다. 
+- 허브와 스포크 네트워크 토폴로지를 구성했습니다.
+- 가상 네트워크 피어링의 전이성을 테스트했습니다.
+- 허브와 스포크 토폴로지의 라우팅을 구성했습니다.
+- 부하 분산 장치를 구현했습니다.
+- 애플리케이션 게이트웨이를 구현했습니다.
