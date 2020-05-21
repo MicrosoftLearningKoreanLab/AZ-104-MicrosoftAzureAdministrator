@@ -1,39 +1,39 @@
 ---
 lab:
     title: '05 - Implement Intersite Connectivity'
-    module: 'Module 05 - Intersite Connectivity'
+    module: '모듈 05 - Intersite Connectivity'
 ---
 
-# Lab 05 - Implement Intersite Connectivity
-# Student lab manual
+# 랩 05 - 사이트 간 연결 구현
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-Contoso has its datacenters in Boston, New York, and Seattle offices connected via a mesh wide-area network links, with full connectivity between them. You need to implement a lab environment that will reflect the topology of the Contoso's on-premises networks and verify its functionality. 
+Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결된 데이터 센터를 보유합니다. 이들은 완전히 연결되어 있습니다. Contoso의 온프레미스 네트워크 토폴로지를 반영하는 실험 환경을 구현하고 그 기능을 검증해야 합니다.
 
-## Objectives
+## 목표
 
-In this lab, you will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Provision the lab environment
-+ Task 2: Configure local and global virtual network peering
-+ Task 3: Test intersite connectivity 
++ 작업 1: 랩 환경 프로비전
++ 작업 2: 로컬 및 글로벌 가상 네트워크 피어링 구성
++ 작업 3: 사이트 간 연결 테스트
 
-#### Task 1: Provision the lab environment
+#### 작업 1: 랩 환경 프로비전
 
-In this task, you will deploy three virtual machines, each into a separate virtual network, with two of them in the same Azure region and the third one in another Azure region. 
+이 작업에서는 세 개의 가상 머신을 분리된 네트워크에 배포합니다. 두개는 같은 Azure 지역에, 나머지 하나는 다른 Azure 지역에 배포합니다. 
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 실행한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다. 
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+    >**참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오.
 
-1. In the toolbar of the Cloud Shell pane, click the **Upload/Download files** icon, in the drop-down menu, click **Upload** and upload the files **\\Allfiles\\Labs\\05\\az104-05-vnetvm-template.json** and **\\Allfiles\\Labs\\05\\az104-05-vnetvm-parameters.json** into the Cloud Shell home directory.
+1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 선택한다. 드롭다운 메뉴에서 **업로드**를 클릭하고, **\\Allfiles\\Labs\\05\\az104-05-vnetvm-template.json** 와 **\\Allfiles\\Labs\\05\\az104-05-vnetvm-parameters.json**를 Cloud Shell의 홈 디렉토리에 업로드한다.
 
-1. From the Cloud Shell pane, run the following to create the first resource group that will be hosting the first virtual network and the pair of virtual machines (replace the `[Azure_region_1]` placeholder with the name of an Azure region where you intend to deploy these Azure virtual machines):
+1. Cloud Shell 창에서 다음 명령을 실행하여 첫 번째 가상 네트워크와 가상 머신들을 호스팅할 리소스 그룹을 생성한다. (`[Azure_region_1]` 부분을 Azure 가상 머신을 배포할 Azure 지역의 이름으로 대체한다)
 
    ```pwsh
    $location = '[Azure_region_1]'
@@ -42,7 +42,7 @@ In this task, you will deploy three virtual machines, each into a separate virtu
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the first virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 첫 번째 가상 네트워크를 만들고 가상 머신을 배포한다. 
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -52,14 +52,14 @@ In this task, you will deploy three virtual machines, each into a separate virtu
       -nameSuffix 0 `
       -AsJob
    ```
-1. From the Cloud Shell pane, run the following to create the second resource group that will be hosting the second virtual network and the second virtual machine
+1. Cloud Shell 창에서 다음 명령을 실행하여 두번째 가상 네트워크와 가상 머신을 배포할 두 번째 리소스 그룹을 생성한다.
 
    ```pwsh
    $rgName = 'az104-05-rg1'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the second virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 두 번째 가상 네트워크를 만들고 가상 머신을 배포한다.  
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -69,7 +69,7 @@ In this task, you will deploy three virtual machines, each into a separate virtu
       -nameSuffix 1 `
       -AsJob
    ```
-1. From the Cloud Shell pane, run the following to create the third resource group that will be hosting the third virtual network and the third virtual machine (replace the `[Azure_region_2]` placeholder with the name of another Azure region where you can deploy Azure virtual machines, different from the Azure region you used for the other two deployments):
+1. Cloud Shell 창에서 다음 명령을 실행하여 세번째 가상 네트워크와 가상 머신을 배포할 세번째 리소스 그룹을 생성한다. (`[Azure_region_2]` 부분을 Azure 가상 머신을 배포할 Azure 지역의 이름으로 대체한다. 다른 가상 머신을 배포했던 지역과 다른 지역을 사용한다):
 
    ```pwsh
    $location = '[Azure_region_2]'
@@ -78,7 +78,7 @@ In this task, you will deploy three virtual machines, each into a separate virtu
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the third virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 세 번째 가상 네트워크를 만들고 가상 머신을 배포한다.
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -88,162 +88,164 @@ In this task, you will deploy three virtual machines, each into a separate virtu
       -nameSuffix 2 `
       -AsJob
    ```
-    >**Note**: Wait for the deployments to complete before proceeding to the next task. This should take about 2 minutes.
+    >**참고**: 다음 작업을 시작하기 전에 배포가 끝날 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다. 
 
-    >**Note**: To verify the status of the deployments, you can examine the properties of the resource groups you created in this task.
+    >**참고**: 배포 상태를 확인하려면 이 작업에서 생성했던 리소스 그룹의 속성을 검토하십시오.
+    
 
-1. Close the Cloud Shell pane.
+1. Cloud Shell 창을 닫는다. 
 
-#### Task 2: Configure local and global virtual network peering
+#### 작업 2: 로컬 및 글로벌 가상 네트워크 피어링 구성
 
-In this task, you will configure local and global peering between the virtual networks you deployed in the previous tasks.
+이 작업에서는 이전 작업에서 배포했던 가상 네트워크 사이에 로컬 및 글로벌 피어링을 구성합니다. 
 
-1. In the Azure portal, search for and select **Virtual networks**.
+1. Azure 포털에서 **가상 네트워크**를 찾아 선택한다.
 
-1. Review the virtual networks you created in the previous task and verify that the first two are located in the same Azure region and the third one in a different Azure region. 
+1. 이전 작업에서 배포했던 가상 네트워크를 검토한다. 먼저 배포했던 두 개의 가상 머신은 같은 지역에 배포되고, 나머지 가상 머신은 다른 Azure 지역에 배포되었는지 확인한다. 
 
-    >**Note**: The template you used for deployment of the three virtual networks ensures that the IP address ranges of the three virtual networks do not overlap.
+    >**참고**: 세 개의 가상 네트워크를 배포할 때 사용했던 템플릿은 가상 네트워크의 IP 주소 범위가 중첩되지 않는 것을 보장합니다. 
 
-1. In the list of virtual networks, click **az104-05-vnet0**.
+1. 가상 네트워크 목록에서 **az104-05-vnet0**을 클릭한다.
 
-1. On the **az104-05-vnet0** virtual network blade, in the **Settings** section, click **Peerings** and then click **+ Add**.
+1. **az104-05-vnet0** 가상 네트워크 블레이드에서 **설정** 섹션에 **피어링**을 선택하고 **+ 추가**를 클릭한다.
 
-1. Add a peering with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 피어링을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value|
+    | 설정 | 값|
     | --- | --- |
-    | Name of the peering from az104-05-vnet0 to remote virtual network | **az104-05-vnet0_to_az104-05-vnet1** |
-    | Virtual network deployment model | **Resource manager** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Virtual network | **az104-05-vnet1 (az104-05-rg1)** |
-    | Name of the peering from az104-05-vnet1 to az104-05-vnet0 | **az104-05-vnet1_to_az104-05-vnet0** |
-    | Allow virtual network access from az104-05-vnet0 to az104-05-vnet1 | **Enabled** |
-    | Allow virtual network access from az104-05-vnet1 to az104-05-vnet0 | **Enabled** |
-    | Allow forwarded traffic from az104-05-vnet1 to az104-05-vnet0 | **Disabled** |
-    | Allow forwarded traffic from az104-05-vnet0 to az104-05-vnet1 | **Disabled** |
-    | Allow gateway transit | **(Uncheck Box)** |
+    | az104-05-vnet0에서 원격 가상 네트워크(으)로 피어링 이름 | **az104-05-vnet0_to_az104-05-vnet1** |
+    | 가상 네트워크 배포 모델 | **Resource manager** |
+    | 구독 | 이 랩에서 사용할 구독의 이름 |
+    | 가상 네트워크 | **az104-05-vnet1 (az104-05-rg1)** |
+    | az104-05-vnet1에서 az104-05-vnet0(으)로 피어링 이름 | **az104-05-vnet1_to_az104-05-vnet0** |
+    | az104-05-vnet0에서 az104-05-vnet1(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-05-vnet1에서 az104-05-vnet0(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-05-vnet1에서 az104-05-vnet0(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | az104-05-vnet0에서 az104-05-vnet1(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | 게이트웨이 전송 설정 구성 | **(체크하지 않음)** |
 
-    >**Note**: This step establishes two local peerings - one from az104-05-vnet0 to az104-05-vnet1 and the other from az104-05-vnet1 to az104-05-vnet0.
+    >**참고**: 이 과정은 두개의 로컬 피어링을 설정합니다. - az104-05-vnet0 에서 az104-05-vnet1 로 향하는 피어링, az104-05-vnet1 에서 az104-05-vnet0로 향하는 피어링
 
-1. On the **az104-05-vnet0** virtual network blade, in the **Settings** section, click **Peerings** and then click **+ Add**.
+1. **az104-05-vnet0** 가상 네트워크 블레이드에서 **설정** 섹션에 **피어링**을 선택하고 **+ 추가**를 클릭한다.
 
-1. Add a peering with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 피어링을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value|
+    | 설정 | 값|
     | --- | --- |
-    | Name of the peering from az104-05-vnet0 to remote virtual network | **az104-05-vnet0_to_az104-05-vnet2** |
-    | Virtual network deployment model | **Resource manager** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Virtual network | **az104-05-vnet2 (az104-05-rg2)** |
-    | Name of the peering from az104-05-vnet2 to az104-05-vnet0 | **az104-05-vnet2_to_az104-05-vnet0** |
-    | Allow virtual network access from az104-05-vnet0 to az104-05-vnet2 | **Enabled** |
-    | Allow virtual network access from az104-05-vnet2 to az104-05-vnet0 | **Enabled** |
-    | Allow forwarded traffic from az104-05-vnet2 to az104-05-vnet0 | **Disabled** |
-    | Allow forwarded traffic from az104-05-vnet0 to az104-05-vnet2 | **Disabled** |
-    | Allow gateway transit | **(Uncheck Box)** |
+    | az104-05-vnet0에서 원격 가상 네트워크(으)로 피어링 이름 | **az104-05-vnet0_to_az104-05-vnet2** |
+    | 가상 네트워크 배포 모델 | **Resource manager** |
+    | 구독 | 이 랩에서 사용할 구독의 이름 |
+    | 가상 네트워크 | **az104-05-vnet2 (az104-05-rg2)** |
+    | az104-05-vnet2에서 az104-05-vnet0(으)로 피어링 이름 | **az104-05-vnet2_to_az104-05-vnet0** |
+    | az104-05-vnet0에서 az104-05-vnet2(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-05-vnet2에서 az104-05-vnet0(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-05-vnet2에서 az104-05-vnet0(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | az104-05-vnet0에서 az104-05-vnet2(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | 게이트웨이 전송 설정 구성 | **(체크하지 않음)** |
 
-    >**Note**: This step establishes two global peerings - one from az104-05-vnet0 to az104-05-vnet2 and the other from az104-05-vnet2 to az104-05-vnet0.
+    >**참고**: 이 과정은 두개의 글로벌 피어링을 설정합니다. - az104-05-vnet0 에서 az104-05-vnet2 로 향하는 피어링,az104-05-vnet2 에서 az104-05-vnet0로 향하는 피어링
 
-1. Navigate back to the **Virtual networks** blade and, in the list of virtual networks, click **az104-05-vnet1**.
+1. **가상 네트워크** 블레이드로 돌아가서 **az104-05-vnet1**를 클릭한다.
 
-1. On the **az104-05-vnet1** virtual network blade, in the **Settings** section, click **Peerings** and then click **+ Add**.
+1. **az104-05-vnet1** 가상 네트워크 블레이드에서 **설정** 섹션에 **피어링**을 선택하고 **+ 추가**를 클릭한다.
 
-1. Add a peering with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 피어링을 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value|
+    | 설정 | 값|
     | --- | --- |
-    | Name of the peering from az104-05-vnet1 to remote virtual network | **az104-05-vnet1_to_az104-05-vnet2** |
-    | Virtual network deployment model | **Resource manager** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Virtual network | **az104-05-vnet2 (az104-05-rg2)** |
-    | Name of the peering from az104-05-vnet2 to az104-05-vnet1 | **az104-05-vnet2_to_az104-05-vnet1** |
-    | Allow virtual network access from az104-05-vnet1 to az104-05-vnet2 | **Enabled** |
-    | Allow virtual network access from az104-05-vnet2 to az104-05-vnet1 | **Enabled** |
-    | Allow forwarded traffic from az104-05-vnet2 to az104-05-vnet1 | **Disabled** |
-    | Allow forwarded traffic from az104-05-vnet1 to az104-05-vnet2 | **Disabled** |
-    | Allow gateway transit | **(Uncheck Box)** |
+    | az104-05-vnet1에서 원격 가상 네트워크(으)로 피어링 이름 | **az104-05-vnet1_to_az104-05-vnet2** |
+    | 가상 네트워크 배포 모델 | **Resource manager** |
+    | 구독 | 이 랩에서 사용할 구독의 이름 |
+    | 가상 네트워크 | **az104-05-vnet2 (az104-05-rg2)** |
+    | az104-05-vnet2에서 az104-05-vnet1(으)로 피어링 이름 |  **az104-05-vnet2_to_az104-05-vnet1** |
+    | az104-05-vnet1에서 az104-05-vnet2(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-05-vnet2에서 az104-05-vnet1(으)로 가상 네트워크 액세스 허용 | **사용** |
+    | az104-05-vnet2에서 az104-05-vnet1(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | az104-05-vnet1에서 az104-05-vnet2(으)로 전달되는 트래픽 허용 | **사용 안 함** |
+    | 게이트웨이 전송 설정 구성 | **(체크하지 않음)** |
 
-    >**Note**: This step establishes two global peerings - one from az104-05-vnet1 to az104-05-vnet2 and the other from az104-05-vnet2 to az104-05-vnet1.
+    >**참고**:  이 과정은 두개의 글로벌 피어링을 설정합니다. - az104-05-vnet1 에서 az104-05-vnet2 로 향하는 피어링, az104-05-vnet2 에서 az104-05-vnet1로 향하는 피어링
 
-#### Task 3: Test intersite connectivity 
+#### 작업 3: 사이트 간 연결 테스트
 
-In this task, you will test connectivity between virtual machines on the three virtual networks that you connected via local and global peering in the previous task.
+이 작업에서는 앞선 작업에서 로컬 및 글로벌 피어링을 통해 연결한 세 개의 가상 네트워크에 있는 가상 머신 사이의 연결성을 테스트합니다.
 
-1. In the Azure portal, search for and select **Virtual machines**.
+1. Azure 포털에서 **가상 머신**을 찾아 선택한다.
 
-1. In the list of virtual machines, click **az104-05-vm0**.
+1. 가상 머신 목록에서 **az104-05-vm0**을 클릭한다.
 
-1. On the **az104-05-vm0** blade, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-05-vm0** 블레이드에서 **연결**을 클릭하고, **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **RDP 파일 다운로드**를 클릭하고 원격 데스크톱 세션을 시작한다. 
 
-    >**Note**: This step refers to connecting via Remote Desktop from a Windows computer. On a Mac, you can use Remote Desktop Client from the Mac App Store and on Linux computers you can use an open source RDP client software.
+    >**참고**: 이 단계는 Windows 컴퓨터에서 원격 데스크톱을 통해 연결하는 것을 말합니다. Mac에서는 Mac App Store에서 Remote Desktop Client를 사용할 수 있으며, Linux 컴퓨터에서는 오픈 소스 RDP 클라이언트 소프트웨어를 사용할 수 있습니다.
 
-    >**Note**: You can ignore any warning prompts when connecting to the target virtual machines.
+    >**참고**: 가상 머신에 연결할 때 출력되는 경고 메시지는 무시할 수 있습니다.
 
-1. When prompted, sign in by using the **Student** username and **Pa55w.rd1234** password.
 
-1. Within the Remote Desktop session to **az104-05-vm0**, right-click the **Start** button and, in the right-click menu, click **Windows PowerShell (Admin)**.
+1. 원격 데스크톱에 연결되면 **Student** 계정과 **Pa55w.rd1234** 패스워드를 사용하여 로그인한다.
 
-1. In the Windows PowerShell console window, run the following to test connectivity to **az104-05-vm1** (which has the private IP address of **10.51.0.4**) over TCP port 3389:
+1. **az104-05-vm0** 원격 데스크톱 세션 내의 **Start** 버튼을 우클릭하여, 메뉴에서 **Windows PowerShell (Admin)**를 클릭한다.
+
+1. Windows PowerShell 콘솔 창에서 다음 명령을 사용하여 TCP 포트 3389를 통해 **az104-05-vm1**에 대한 연결성을 테스트한다. (사설 IP 주소 **10.51.0.4**)
 
    ```pwsh
    Test-NetConnection -ComputerName 10.51.0.4 -Port 3389 -InformationLevel 'Detailed'
    ```
-    >**Note**: The test uses TCP 3389 since this is this port is allowed by default by operating system firewall. 
+    >**참고**: 테스트에 사용되는 TCP 3389 포트는 운영 체제 방화벽에 의해 기본적으로 허용됩니다.
 
-1. Examine the output of the command and verify that the connection was successful.
+1. 명령의 결과를 검토하고, 연결에 성공했음을 확인한다.
 
-1. In the Windows PowerShell console window, run the following to test connectivity to **az104-05-vm2** (which has the private IP address of **10.52.0.4**):
+1. Windows PowerShell 콘솔 창에서 다음 명령을 사용하여 **az104-05-vm2**에 대한 연결성을 확인한다. (사설 IP 주소 **10.52.0.4**)
 
    ```pwsh
    Test-NetConnection -ComputerName 10.51.0.4 -Port 3389 -InformationLevel 'Detailed'
    ```
-1. Switch back to the Azure portal on your lab computer and navigate back to the **Virtual machines** blade. 
+1. Azure 포털의 **가상 머신** 블레이드로 돌아간다. 
 
-1. In the list of virtual machines, click **az104-05-vm1**.
+1. 가상 머신 목록에서 **az104-05-vm1**를 클릭한다.
 
-1. On the **az104-05-vm1** blade, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-05-vm1** 블레이드에서 *연결**을 클릭하고, **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **RDP 파일 다운로드**를 클릭하고 원격 데스크톱 세션을 시작한다. 
 
-    >**Note**: This step refers to connecting via Remote Desktop from a Windows computer. On a Mac, you can use Remote Desktop Client from the Mac App Store and on Linux computers you can use an open source RDP client software.
+    >**참고**: 이 단계는 Windows 컴퓨터에서 원격 데스크톱을 통해 연결하는 것을 말합니다. Mac에서는 Mac App Store에서 Remote Desktop Client를 사용할 수 있으며, Linux 컴퓨터에서는 오픈 소스 RDP 클라이언트 소프트웨어를 사용할 수 있습니다.
 
-    >**Note**: You can ignore any warning prompts when connecting to the target virtual machines.
+    >**참고**: 가상 머신에 연결할 때 출력되는 경고 메시지는 무시할 수 있습니다.
 
-1. When prompted, sign in by using the **Student** username and **Pa55w.rd1234** password.
+1. 원격 데스크톱에 연결되면 **Student** 계정과 **Pa55w.rd1234** 패스워드를 사용하여 로그인한다.
 
-1. Within the Remote Desktop session to **az104-05-vm1**, right-click the **Start** button and, in the right-click menu, click **Windows PowerShell (Admin)**.
+1. **az104-05-vm1** 원격 데스크톱 세션 내의 **Start** 버튼을 우클릭하여, 메뉴에서 **Windows PowerShell (Admin)**를 클릭한다.
 
-1. In the Windows PowerShell console window, run the following to test connectivity to **az104-05-vm2** (which has the private IP address of **10.52.0.4**) over TCP port 3389:
+1. Windows PowerShell 콘솔 창에서 다음 명령을 사용하여 TCP 포트 3389를 통해 **az104-05-vm2**에 대한 연결성을 테스트한다. (사설 IP 주소 **10.52.0.4**)
 
    ```pwsh
    Test-NetConnection -ComputerName 10.52.0.4 -Port 3389 -InformationLevel 'Detailed'
    ```
-    >**Note**: The test uses TCP 3389 since this is this port is allowed by default by operating system firewall. 
+    >**참고**: 테스트에 사용되는 TCP 3389 포트는 운영 체제 방화벽에 의해 기본적으로 허용됩니다.
 
-1. Examine the output of the command and verify that the connection was successful.
+1. 명령의 결과를 검토하고, 연결에 성공했음을 확인한다.
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+   >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-05*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-05*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Provisioned the lab environment
-- Configured local and global virtual network peering
-- Tested intersite connectivity 
+- 랩 환경을 프로비전 했습니다.
+- 로컬 및 글로벌 가상 네트워크 피어링을 구성했습니다.
+- 사이트 간 연결성을 테스트했습니다.
