@@ -107,7 +107,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. Azure 포털에서 **Cloud Shell**의 **Bash** shell 세션을 시작한다.
+1. Azure 포털에서 **Cloud Shell**의 **Bash** 세션을 시작한다.
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
