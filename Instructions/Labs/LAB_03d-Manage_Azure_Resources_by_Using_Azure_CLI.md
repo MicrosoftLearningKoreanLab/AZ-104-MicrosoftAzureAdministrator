@@ -31,7 +31,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
 
 1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **Bash**를 선택한다. 
 
-    >**Note**:  **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오. 
+    >**참고**:  **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오. 
 
 1. 메시지가 나타나면 **스토리지 만들기**를 클릭하고, Azure Cloud Shell 창이 표시될 때까지 기다린다.
 
@@ -67,7 +67,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
    --sku 'Standard_LRS' \
    --size-gb 32
    ```
-    >**참고**: 여러 줄로 된 구문을 사용할 때는 각 줄이 후행 공백 없이 백슬래시("\")로 끝나는지, 각 줄의 시작 부분에 공백이 없는지 확인하십시오.
+>**참고**: 여러 줄로 된 구문을 사용할 때는 각 줄이 후행 공백 없이 백슬래시("\")로 끝나는지, 각 줄의 시작 부분에 공백이 없는지 확인하십시오.
 
 1. 새로 생성한 디스크의 속성을 검색하려면 다음 명령을 실행한다.
 
@@ -121,7 +121,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
    az group list --query "[?starts_with(name,'az104-03')].[name]" --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
    ```
 
-    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
+>**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
 #### 요약
 
