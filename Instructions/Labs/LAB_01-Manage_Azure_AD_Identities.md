@@ -1,265 +1,265 @@
 ---
 lab:
-    title: '01 - Manage Azure Active Directory Identities'
-    module: 'Module 01 - Identity'
+    title: '01 - Azure Active Directory ID 관리'
+    module: '모듈 01 - Identity'
 ---
 
-# Lab 01 - Manage Azure Active Directory Identities
+# 랩 01 - Azure Active Directory ID 관리
 
-# Student lab manual
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-In order to allow Contoso users to authenticate by using Azure AD, you have been tasked with provisioning users and group accounts. Membership of the groups should be updated automatically based on the user job titles. You also need to create a test Azure AD tenant with a test user account and grant that account limited permissions to resources in the Contoso Azure subscription.
+Contoso 사용자가 Azure AD를 사용하여 인증할 수 있도록 사용자 및 그룹 계정을 프로비저닝하는 작업을 수행합니다. 그룹의 멤버 자격은 사용자 직책에 따라 자동으로 업데이트되어야 합니다. 또한 테스트 사용자 계정으로 테스트 Azure AD 테넌트를 생성하고, 해당 계정에 Contoso Azure 구독의 리소스에 대한 제한된 권한을 부여해야 합니다.
 
-## Objectives
+## 목표
 
-In this lab, you will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Create and configure Azure AD users
-+ Task 2: Create Azure AD groups with assigned and dynamic membership
-+ Task 3: Create an Azure Active Directory (AD) tenant
-+ Task 4: Manage Azure AD guest users 
++ 작업 1: Azure AD 사용자 생성 및 설정
++ 작업 2: 할당 및 동적 멤버십이 있는 Azure AD 그룹 생성
++ 작업 3: Azure Active Directory (AD) 테넌트 생성
++ 작업 4: Azure AD 게스트 사용자 관리
 
-## Instructions
+## 설명
 
-### Exercise 1
+### 연습 1
 
-#### Task 1: Create and configure Azure AD users
+#### 작업 1: Azure AD 사용자 생성 및 설정
 
-In this task, you will create and configure Azure AD users.
+이 작업에서는 Azure AD 사용자를 생성하고 설정합니다.
 
-1. In the Azure portal, search for and select **Azure Active Directory**.
+1. Azure 포털에서 **Azure Active Directory**를 찾아 선택한다.
 
-1. On the Azure Active Directory blade, scroll down to the **Manage** section, click **User settings**, and review available configuration options.
+1. Azure Active Directory 블레이드 **관리** 섹션의 **사용자 설정**을 클릭하여 가능한 옵션을 검토한다.
 
-1. On the Azure Active Directory blade, in the **Manage** section, click **Users**, and then click your user account to display its **Profile** settings. 
+1. Azure Active Directory 블레이드 **관리** 섹션의 **사용자**를 클릭한다. 본인의 사용자 계정을 클릭하여 **프로필** 설정을 확인한다. 
 
-1. Click **edit**, in the **Settings** section, set **Usage location** to **United States** and save the change.
+1. **편집**을 클릭하고 **설정** 섹션의 **사용량 위치**를 **United States**로 바꾸고, 변경 사항을 저장한다. 
 
-    >**Note**: This is necessary in order to assign an Azure AD Premium P2 license to your user account later in this lab.
+    >**참고**: 해당 작업은 사용자 계정에 Azure AD Premium P2 라이선스를 할당하기 위해 필요합니다.
 
-1. Navigate back to the **Users - All users** blade, and then click **+ New user**.
+1. **사용자 - 모든 사용자** 블레이드로 돌아가 **+ 새 사용자**를 클릭한다.
 
-1. Create a new user with the following settings (leave others with their defaults):
+1. 다음 설정을 사용하여 새 사용자를 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | User name | **az104-01a-aaduser1** |
-    | Name | **az104-01a-aaduser1** |
-    | Let me create the password | enabled |
-    | Initial password | **Pa55w.rd124** |
-    | Usage location | **United States** |
-    | Job title | **Cloud Administrator** |
-    | Department | **IT** |
+    | 사용자 이름 | **az104-01a-aaduser1** |
+    | 이름 | **az104-01a-aaduser1** |
+    | 암호 | 암호 직접 만들기 |
+    | 초기 암호 | **Pa55w.rd124** |
+    | 사용량 위치 | **United States** |
+    | 직함 | **Cloud Administrator** |
+    | 부서 | **IT** |
 
-    >**Note**: **Copy to clipboard** the full **User name**. You will need it later in this task.
+    >**참고**: **사용자 이름**을 **클립 보드에 복사**하십시오. 다음 과정에서 사용할 것입니다.
 
-1. In the list of users, click the newly created user account to display its blade.
+1. 사용자 목록에서 새로 생성된 계정을 클릭한다.
 
-1. Review the options available in the **Manage** section and note that you can identify the Azure AD roles assigned to the user account as well as the user account's permissions to Azure resources.
+1. **관리** 섹션에서 사용할 수 있는 옵션을 검토하고, 사용자 계정에 할당된 Azure AD 역할과 Azure 리소스에 대한 사용자 계정의 권한을 식별할 수 있다는 점을 확인한다.
 
-1. In the **Manage** section, click **Assigned roles**, then click **+ Add assignment** button and assign the **User administrator** role to **az104-01a-aaduser1**.
+1. **관리** 섹션에서 **할당된 역할**을 선택하고 **+ 할당 추가** 버튼을 클릭하여 **az104-01a-aaduser1**에 **사용자 관리자** 역할을 할당한다.
 
-    >**Note**: You also have the option of assigning Azure AD roles when provisioning a new user.
+    >**참고**: 새로운 사용자를 프로비저닝할 때 Azure AD 역할을 할당할 수 있습니다. 
 
-1. Open an **InPrivate** browser window and sign in to the [Azure portal](https://portal.azure.com) using the newly created user account. When prompted to update the password, change the password for the user.
+1. **InPrivate** 모드로 브라우저 창을 열어서 새롭게 생성된 사용자 계정으로 [Azure portal](https://portal.azure.com)에 로그인하고, 패스워드를 변경한다.
 
-    >**Note**: Rather than typing the user name, you can paste the content of Clipboard.
+    >**참고**: 사용자 이름은 클립보드에 복사했던 것을 사용하십시오. 
 
-1. In the **InPrivate** browser window, in the Azure portal, search for and select **Azure Active Directory**.
+1. Azure 포털에서 **Azure Active Directory**를 찾아 선택한다.
 
-    >**Note**: While this user account can access the Azure Active Directory tenant, it does not have any access to Azure resources. This is expected, since such access would need to be granted explicitly by using Azure Role-Based Access Control. 
+    >**참고**: 이 사용자 계정은 Azure Active Directory 테넌트에 액세스할 수 있지만 Azure 리소스에 대한 액세스 권한은 없습니다. 이러한 액세스는 Azure Role-Based Access Control을 사용하여 명시적으로 허가되어야 하기 때문입니다.
 
-1. In the **InPrivate** browser window, on the Azure AD blade, scroll down to the **Manage** section, click **User settings**, and note that you do not have permissions to modify any configuration options.
+1.  Azure AD 블레이드의 **관리** 섹션에서 **사용자 설정**을 클릭하고, 설정 옵션을 수정할 권한이 없는 것을 확인한다. 
 
-1. In the **InPrivate** browser window, on the Azure AD blade, in the **Manage** section, click **Users**, and then click **+ New user**.
+1. Azure AD 블레이드 **관리** 섹션에서 **사용자**를 선택하고 **+ 새 사용자**를 클릭한다.
 
-1. Create a new user with the following settings (leave others with their defaults):
+1. 다음 설정을 사용하여 새 사용자를 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | User name | **az104-01a-aaduser2** |
-    | Name | **az104-01a-aaduser2** |
-    | Let me create the password | enabled |
-    | Initial password | **Pa55w.rd124** |
-    | Usage location | **United States** |
-    | Job title | **System Administrator** |
-    | Department | **IT** |
+    | 사용자 이름 | **az104-01a-aaduser2** |
+    | 이름 | **az104-01a-aaduser2** |
+    | 암호 | 암호 직접 만들기 |
+    | 초기 암호 | **Pa55w.rd124** |
+    | 사용량 위치 | **United States** |
+    | 직함 | **System Administrator** |
+    | 부서 | **IT** |
 
-1. Sign out as the az104-01a-aaduser1 user from the Azure portal and close the InPrivate browser window.
+1. az104-01a-aaduser1 계정으로부터 로그아웃 하고 브라우저 창을 닫는다. 
 
-#### Task 2: Create Azure AD groups with assigned and dynamic membership
+#### 작업 2: 할당 및 동적 멤버십이 있는 Azure AD 그룹 생성
 
-In this task, you will create Azure Active Directory groups with assigned and dynamic membership.
+이 작업에서는 할당 및 동적 멤버십이 있는 Azure Active Directory 그룹을 생성합니다.
 
-1. Back in the Azure portal where you are signed in with your user account, navigate back to the **Overview** blade of the Azure AD tenant and, in the **Manage** section, click **Licenses**.
+1. 기존 계정으로 로그인된 Azure 포털로 돌아가서, Azure AD 테넌트 블레이드 **관리** 섹션의 **라이선스**를 클릭한다.
 
-    >**Note**: Azure AD Premium P1 or P2 licenses are required in order to implement dynamic groups.
+    >**참고**: 동적 그룹을 구현하려면 Azure AD Premium P1 또는 P2 라이선스가 필요합니다.
 
-1. In the **Manage** section, click **All products**.
+1. **관리** 섹션에서 **모든 제품**을 클릭한다.
 
-1. Click **+ Try/Buy** and activate the free trial of Azure AD Premium P2.
+1. **+ 사용/구매**를 클릭하고, Azure AD Premium P2의 무료 평가판을 활성화한다.
 
-1. Refresh the browser window to verify that the activation was successful. 
+1. 브라우저 창을 새로고침하여 활성화가 완료되었는지 확인한다.
 
-1. From the **Licenses - All products** blade, select the **Azure Active Directory Premium P2** entry, and assign all license options of Azure AD Premium P2 to your user account and the two newly created user accounts.
+1. **라이선스 - 모든 제품** 블레이드에서 **Azure Active Directory Premium P2**를 선택하고, 기존 사용자 계정과 새로 생성한 사용자 계정에 Azure AD Premium P2 라이선스 옵션을 할당한다.
 
-1. In the Azure portal, navigate back to the Azure AD tenant blade and click **Groups**.
+1. Azure 포털의 Azure AD 테넌트 블레이드로 돌아가서 **그룹**을 클릭한다.
 
-1. Use the **+ New group** button to create a new group with the following settings:
+1. **+ 새 그룹** 버튼을 클릭하고, 다음 설정을 사용하여 새 그룹을 생성한다. 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Group type | **Security** |
-    | Group name | **IT Cloud Administrators** |
-    | Group description | **Contoso IT cloud administrators** |
-    | Membership type | **Dynamic User** |
+    | 그룹 유형 | **보안** |
+    | 그룹 이름 | **IT Cloud Administrators** |
+    | 그룹 설명 | **Contoso IT cloud administrators** |
+    | 구성원 자격 유형 | **동적 사용자** |
 
-    >**Note**: If the **Membership type** drop-down list is grayed out, refresh the browser page.
+    >**참고**: **구성원 자격 유형**의 드롭 다운 메뉴가 비활성화 상태라면, 브라우저 페이지를 새로고침 하십시오. 
 
-1. Click **Add dynamic query**.
+1. **동적 쿼리 추가**를 클릭한다.
 
-1. On the **Configure Rules** tab of the **Dynamic membership rules** blade, create a new rule with the following settings:
+1. **동적 구성원 규칙** 블레이드의 **규칙 구성** 탭에서 다음 설정을 사용하여 새 규칙을 생성한다. 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Property | **jobTitle** |
-    | Operator | **Equals** |
-    | Value | **Cloud Administrator** |
+    | 속성 | **jobTitle** |
+    | 연산자 | **Equals** |
+    | 값 | **Cloud Administrator** |
 
-1. Save the rule and, back on the **New Group** blade, click **Create**. 
+1. 규칙을 저장하고, **새 그룹** 블레이드에서 **만들기**를 클릭한다. 
 
-1. Back on the **Groups - All groups** blade of the Azure AD tenant, click the **+ New group** button and create a new group with the following settings:
+1. Azure AD 테넌트의 **그룹 - 모든 그룹** 블레이드로 돌아와서 **+ 새 그룹** 버튼을 클릭하고, 다음 설정을 사용하여 새 그룹을 생성한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Group type | **Security** |
-    | Group name | **IT System Administrators** |
-    | Group description | **Contoso IT system administrators** |
-    | Membership type | **Dynamic User** |
+    | 그룹 유형 | **보안** |
+    | 그룹 이름 | **IT System Administrators** |
+    | 그룹 설명 | **Contoso IT system administrators** |
+    | 구성원 자격 유형 | **동적 사용자** |
 
-1. Click **Add dynamic query**.
+1. **동적 쿼리 추가**를 클릭한다.
 
-1. On the **Configure Rules** tab of the **Dynamic membership rules** blade, create a new rule with the following settings:
+1. **동적 구성원 규칙** 블레이드의 **규칙 구성** 탭에서 다음 설정을 사용하여 새 규칙을 생성한다. 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Property | **jobTitle** |
-    | Operator | **Equals** |
-    | Value | **System Administrator** |
+    | 속성 | **jobTitle** |
+    | 연산자 | **Equals** |
+    | 값 | **System Administrator** |
 
-1. Save the rule and, back on the **New Group** blade, click **Create**. 
+1. 규칙을 저장하고, **새 그룹** 블레이드에서 **만들기**를 클릭한다.
 
-1. Back on the **Groups - All groups** blade of the Azure AD tenant, click the **+ New group** button, and create a new group with the following settings:
+1. Azure AD 테넌트의 **그룹 - 모든 그룹** 블레이드로 돌아와서 **+ 새 그룹** 버튼을 클릭하고, 다음 설정을 사용하여 새 그룹을 생성한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Group type | **Security** |
-    | Group name | **IT Lab Administrators** |
-    | Group description | **Contoso IT Lab administrators** |
-    | Membership type | **Assigned** |
+    | 그룹 유형 | **보안** |
+    | 그룹 이름 | **IT Lab Administrators** |
+    | 그룹 설명 | **Contoso IT Lab administrators** |
+    | 구성원 자격 유형 | **할당됨** |
 
-1. Click **No members selected**.
+1. **선택한 멤버가 없음**을 클릭한다.
 
-1. From the **Add members** blade, search and select the **IT Cloud Administrators** and **IT System Administrators** groups and, back on the **New Group** blade, click **Create**.
+1. **구성원 추가** 블레이드에서 **IT Cloud Administrators** 와 **IT System Administrators** 그룹을 선택하고 **만들기**를 클릭한다.
 
-1. Back on the **Groups - All groups** blade, click the entry representing the **IT Cloud Administrators** group and, on then display its **Members** blade. Verify that the **az104-01a-aaduser1** appears in the list of group members.
+1. **그룹 - 모든 그룹** 블레이드로 돌아가서 **IT Cloud Administrators** 그룹을 클릭한다. **구성원** 블레이드에서 **az104-01a-aaduser1** 가 목록에 나타나는지 확인한다.
 
-1. Navigate back to the **Groups - All groups** blade, click the entry representing the **IT System Administrators** group and, on then display its **Members** blade. Verify that the **az104-01a-aaduser2** appears in the list of group members.
+1. **그룹 - 모든 그룹** 블레이드로 돌아가서 **IT System Administrators** 그룹을 클릭한다. **구성원** 블레이드에서 **az104-01a-aaduser2** 가 목록에 나타나는지 확인한다.
 
-    >**Note**: You might experience delays with updates of the dynamic membership groups. To expedite the update, navigate to the group blade, display its **Dynamic membership rules** blade, **Edit** the rule listed in the **Rule syntax** textbox by adding a whitespace at the end, and **Save** the change.
+    >**참고**: 동적 구성원 자격 그룹의 업데이트로 인해 지연이 발생할 수 있습니다. 업데이트를 빨리하려면 각 그룹의 **동적 구성원 규칙** 블레이드에서 **규칙 구문** 내용의 끝에 공백을 추가하고 변경 사항을 **저장**하십시오. 
 
-#### Task 3: Create an Azure Active Directory (AD) tenant
+#### 작업 3: Azure Active Directory (AD) 테넌트 생성
 
-In this task, you will create a new Azure AD tenant.
+이 작업에서는 새로운 Azure AD 테넌트를 생성합니다.
 
-1. In the Azure portal, search for and select **Azure Active Directory**.
+1. Azure 포털에서 **Azure Active Directory**를 찾아 클릭한다.
 
-1. Click **+ Create a directory** and specify the following setting:
+1. **+ Create a tenant**를 클릭하여 다음 설정을 사용한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Directory type | **Azure Active Directory** |
-    | Organization name | **Contoso Lab** |
-    | Initial domain name | any valid DNS name consisting of lower case letters and digits and starting with a letter | 
-    | Country/Region | **United States** |
+    | 디렉터리 형식 선택 | **Azure Active Directory** |
+    | 조직 이름 | **Contoso Lab** |
+    | 초기 도메인 이름 | 알파벳 소문자와 숫자로 구성된 유효한 DNS 이름  | 
+    | 국가/지역 | **미국** |
 
-   > **Note**: The green check mark in the **Initial domain name** text box will indicate that the domain name you typed in is valid and unique.
+   > **참고**: **초기 도메인 이름** 텍스트 상자의 초록색 체크 표시는 입력한 도메인 이름이 유효하다는 것을 의미합니다.
 
-1. Click **Review + create** and then click **Create**.
+1. **검토 + 만들기**를 클릭하고, 유효성 검사에 통과하면 **만들기**를 클릭한다.
 
-1. Display the blade of the newly created Azure AD tenant by using the **Click here to navigate to your new directory: Contoso Lab** link or the **Directory + Subscription** button (directly to the right of the Cloud Shell button) in the Azure portal toolbar.
+1. **새 디렉터리로 이동하려면 여기를 클릭합니다. Contoso Lab** 링크를 사용하거나  Azure portal 툴바의 **디렉터리 + 구독** 버튼을 클릭하여 새로 생성한 Azure AD 테넌트로 이동한다. (Cloud Shell 버튼 오른쪽에 있음) 
 
-#### Task 4: Manage Azure AD guest users.
+#### 작업 4: Azure AD 게스트 사용자 관리
 
-In this task, you will create Azure AD guest users and grant them access to resources in an Azure subscription.
+ 이 작업에서는 Azure AD 게스트 사용자를 생성하고 Azure 구독의 리소스에 대한 접근 권한을 부여합니다.
 
-1. In the Azure portal displaying the Contoso Lab Azure AD tenant, in the **Manage** section, click **Users**, and then click **+ New user**.
+1. Contoso Lab Azure AD 테넌트의 Azure 포털에서 **관리** 섹션의 **사용자**를 선택하고, **+ 새 사용자**를 클릭한다.
 
-1. Create a new user with the following settings (leave others with their defaults):
+1. 다음 설정을 사용하여 새 사용자를 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | User name | **az104-01b-aaduser1** |
-    | Name | **az104-01b-aaduser1** |
-    | Let me create the password | enabled |
-    | Initial password | **Pa55w.rd124** |
-    | Job title | **System Administrator** |
-    | Department | **IT** |
+    | 사용자 이름 | **az104-01b-aaduser1** |
+    | 이름 | **az104-01b-aaduser1** |
+    | 암호 | 암호 직접 만들기 |
+    | 초기 암호 | **Pa55w.rd124** |
+    | 직함 | **System Administrator** |
+    | 부서 | **IT** |
 
-    >**Note**: **Copy to clipboard** the full **User name**. You will need it later in this task.
+    >**참고**: **사용자 이름**을 **클립 보드에 복사**하십시오. 이 작업에서 이용할 것입니다. 
 
-1. Switch back to your default Azure AD tenant by using the **Directory + Subscription** button (directly to the right of the Cloud Shell button) in the Azure portal toolbar.
+1. 포털 툴바의 **디렉터리 + 구독** 버튼을 이용하여 기본 Azure AD 테넌트로 돌아간다. 
 
-1. Navigate back to the **Users - All users** blade, and then click **+ New guest user**.
+1. **사용자 - 모든 사용자** 블레이드로 돌아가 **+ 새 게스트 사용자**를 클릭한다.
 
-1. Create a new guest user with the following settings (leave others with their defaults):
+1. 다음 설정을 사용하여 새 게스트 사용자를 추가한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **az104-01b-aaduser1** |
-    | Email address | paste the value you copied into Clipboard earlier in this task |
-    | Usage location | **United States** |
-    | Job title | **Lab Administrator** |
-    | Department | **IT** |
+    | 이름 | **az104-01b-aaduser1** |
+    | 전자 메일 주소 | 이전 작업에서 클립 보드에 복사한 사용자 이름 |
+    | 사용량 위치 | **United States** |
+    | 직함 | **Lab Administrator** |
+    | 부서 | **IT** |
 
-1. Click **Invite**. 
+1. **초대**를 클릭한다. 
 
-1. Back on the **Users - All users** blade, click the entry representing the newly created guest user account.
+1. **사용자 - 모든 사용자** 블레이드로 돌아가 새로 추가된 게스트 사용자 계정을 클릭한다.
 
-1. On the **az104-01b-aaduser1 - Profile** blade, click **Groups**.
+1. **az104-01b-aaduser1 - 프로필** 블레이드에서 **그룹**을 클릭한다.
 
-1. Click **+ Add membership** and add the guest user account to the **IT Lab Administrators** group.
+1. **+ 멤버 자격 추가**를 클릭하고 **IT Lab Administrators** 그룹에 게스트 사용자 계정을 추가한다. 
 
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs. While, in this case, there are no additional charges associated with Azure Active Directory tenants and their objects, you might want to consider removing the user accounts, the group accounts, and the Azure Active Directory tenant you created in this lab.
+   >**참고**: 더 이상 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다. 이 경우 Azure Active Directory 테넌트 및 해당 개체와 관련된 추가 비용은 없지만, 이 랩에서 생성한 사용자 계정, 그룹 계정 및 Azure Active Directory 테넌트를 제거하는 것을 고려할 수 있습니다. 
 
-1. In the Azure portal, navigate to the **Users - All users** blade, click the entry representing the **az104-01b-aaduser1** guest user account, on the **az104-01b-aaduser1 - Profile** blade click **Delete**, and, when prompted to confirm, click **OK**.
+1. **사용자 - 모든 사용자** 블레이드로 이동하여 **az104-01b-aaduser1** 게스트 사용자 계정을 클릭한다. **az104-01b-aaduser1 - 프로필** 블레이드에서 **삭제**를 클릭하고, 확인 창이 뜨면 **예**를 클릭한다.
 
-1. Repeat the same sequence of steps to delete the remaining user accounts you created in this lab.
+1. 동일한 단계를 반복하여 이 랩에서 생성한 나머지 사용자 계정을 삭제하십시오.
 
-1. Navigate to the **Groups - All groups** blade, select the groups you created in this lab, click **Delete**, and, when prompted to confirm, click **OK**.
+1. **그룹 - 모든 그룹** 블레이드로 이동하여 이 랩에서 생성한 그룹을 클릭한다. **삭제**를 클릭하고 확인 창이 뜨면, **예**를 클릭한다.
 
-1. Navigate to the **Azure Active Directory Premium P2 - Licensed users** blade, select the user accounts to which you assigned licenses in this lab, click **Remove license**, and, when prompted to confirm, click **OK**.
+1. **Azure Active Directory Premium P2 - 허가된 사용자** 블레이드로 이동하여 이 랩에서 할당한 계정을 선택하고, **라이선스 제거**를 클릭한다. 확인 창이 뜨면 **예**를 클릭한다.
 
-1. In the Azure portal, display the blade of the Contoso Lab Azure AD tenant by using the **Directory + Subscription** button (directly to the right of the Cloud Shell button) in the Azure portal toolbar.
+1. Azure 포털에서 툴바의 **디렉터리 + 구독** 버튼을 클릭하여 Contoso Lab Azure AD 테넌트로 이동한다.  
 
-1. Navigate to the **Users - All users** blade, click the entry representing the **az104-01b-aaduser1** user account, on the **az104-01b-aaduser1 - Profile** blade click **Delete**, and, when prompted to confirm, click **OK**.
+1. **사용자 - 모든 사용자** 블레이드로 이동하여 **az104-01b-aaduser1** 사용자 계정을 클릭한다. **az104-01b-aaduser1 - 프로필** 블레이드에서 **삭제**를 클릭하고, 확인 창이 뜨면 **예**를 클릭한다.
 
-1. Navigate to the **Contoso Lab - Overview** blade of the Contoso Lab Azure AD tenant, click **Delete directory**, on the **Delete directory 'Contoso Lab'** blade, click the **Get permission to delete Azure resources** link, on the **Properties** blade of Azure Active Directory, set **Access management for Azure resources** to **Yes** and click **Save**.
+1. **Contoso Lab - 개요** 블레이드로 이동하여 **테넌트 삭제**를 클릭한다. **'Contoso Lab' 디렉터리 삭제** 블레이드에서 **Azure 리소스를 삭제할 권한 얻기** 링크를 클릭한다. **속성** 블레이드에서 **Azure 리소스에 대한 액세스 관리**를 **예**로 설정하고 **저장**을 클릭한다.
 
-1. Sign out from the Azure portal and sign in back. 
+1. Azure 포털에서 로그아웃하고 다시 로그인한다.
 
-1. Navigate back to the **Delete directory 'Contoso Lab'** blade and click **Delete**.
+1. **'Contoso Lab' 디렉터리 삭제** 블레이드로 돌아가 **삭제**를 클릭한다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Created and configured Azure AD users
-- Created Azure AD groups with assigned and dynamic membership
-- Created an Azure Active Directory (AD) tenant
-- Managed Azure AD guest users 
+- Azure AD 사용자를 생성 및 설정했습니다.
+- 할당 및 동적 멤버십이 있는 Azure AD 그룹을 생성했습니다.
+- Azure Active Directory (AD) 테넌트를 생성했습니다.
+- Azure AD 게스트 사용자를 관리했습니다.
