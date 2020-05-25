@@ -1,47 +1,47 @@
 ---
 lab:
-    title: '10 - Implement Data Protection'
-    module: 'Module 10 - Data Protection'
+    title: '10 - 데이터 보호 구현'
+    module: '모듈 10 - 데이터 보호'
 ---
 
-# Lab 10 - Backup virtual machines
-# Student lab manual
+# 랩 10 - 가상 머신 백업
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-You have been tasked with evaluating the use of Azure Recovery Services for backup and restore of files hosted on Azure virtual machines and on-premises computers. In addition, you want to identify methods of protecting data stored in the Recovery Services vault from accidental or malicious data loss.
+Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백업하고 복구하기 위하여 Azure Recovery Services의 사용을 검토합니다. 또한 우발적이거나 악의적인 데이터 손실로부터 Recovery Services vault에 저장된 데이터를 보호하기 위한 방법을 확인합니다. 
 
-## Objectives
+## 목표
 
-In this lab, you will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Provision the lab environment
-+ Task 2: Create a Recovery Services vault
-+ Task 3: Implement Azure virtual machine-level backup
-+ Task 4: Implement File and Folder backup
-+ Task 5: Perform file recovery by using Azure Recovery Services agent
-+ Task 6: Perform file recovery by using Azure virtual machine snapshots (optional)
-+ Task 7: Review the Azure Recovery Services soft delete functionality (optional)
++ 작업 1: 랩 환경 프로비전
++ 작업 2: Recovery Services 자격 증명 모음 생성
++ 작업 3: Azure 가상 머신 레벨 백업 구성
++ 작업 4: 파일 및 폴더 백업 구현
++ 작업 5: Azure Recovery Services agent를 이용하여 파일 복구 수행
++ 작업 6: Azure 가상 머신 스냅샷을 이용하여 파일 복구 수행 (선택 사항)
++ 작업 7: Azure Recovery Services 일시 삭제 기능 검토 (선택 사항) 
 
-## Instructions
+## 설명
 
-### Exercise 1
+### 연습 1
 
-#### Task 1: Provision the lab environment
+#### 작업 1: 랩 환경 프로비전
 
-In this task, you will deploy two virtual machines that will be used to test different backup scenarios.
+이 작업에서는 다른 백업 시나리오를 테스트하는 데 사용할 두 개의 가상 머신을 배포합니다. 
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. In the Azure portal, open the **Azure Cloud Shell** by clicking on the icon in the top right of the Azure Portal.
+1. Azure 포털 오른쪽 위의 아이콘을 클릭하여 **Azure Cloud Shell**을 실행한다.
 
-1. If prompted to select either **Bash** or **PowerShell**, select **PowerShell**. 
+1. **Bash** 또는 **PowerShell**을 선택하는 프롬프트 창에서 **PowerShell**을 선택한다. 
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+    >**참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오. 
 
-1. In the toolbar of the Cloud Shell pane, click the **Upload/Download files** icon, in the drop-down menu, click **Upload** and upload the files **\\Allfiles\\Labs\\10\\az104-10-vms-template.json** and **\\Allfiles\\Labs\\10\\az104-10-vms-parameters.json** into the Cloud Shell home directory.
+1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 클릭한다. 드롭다운 메뉴에서 **업로드**를 클릭하고, **\\Allfiles\\Labs\\10\\az104-10-vms-template.json** 와 **\\Allfiles\\Labs\\10\\az104-10-vms-parameters.json**을 Cloud Shell의 홈 디렉토리에 업로드한다. 
 
-1. From the Cloud Shell pane, run the following to create the resource group that will be hosting the virtual machines (replace the `[Azure_region]` placeholder with the name of an Azure region where you intend to deploy Azure virtual machines):
+1. Cloud Shell 창에서 다음을 실행하여 가상 머신을 호스팅할 리소스 그룹을 생성한다. (replace the `[Azure_region]`을 Azure 가상 머신을 배포할 지역의 이름으로 대체한다)
 
    ```pwsh
    $location = '[Azure_region]'
@@ -50,7 +50,7 @@ In this task, you will deploy two virtual machines that will be used to test dif
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
-1. From the Cloud Shell pane, run the following to create the first virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
+1. Cloud Shell 창에서 다음을 실행하여 업로드한 템플릿과 파라미터 파일을 사용하여 첫 번째 가상 네트워크를 생성하고 가상 머신을 배포한다. 
 
    ```pwsh
    New-AzResourceGroupDeployment `
@@ -60,395 +60,395 @@ In this task, you will deploy two virtual machines that will be used to test dif
       -AsJob
    ```
 
-1. Minimize Cloud Shell (but do not close it).
+1. Cloud Shell을 최소화한다. (창은 닫지 않는다)
 
-    >**Note**: Do not wait for the deployment to complete but instead proceed to the next task. The deployment should take about 5 minutes.
+    >**참고**: 배포가 끝날 때까지 기다리지 말고 다음 작업을 진행하십시오. 배포에는 약 5분 소요됩니다. 
 
-#### Task 2: Create a Recovery Services vault
+#### 작업 2: Recovery Services 자격 증명 모음 생성
 
-In this task, you will create a recovery services vault.
+이 작업에서는 Recovery Services 자격 증명 모음을 생성합니다. 
 
-1. In the Azure portal, search for and select **Recovery Services vaults** and, on the **Recovery Services vaults** blade, click **+ Add**.
 
-1. On the **Create Recovery Services vault** blade, specify the following settings:
+1. Azure 포털에서 **Recovery Services 자격 증명 모음**을 선택하고, **+ 추가**를 클릭한다.
 
-    | Settings | Value |
+1. **Recovery Services 자격 증명 모음 만들기** 블레이드에서 다음 설정을 사용한다.
+
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | the name of a new resource group **az104-10-rg1** |
-    | Name | **az104-10-rsv1** |
-    | Region | the name of a region where you deployed the two virtual machines in the previous task |
+    | 구독 | 이 랩에서 사용할 구독의 이름 |
+    | 리소스 그룹 | 새로 만들기 **az104-10-rg1** |
+    | 자격 증명 모음 이름 | **az104-10-rsv1** |
+    | 지역 | 이전 작업에서 두 개의 가상 머신을 배포한 지역의 이름 |
 
-    >**Note**: Make sure that you specify the same region into which you deployed virtual machines in the previous task.
+    >**참고**: 이전 작업에서 두 개의 가상 머신을 배포한 지역과 동일한 지역에 배포해야 합니다.
 
-1. Click **Review + Create** and then click **Create**.
+1. **검토 + 만들기**를 클릭하고, **만들기**를 클릭한다.
 
-    >**Note**: Wait for the deployment to complete. The deployment should take less than 1 minute.
+    >**참고**: 배포가 완료될 때까지 기다리십시오. 이 작업은 1분 미만 소요됩니다.
 
-1. When the deployment is completed, click **Go to Resource**. 
+1. 배포가 끝나면 **리소스로 이동**을 클릭한다.. 
 
-1. On the **az104-10-rsv1** Recovery Services vault blade, in the **Settings** section, click **Properties**.
+1. **az104-10-rsv1** Recovery Services 자격 증명 모음 블레이드 **설정** 섹션의 **속성**을 클릭한다.
 
-1. On the **az104-10-rsv1 - Properties** blade, click the **Update** link under **Backup Configuration** label.
+1. **az104-10-rsv1 - 속성** 블레이드 **백업 구성** 레이블 아래 **업데이트**를 클릭한다. 
 
-1. On the **Backup Configuration** blade, note that you can set the **Storage replication type** to either **Locally-redundant** or **Geo-redundant**. Leave the default setting of **Geo-redundant** in place and close the blade.
+1. **백업 구성** 블레이드에서 **스토리지 복제 유형**을 **로컬 중복**이나 **지역 중복**으로 설정할 수 있다. 기본 설정인 **지역 중복**을 사용하고 블레이드를 닫는다.
 
-    >**Note**: This setting can be configured only if there are no existing backup items.
+    >**참고**: 이 설정은 백업 항목이 존재하지 않을 때만 할 수 있다. 
 
-1. Back on the **az104-10-rsv1 - Properties** blade, click the **Update** link under **Security Settings** label. 
+1. **az104-10-rsv1 - 속성** 블레이드로 돌아가서 **보안 설정** 레이블 아래 **업데이트**를 클릭한다. 
 
-1. On the **Security Settings** blade, note that **Soft Delete (For Azure Virtual Machines)** is **Enabled**.
+1. **보안 설정** 블레이드에서 **일시 삭제(Azure Virtual Machines 용)** 이 **사용**으로 설정되어 있는 것을 확인한다.
 
-1. Close the **Security Settings** blade and, back on the **az104-10-rsv1** Recovery Services vault blade, click **Overview**.
+1. **보안 설정** 블레이드를 닫고, **az104-10-rsv1**  Recovery Services 자격 증명 모음 블레이드로 돌아가 **개요**를 클릭한다.
 
-#### Task 3: Implement Azure virtual machine-level backup
+#### 작업 3: Azure 가상 머신 레벨 백업 구성
 
-In this task, you will implement Azure virtual-machine level backup.
+이 작업에서는 Azure 가상 머신 레벨 백업을 구성합니다. 
 
-   >**Note**: Before you start this task, make sure that the deployment you initiated in the first task of this lab has successfully completed.
+   >**참고**: 이 작업을 시작하기 전에, 이 랩의 첫 번째 작업에서 시작한 배포가 완료되었는지 확인합니다. 
 
-1. On the **az104-10-rsv1** Recovery Services vault blade, click **+ Backup**.
+1. **az104-10-rsv1** Recovery Services 자격 증명 모음 블레이드에서 **+ 백업**을 클릭한다.
 
-1. On the **Backup Goal** blade, specify the folowing settings:
+1. **백업 목표** 블레이드에서 다음 설정을 사용한다. 
 
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Where is your workload running? | **Azure** |
-    | What do you want to backup? | **Virtual machine** |
+    | 작업이 실행되는 위치 | **Azure** |
+    | 백업할 항목 | **가상 머신** |
 
-1. On the **Backup Goal** blade, click **Backup**.
+1. **백업 목표** 블레이드에서 **백업**을 클릭한다. 
 
-1. On the **Backup policy**, review the **DefaultPolicy** settings, and, in the **Choose backup policy** drop-down list, select **Create New**.
+1. **백업 목표** 블레이드에서, **DefaultPolicy** 설정을 검토하고 드롭다운 목록 아래 **새 정책 만들기**를 클릭한다.
 
-1. Define a new backup policy with the following settings (leave others with their default values):
+1. 다음 설정을 사용하여 새로운 백업 정책을 정의한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | ---- | ---- |
-    | Policy name | **az104-10-backup-policy** |
-    | Frequency | **Daily** |
-    | Time | **12:00 AM** |
-    | Timezone | the name of your local time zone |
-    | Retain instant recovery snapshot(s) for | **2** Days(s) |
+    | 정책 이름 | **az104-10-backup-policy** |
+    | 빈도 | **매일** |
+    | 시간 | **12:00 AM** |
+    | 표준 시간대 | 로컬 타임 존 이름 |
+    | 빠른 복구 스냅샷 보존 | **2**일 |
 
-1. Click **OK** to create the policy. This will automatically transition to the **Items to backup** step and open the **Select virtual machines** blade.
+1. **확인**을 클릭하여 정책을 만든다. 가상 머신 레이블 아래의 **추가**를 클릭하여 **가상 머신 선택** 블레이드를 연다.
 
-1. On the **Select virtual machines** blade, select **az-104-10-vm0**, click **OK**, and, back on the **Backup** blade, click **Enable backup**.
+1. **가상 머신 선택** 블레이드에서 **az-104-10-vm0**를 선택하고 **확인**을 클릭한다. **백업** 블레이드에서 **백업 사용**을 클릭한다.
 
-    >**Note**: Wait for the backup to be enabled. This should take about 2 minutes. 
+    >**참고**: 백업 설정이 완료될 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다.
 
-1. Navigate back to the **az104-10-rsv1** Recovery Services vault blade, in the **Protected items** section, click **Backup items**, and then click the **Azure virtual machines** entry.
+1. **az104-10-rsv1** Recovery Services 자격 증명 모음 블레이드의  **보호된 항목** 섹션에서 **백업 항목**을 선택하고, **Azure virtual machines**을 클릭한다.
 
-1. On the **Backup Items (Azure Virtual Machine)** blade of **az104-10-vm0**, review the values of the **Backup Pre-Check** and **Last Backup Status** entries, and click the **az104-10-vm0** entry.
+1. **백업 항목 (Azure Virtual Machine)** 목록의 **az104-10-vm0**에서 **백업 사전 검사** 항목과 **마지막 백업 상태**를 확인하고, **az104-10-vm0**을 클릭한다.
 
-1. On the **az104-10-vm0** Backup Item blade, click **Backup now**, accept the default value in the **Retain Backup Till** drop-down list, and click **OK**.
+1. **az104-10-vm0** 백업 항목에서 **지금 백업**을 클릭하고, **다음까지 백업 보존** 값을 기본으로 두고 **확인**을 클릭한다.
 
-    >**Note**: Do not wait for the backup to complete but instead proceed to the next task.
+    >**참고**:  백업 작업이 끝날 때까지 기다리지 않고 다음 작업을 진행합니다.
 
-#### Task 4: Implement File and Folder backup
+#### 작업 4: 파일 및 폴더 백업 구현
 
-In this task, you will implement file and folder backup by using Azure Recovery Services.
+이 작업에서는 Azure Recovery Services를 사용하여 파일 및 폴더 백업을 구현합니다. 
 
-1. In the Azure portal, search for and select **Virtual machines**, and on the **Virtual machines** blade, click **az104-10-vm1**.
+1. Azure 포털에서 **가상 머신**을 찾아 선택하고, **az104-10-vm1**을 클릭한다.
 
-1. On the **az104-10-vm1** blade, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-10-vm1** 블레이드에서 **연결**을 클릭하고, **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **RDP 파일 다운로드**를 클릭하고 원격 데스크톱 세션을 시작한다.
 
-    >**Note**: This step refers to connecting via Remote Desktop from a Windows computer. On a Mac, you can use Remote Desktop Client from the Mac App Store and on Linux computers you can use an open source RDP client software.
+    >**참고**: 이 단계는 Windows 컴퓨터에서 원격 데스크톱을 통해 연결하는 것을 말합니다. Mac에서는 Mac App Store에서 Remote Desktop Client를 사용할 수 있으며, Linux 컴퓨터에서는 오픈 소스 RDP 클라이언트 소프트웨어를 사용할 수 있습니다.
 
-    >**Note**: You can ignore any warning prompts when connecting to the target virtual machines.
+    >**참고**: 가상 머신에 연결할 때 출력되는 경고 메시지는 무시할 수 있습니다.
 
-1. When prompted, sign in by using the **Student** username and **Pa55w.rd1234** password.
+1. 원격 데스크톱에 연결되면 **Student** 계정과 **Pa55w.rd1234** 패스워드를 사용하여 로그인한다.
 
-1. Within the Remote Desktop session to the **az104-10-vm1** Azure virtual machine, in the **Server Manager** window, click **Local Server**, click **IE Enhanced Security Configuration** and turn it **Off** for Administrators.
+1. **az104-10-vm1** Azure 가상 머신의 원격 데스크톱 세션에서 **Server Manager** 창에서 **Local Server**를 클릭하고, **IE Enhanced Security Configuration**을 선택한 후, Administrators에 대해 **off**로 설정한다.
 
-1. Within the Remote Desktop session to the **az104-10-vm1** Azure virtual machine, start Internet Explorer, browse to the [Azure portal](https://portal.azure.com), and sign in using your credentials. 
+1. **az104-10-vm1** Azure 가상 머신에서 Internet Explore를 시작하여 [Azure portal](https://portal.azure.com)에 로그인한다.
 
-1. In the Azure portal, search for and select **Recovery Services vaults** and, on the **Recovery Services vaults**, click **az104-10-rsv1**.
+1. Azure 포털에서 **Recovery Services vaults**를 찾아 선택하고, **Recovery Services vaults**의 **az104-10-rsv1**를 클릭한다.
 
-1. On the **az104-10-rsv1** Recovery Services vault blade, click **+ Backup**.
+1. **az104-10-rsv1** Recovery Services vault 블레이드에서 **+ Backup**을 클릭한다.
 
-1. On the **Backup Goal** blade, specify the following settings:
+1. **Backup Goal** 블레이드에 다음 설정을 사용한다.
 
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
     | Where is your workload running? | **On-premises** |
     | What do you want to backup? | **Files and folders** |
 
-    >**Note**: Even though the virtual machine you are using in this task is running in Azure, you can leverage it to evaluate the backup capabilities applicable to any on-premises computer running Windows Server operating system.
+    >**참고**: 이 작업에서 사용하는 가상 머신이 Azure 환경에서 동작하지만,  이 작업에서 사용 중인 가상 시스템이 Azure에서 실행되고 있더라도 Windows Server 운영 체제를 실행하는 모든 온프레미스 컴퓨터에 적용할 수 있는 백업 기능을 평가하는 데 이 가상 머신을 활용할 수 있다.
 
-1. On the **Backup Goal** blade, click **Prepare infrastructure**.
+1. **Backup Goal** 블레이드에서 **Prepare infrastructure**을 클릭한다.
 
-1. On the **Prepare infrastructure** blade, click the **Download Agent for Windows Server or Windows Client** link.
+1. **Prepare infrastructure** 블레이드에서 **Download Agent for Windows Server or Windows Client** 링크를 클릭한다. 
 
-1. When prompted, click **Run** to start installation of **MARSAgentInstaller.exe** with the default settings. 
+1. **Run**을 클릭하여 기본 설정으로  **MARSAgentInstaller.exe**를 설치한다.
 
-    >**Note**: On the **Microsoft Update Opt-In** page of the **Microsoft Azure Recovery Services Agent Setup Wizard**, select the **I do not want to use Microsoft Update** installation option.
+    >**참고**: **Microsoft Azure Recovery Services Agent Setup Wizard**의 **Microsoft Update Opt-In**페이지에서 **I do not want to use Microsoft Update** 설치 옵션을 선택한다. 
 
-1. On the **Installation** page of the **Microsoft Azure Recovery Services Agent Setup Wizard**, click **Proceed to Registration**. This will start **Register Server Wizard**.
+1. **Proceed to Registration**을 클릭하여 **Register Server Wizard**를 시작한다. 
 
-1. Switch to the Internet Explorer window displaying the Azure portal, on the **Prepare infrastructure** blade, select the checkbox **Already downloaded or using the latest Recovery Server Agent**, and click **Download**.
+1. Azure portal이 있는 Internet Explorer 창으로 돌아가서 **Prepare infrastructure** 블레이드의 **Already downloaded or using the latest Recovery Server Agent** 체크 박스를 선택하고, **Download**를 클릭한다. 
 
-1. When prompted, whether to open or save the vault credentials file, click **Save**. This will save the vault credentials file to the local Downloads folder.
+1. **Save**를 클릭하여 vault credentials 파일을 Downloads 폴더에 저장한다. 
 
-1. Switch back to the **Register Server Wizard** window and, on the **Vault Identification** page, click **Browse**.
+1. **Register Server Wizard** 창으로 돌아가서 **Vault Identification** 페이지의 **Browse**를 클릭한다.
 
-1. In the **Select Vault Credentials** dialog box, browse to the **Downloads** folder, click the vault credentials file you downloaded, and click **Open**.
+1. **Select Vault Credentials** 창에서 **Downloads** 폴더를 찾아 다운로드했던 vault credentials 파일을 선택하고, **Open**을 클릭한다.
 
-1. Back on the **Vault Identification** page, click **Next**.
+1. **Vault Identification** 페이지로 돌아가 **Next**를 클릭한다.
 
-1. On the **Encryption Setting** page of the **Register Server Wizard**, click **Generate Passphrase**.
+1. **Register Server Wizard**의 **Encryption Setting** 페이지에서 **Generate Passphrase**를 클릭한다.
 
-1. On the **Encryption Setting** page of the **Register Server Wizard**, click the **Browse** button next to the **Enter a location to save the passphrase** drop-down list.
+1.  **Register Server Wizard**의 **Encryption Setting** 페이지에서 **Enter a location to save the passphrase** 드롭다운 목록 옆의 **Browse** 버튼을 클릭한다. 
 
-1. In the **Browse For Folder** dialog box, select the **Documents** folder and click **OK**.
+1. **Browse For Folder** 창에서 **Documents** 폴더를 선택하고, **OK**를 클릭한다.
 
-1. Click **Finish**, review the **Microsoft Azure Backup** warning and click **Yes**, and wait for the registration to complete.
+1. **Finish**를 클릭하고 **Microsoft Azure Backup** 안내 사항을 검토한 뒤, **Yes**를 클릭한다. 등록이 완료될 때까지 기다린다. 
 
-    >**Note**: In a production environment, you should store the passphrase file in a secure location other than the server being backed up.
+    >**참고**: production 환경에서는 암호 파일을 백업되는 서버가 아닌 안전한 위치에 저장해야 합니다. 
 
-1. On the **Server Registration** page of the **Register Server Wizard**, review the warning regarding the location of the passphrase file, ensure that the **Launch Microsoft Azure Recovery Services Agent** checkbox is selected and click **Close**. This will automatically open the **Microsoft Azure Backup** console.
+1. **Register Server Wizard**의 **Server Registration** 페이지에서 파일 위치에 대한 경고를 확인하고, **Launch Microsoft Azure Recovery Services Agent**의 체크박스를 선택한 뒤, **Close**를 클릭한다. **Microsoft Azure Backup** 콘솔이 자동으로 실행된다. 
 
-1. In the **Microsoft Azure Backup** console, in the **Actions** pane, click **Schedule Backup**.
+1. **Microsoft Azure Backup** 콘솔에서 **Actions** 창의 **Schedule Backup**을 클릭한다.
 
-1. In the **Schedule Backup Wizard**, on the **Getting started** page, click **Next**.
+1. **Schedule Backup Wizard**의 **Getting started** 페이지에서 **Next**를 클릭한다.
 
-1. On the **Select Items to Backup** page, click **Add Items**.
+1. **Select Items to Backup** 페이지에서 **Add Items**를 클릭한다.
 
-1. In the **Select Items** dialog box, expand **C:\\Windows\\System32\\drivers\\etc\\**, select **hosts**, and then click **OK**:
+1. **Select Items** 박스에서 **C:\\Windows\\System32\\drivers\\etc\\** 경로를 찾아서 **hosts**를 선택하고 **OK**를 클릭한다.
 
-1. On the **Select Items to Backup** page, click **Next**.
+1. **Select Items to Backup** 페이지에서 **Next**를 클릭한다.
 
-1. On the **Specify Backup Schedule** page, ensure that the **Day** option is selected, in the first drop-down list box below the **At following times (Maximum allowed is three times a day)** box, select **4:30 AM**, and then click **Next**.
+1. **Specify Backup Schedule** 페이지에서 **Day**로 설정된 것을 확인한다. **At following times (Maximum allowed is three times a day)** 박스 아래 첫 번째 드롭다운 리스트에서 **4:30 AM**을 선택하고 **Next**를 클릭한다. 
 
-1. On the **Select Retention Policy** page, accept the defaults, and then click **Next**.
+1. **Select Retention Policy** 페이지의 설정을 기본 값으로 두고 **Next**를 클릭한다.
 
-1. On the **Choose Initial Backup type** page, accept the defaults, and then click **Next**.
+1. **Choose Initial Backup type** 페이지의 설정을 기본 값으로 두고, **Next**를 클릭한다.
 
-1. On the **Confirmation** page, click **Finish**. When the backup schedule is created, click **Close**.
+1. **Confirmation** 페이지에서 **Finish**를 클릭한다. 백업 스케줄이 생성되면 **Close**를 클릭한다. 
   
-1. In the **Microsoft Azure Backup** console, in the Actions pane, click **Back Up Now**.
+1. **Microsoft Azure Backup** 콘솔에서 Actions 창의 **Back Up Now**를 클릭한다.
 
-    >**Note**: The option to run backup on demand becomes available once you create a scheduled backup.
+    >**참고**: 예약된 백업을 생성하면 온디맨드 방식으로 백업을 실행할 수 있는 옵션이 제공됩니다.
 
-1. In the Back Up Now Wizard, on the **Select Backup Item** page, ensure that the **Files and Folders** option is selected and click **Next**.
+1. Back Up Now Wizard의 **Select Backup Item** 페이지에서 **Files and Folders** 옵션이 선택된 것을 확인하고, **Next**를 클릭한다.
 
-1. On the **Retain Backup Till** page, accept the default setting and click **Next**.
+1. **Retain Backup Till** 페이지의 설정을 기본 값으로 두고, **Next**를 클릭한다.
 
-1. On the **Confirmation** page, click **Back Up**.
+1. **Confirmation** 페이지에서 **Back Up**을 클릭한다.
 
-1. When the backup is complete, click **Close**, and then close Microsoft Azure Backup.
+1. 백업이 완료되면 **Close**를 클릭하고 Microsoft Azure Backup을 닫는다. 
 
-1. Switch to the Internet Explorer window displaying the Azure portal, navigate back to the Recovery Services vault blade and click **Backup items**. 
+1. Azure portal이 있는 Internet Explorer 창으로 돌아와서 Recovery Services vault 블레이드의 **Backup items**을 클릭한다.
 
-1. On the **az104-10-rsv1 - Backup items** blade, click **Azure Backup Agent**.
+1. **az104-10-rsv1 - Backup items** 블레이드에서 **Azure Backup Agent**를 클릭한다.
 
-1. On the **Backup Items (Azure Backup Agent)** blade, verify that there is an entry referencing the **C:\\** drive of **az104-10-vm1.**.
+1. **Backup Items (Azure Backup Agent)** 블레이드의 항목이 **az104-10-vm1.** 의 **C:\\** 드라이브를 참조하고 있는 것을 확인한다. 
 
-#### Task 5: Perform file recovery by using Azure Recovery Services agent (optional)
+#### 작업 5: Azure Recovery Services agent를 이용하여 파일 복구 수행 (선택 사항)
 
-In this task, you will perform file restore by using Azure Recovery Services agent.
+이 작업에서는 Azure Recovery Services agent를 이용하여 파일 복구를 수행합니다. 
 
-1. Within the Remote Desktop session to **az104-10-vm1**, open File Explorer, navigate to the **C:\\Windows\\System32\\drivers\\etc\\** folder and delete the **hosts** file.
+1. **az104-10-vm1** 원격 데스크톱 세션에서 **C:\\Windows\\System32\\drivers\\etc\\** 폴더의 **hosts** 파일을 삭제한다.
 
-1. Switch to the Microsoft Azure Backup window and click **Recover data**. This will start **Recover Data Wizard**.
+1. Microsoft Azure Backup 창으로 돌아가서 **Recover data**를 클릭하여 **Recover Data Wizard**를 시작한다.
 
-1. On the **Getting Started** page of **Recover Data Wizard**, ensue that **This server (az104-10-vm1.)** option is selected and click **Next**.
+1. **Getting Started** 페이지에서 **This server (az104-10-vm1.)** 옵션이 선택된 것을 확인하고, **Next**를 클릭한다.
 
-1. On the **Select Recovery Mode** page, ensure that **Individual files and folders** option is selected, and click **Next**.
+1. **Individual files and folders** 옵션이 선택된 것을 확인하고 **Next**를 클릭한다.
 
-1. On the **Select Volume and Date** page, in the **Select the volume** drop down list, select **C:\\**, accept the default selection of the available backup, and click **Mount**. 
+1. **Select Volume and Date** 페이지의 **Select the volume** 드롭 다운 메뉴에서 **C:\\** 를 선택한다. available backups 설정을 기본으로 두고 **Mount**를 클릭한다.
 
-    >**Note**: Wait for the mount operation to complete. This might take about 2 minutes.
+    >**참고**: 작업이 완료될 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다. 
 
-1. On the **Browse And Recover Files** page, note the drive letter of the recovery volume and review the tip regarding the use of robocopy.
+1. **Browse And Recover Files** 페이지에서 복구 volume의 드라이브 문자를 확인하고, Robocopy 사용에 대한 팁을 검토한다.
 
-1. Click **Start**, expand the **Windows System** folder, and click **Command Prompt**.
+1. **Start**를 클릭하여 **Windows System** 폴더의 **Command Prompt**를 시작한다.
 
-1. From the Command Prompt, run the following to copy the restore the **hosts** file to the original location (replace `[recovery_volume]` with the drive letter of the recovery volume you identified earlier):
+1. Command Prompt 창에서 다음 명령을 실행하여 **hosts** 복구 파일을 원본 위치에 복사한다. (`[recovery_volume]`을 앞서 확인한  복구 volume의 드라이브 문자로 대체한다)
 
    ```
    robocopy [recovery_volume]:\Windows\System32\drivers\etc C:\Windows\system32\drivers\etc hosts /r:1 /w:1
    ```
 
-1. Switch back to the **Recover Data Wizard** and, on the **Browse and Recover File, click **Unmount** and, when prompted to confirm, click **Yes**. 
+1. **Recover Data Wizard**로 돌아가서 **Browse and Recover File** 창의 **Unmount**를 클릭한다.확인 창이 뜨면, **Yes**를 클릭한다.
 
-1. Terminate the Remote Desktop session.
+1. 원격 데스크톱 세션을 종료한다. 
 
-#### Task 6: Perform file recovery by using Azure virtual machine snapshots (optional)
+#### 작업 6: Azure 가상 머신 스냅샷을 이용하여 파일 복구 수행 (선택 사항)
 
-In this task, you will restore a file from the Azure virtual machine-level snapshot-based backup.
+이 작업에서는 Azure 가상 머신 레벨 스냅샷 기반 백업을 이용하여 파일을 복구합니다. 
 
-1. Switch to the browser window running on your lab computer and displaying the Azure portal.
+1. 랩 컴퓨터로 Azure 포털에 접속한다. 
 
-1. In the Azure portal, search for and select **Virtual machines**, and on the **Virtual machines** blade, click **az104-10-vm0**.
+1. Azure 포털 **가상 머신** 블레이드의 **az104-10-vm0**을 클릭한다.
 
-1. On the **az104-10-vm0** blade, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-10-vm0** 블레이드에서 **연결**을 클릭하고, **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **RDP 파일 다운로드**를 클릭하고 원격 데스크톱 세션을 시작한다.
 
-    >**Note**: This step refers to connecting via Remote Desktop from a Windows computer. On a Mac, you can use Remote Desktop Client from the Mac App Store and on Linux computers you can use an open source RDP client software.
+    >**참고**: 이 단계는 Windows 컴퓨터에서 원격 데스크톱을 통해 연결하는 것을 말합니다. Mac에서는 Mac App Store에서 Remote Desktop Client를 사용할 수 있으며, Linux 컴퓨터에서는 오픈 소스 RDP 클라이언트 소프트웨어를 사용할 수 있습니다.
 
-    >**Note**: You can ignore any warning prompts when connecting to the target virtual machines.
+    >**참고**: 가상 머신에 연결할 때 출력되는 경고 메시지는 무시할 수 있습니다.
 
-1. When prompted, sign in by using the **Student** username and **Pa55w.rd1234** password.
+1. 원격 데스크톱에 연결되면 **Student** 계정과 **Pa55w.rd1234** 패스워드를 사용하여 로그인한다.
 
-1. Within the Remote Desktop session to the **az104-10-vm0** Azure virtual machine, in the **Server Manager** window, click **Local Server**, click **IE Enhanced Security Configuration** and turn it **Off** for Administrators.
+1. **az104-10-vm0** Azure 가상 머신의 원격 데스크톱 세션에서 **Server Manager** 창에서 **Local Server**를 클릭하고, **IE Enhanced Security Configuration**을 선택한 후, Administrators에 대해 **off**로 설정한다.
 
-1. Within the Remote Desktop session to the **az104-10-vm0**, click **Start**, expand the **Windows System** folder, and click **Command Prompt**.
+1. **Start**를 클릭하고, **Windows System** 폴더의 **Command Prompt**를 시작한다.
 
-1. From the Command Prompt, run the following to delete the **hosts** file:
+1. Command Prompt 창에서 다음을 실행하여 **hosts** 파일을 제거한다.
 
    ```
    del C:\Windows\system32\drivers\etc\hosts
    ```
  
-   >**Note**: You will restore this file from the Azure virtual machine-level snapshot-based backup later in this task.
+   >**참고**: 이 파일은 가상 머신 레벨 스냅샷 기반 백업을 통해 복구할 예정입니다.
 
-1. Within the Remote Desktop session to the **az104-10-vm0** Azure virtual machine, start Internet Explorer, browse to the [Azure portal](https://portal.azure.com), and sign in using your credentials. 
+1. Azure 가상 머신 **az104-10-vm0**의 원격 데스크톱 세션에서 [Azure portal](https://portal.azure.com) 에 로그인한다.
 
-1. In the Azure portal, search for and select **Recovery Services vaults** and, on the **Recovery Services vaults**, click **az104-10-rsv1**.
+1. Azure 포털에서 **Recovery Services vaults** 를 찾아 선택하고, **az104-10-rsv1**를 클릭한다.
 
-1. On the **az104-10-rsv1** Recovery Services vault blade, in the **Protected items** section, click **Backup items**.
+1. **az104-10-rsv1** Recovery Services vault 블레이드에서 **Protected items** 섹션의 **Backup items**을 클릭한다.
 
-1. On the **az104-10-rsv1 - Backup items** blade, click **Azure Virtual Machine**. 
+1. **az104-10-rsv1 - Backup items** 블레이드에서 **Azure Virtual Machine**을 클릭한다.
 
-1. On the **Backup Items (Azure Virtual Machine)** blade, click **az104-10-vm0**.
+1. **Backup Items (Azure Virtual Machine)** 블레이드에서 **az104-10-vm0**을 클릭한다.
 
-1. On the **az104-10-vm0** Backup Item blade, click **File Recovery**.
+1. **az104-10-vm0** Backup Item 블레이드에서 **File Recovery**을 클릭한다.
 
-    >**Note**: You have the option of running recovery shortly after backup starts based on the application consistent snapshot.
+    >**참고**: 애플리케이션 정합성이 보장되는 스냅샷을 기반으로 백업이 시작된 직후 복구를 실행할 수 있는 옵션이 있습니다.
 
-1. On the **File Recovery** blade, accept the default recovery point and click **Download Executable**.
+1. **File Recovery** 블레이드에서 기본 설정을 사용하고, **Download Executable**를 클릭한다. 
 
-    >**Note**: The script mounts the disks from the selected recovery point as local drives within the operating system from which the script is run.
+    >**참고**: 이 스크립트는 선택한 복구 지점의 디스크를 스크립트가 실행되는 운영 체제 내의 로컬 드라이브로 마운트합니다.
 
-1. Click **Download** and, when prompted whether to run or save **IaaSVMILRExeForWindows.exe**, click **Run**.
+1. **Download**를 클릭하고, **Run**을 클릭하여 **IaaSVMILRExeForWindows.exe**을 실행한다. 
 
-1. When prompted to provide the password from the portal, copy the password from the **Password to run the script** text box on the **File Recovery** blade, paste it at the Command Prompt, and press **Enter**.
+1. 명령 프롬프트에 패스워드를 입력하라는 메시지가 출력되면, **Password to run the script** 옆의 패스워드를 복사하여  명령 프롬프트 창에 붙여넣기 하고 **Enter**를 클릭한다.
 
-    >**Note**: This will open a Windows PowerShell window displaying the progress of the mount.
+    >**참고**: 마운트 과정을 보여주는 Windows PowerShell 창이 시작됩니다. 
 
-    >**Note**: If you receive an error message at this point, refresh the Internet Explorer window and repeat the last three steps.
+    >**참고**: 이 작업에서 에러 메시지가 표시되면 Internet Explorer 창을 새로고침하고 마지막 세 단계를 반복하십시오.
 
-1. Wait for the mount process to complete, review the informational messages in the Windows PowerShell window, note the drive letter assigned to the volume hosting **Windows**, and start File Explorer.
+1. 마운트 과정이 끝날 때까지 기다리고, Windows PowerShell 창의 정보성 메시지를 검토한다. **Windows**를 호스팅하는 volume에 할당된 드라이브 문자를 기록한다. 
 
-1. In File Explorer, navigate to the drive letter hosting the snapshot of the operating system volume you identified in the previous step and review its content.
+1. 파일 탐색기에서 이전 단계에서 식별한 운영 체제 volume의 스냅샷을 호스팅하는 드라이브 문자로 이동하여 내용을 검토한다.
 
-1. Switch to the **Command Prompt** window.
+1. **Command Prompt** 창으로 돌아간다.
 
-1. From the Command Prompt, run the following to copy the restore the **hosts** file to the original location (replace `[os_volume]` with the drive letter of the operating system volume you identified earlier):
+1. 명령 프롬프트에 다음 명령을 실행하여 원본 위치에 **hosts** 파일 복사하여 복구한다. (`[os_volume]`을 앞서 확인한 운영체제 volume의 드라이브 문자로 대체한다)
 
    ```
    robocopy [os_volume]:\Windows\System32\drivers\etc C:\Windows\system32\drivers\etc hosts /r:1 /w:1
    ```
 
-1. Switch back to the **File Recovery** blade in the Azure portal and click **Unmount Disks**.
+1. **File Recovery** 블레이드로 돌아가서 Azure 포털의 **Unmount Disks**를 클릭한다.
 
-1. Terminate the Remote Desktop session.
+1. 원격 데스크톱 세션을 종료한다.
 
-#### Task 7: Review the Azure Recovery Services soft delete functionality
+#### 작업 7: Azure Recovery Services 일시 삭제 기능 검토
 
-1. On the lab computer, in the Azure portal, search for and select **Recovery Services vaults** and, on the **Recovery Services vaults**, click **az104-10-rsv1**.
+1. 랩 컴퓨터의 Azure 포털에서 **Recovery Services 자격 증명 모음**을 찾아 선택한다. 목록에서 **az104-10-rsv1**를 클릭한다.
 
-1. On the **az104-10-rsv1** Recovery Services vault blade, in the **Protected items** section, click **Backup items**.
+1. **az104-10-rsv1** Recovery Services 자격 증명 모음 블레이드에서 **보호된 항목** 섹션에서 **백업 항목**을 클릭한다.
 
-1. On the **az104-10-rsv1 - Backup items** blade, click **Azure Backup Agent**.
+1. **az104-10-rsv1 - 백업 항목** 블레이드에서 **Azure Backup Agent**를 클릭한다.
 
-1. On the **Backup Items (Azure Backup Agent)** blade, click the entry representing the backup of **az104-10-vm1**.
+1. **백업 항목 (Azure Backup Agent)** 블레이드 목록에서 **az104-10-vm1**을 클릭한다.
 
-1. On the **C:\\ on az104-10-vm1.** blade, click the **az104-10-vm1.** link.
+1. **on az104-10-vm1.의 C:\\** 블레이드에서 **az104-10-vm1.** 링크를 클릭한다.
 
-1. On the **az104-10-vm1.** Protected Servers blade, click **Delete**.
+1. **az104-10-vm1.** 보호된 서버 블레이드에서 **삭제**를 클릭한다.
 
-1. On the **Delete** blade, specify the following settings.
+1. **삭제** 블레이드에 다음 설정을 사용한다. 
 
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | TYPE THE SERVER NAME | **az104-10-vm1.** |
-    | Reason | **Recycling Dev/Test server** |
-    | Comments | **az104 10 lab** |
+    | 서버 이름 입력 | **az104-10-vm1.** |
+    | 이유 | **개발/테스트 서버 재활용** |
+    | 설정 | **az104 10 lab** |
 
-    >**Note**: Make sure to include the trailing period when typing the server name
+    >**참고**: 서버 이름을 입력할 때, **.** (Trailing period)을 반드시 포함해야 합니다.  
 
-1. Enable the checkbox next to the label **There is backup data of 1 backup items associated with this server.I understand that clicking "Confirm" will permanently delete all the cloud backup data. This action cannot be undone. An alert may be sent to the administrators of this subscription notifying them of this deletion** and click **Delete**.
+1. **이 서버와 연결된 1 백업 항목의 백업 데이터가 있습니다."확인"을 클릭하면 모든 클라우드 백업 데이터가 영구적으로 삭제된다는 것을 이해하는 것으로 간주됩니다. 이 작업은 실행 취소할 수 없습니다. 이 삭제를 알리는 경고가 이 구독의 관리자에게 전송될 수 있습니다.** 에 체크하고 **삭제**를 클릭한다.
 
-1. Navigate back to the **az104-10-rsv1 - Backup items** blade and click **Azure Virtual Machines**.
+1. **az104-10-rsv1 - 백업 항목** 블레이드로 돌아가 **Azure Virtual Machines**을 클릭한다.
 
-1. On the **az104-10-rsv1 - Backup items** blade, click **Azure Virtual Machine**. 
+1. **백업 항목 (Azure Virtual Machine)** 블레이드에서 **az104-10-vm0**을 클릭한다.
 
-1. On the **Backup Items (Azure Virtual Machine)** blade, click **az104-10-vm0**.
+1. **az104-10-vm0** 백업 항목 블레이드에서 **백업 중지**를 클릭한다. 
 
-1. On the **az104-10-vm0** Backup Item blade, click **Stop backup**. 
+1. **백업 중지** 블레이드에서 **백업 데이터 삭제**를 선택하고 다음 설정을 사용한 후, **백업 중지**를 클릭한다.
 
-1. On the **Stop backup** blade, select **Delete Backup Data**, specify the following settings and click **Stop backup**:
-
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Type the name of Backup item | **az104-10-vm0** |
-    | Reason | **Others** |
-    | Comments | **az104 10 lab** |
+    | 백업 항목의 이름 입력 | **az104-10-vm0** |
+    | 이유 | **기타** |
+    | 설명 | **az104 10 lab** |
 
-1. Navigate back to the **az104-10-rsv1 - Backup items** blade and click **Refresh**.
+1. **az104-10-rsv1 - 백업 항목** 블레이드로 돌아가 **새로 고침**을 클릭한다.
 
-    >**Note**: The **Azure Virtual Machine** entry is still lists **1** backup item.
+    >**참고**: **Azure Virtual Machine**의 백업 항목 개수가 여전히 **1**인 것을 확인한다.
 
-1. Click the **Azure Virtual Machine** entry and, on the **Backup Items (Azure Virtual Machine)** blade, click the **az104-10-vm0** entry.
+1. **Azure Virtual Machine**을 선택하고 **백업 항목 (Azure Virtual Machine)** 블레이드에서 **az104-10-vm0**를 클릭한다. 
 
-1. On the **az104-10-vm0** Backup Item blade, note that you have the option to **Undelete** the deleted backup. 
+1. **az104-10-vm0** 백업 항목 블레이드에서 삭제된 백업에 대해 **삭제 취소** 옵션이 있는 것을 확인할 수 있다. 
 
-    >**Note**: This functionality is provided by the soft-delete feature, which is, by default, enabled for Azure virtual machine backups.
+    >**참고**: 이 기능은 기본적으로 Azure 가상 머신 백업을 가능하게 하는 일시 삭제 기능을 통해 제공됩니다. 
 
-1. Navigate back to the **az104-10-rsv1** Recovery Services vault blade, and in the **Settings** section, click **Properties**.
+1. **az104-10-rsv1** Recovery Services 자격 증명 모음으로 돌아가, **설정** 섹션의 **속성**을 클릭한다.
 
-1. On the **az104-10-rsv1 - Properties** blade, click the **Update** link under **Security Settings** label. 
+1. **az104-10-rsv1 - 속성** 블레이드에서 **보안 설정** 레이블 아래의 **업데이트**를 클릭한다.
 
-1. On the **Security Settings** blade, Disable **Soft Delete (For Azure Virtual Machines)** and click **Save**.
+1. **보안 설정** 블레이드에서 **일시 삭제 (Azure Virtual Machines 용)** 를 **사용 안 함**으로 설정하고 **저장**을 클릭한다.
 
-    >**Note**: This will not affect items already in soft delete state.
+    >**참고**: 이 작업은 이미 일시 삭제된 상태에 있는 항목에는 영향을 주지 않습니다. 
 
-1. Close the **Security Settings** blade and, back on the **az104-10-rsv1** Recovery Services vault blade, click **Overview**.
+1. **보안 설정** 블레이드를 닫고 **az104-10-rsv1** Recovery Services 자격 증명 블레이드로 돌아가 **개요**를 클릭한다.
 
-1. Navigate back to the **az104-10-vm0** Backup Item blade and click **Undelete**. 
+1. **az104-10-vm0** 백업 항목 블레이드로 돌아가서 **삭제 취소**를 클릭한다.  
 
-1. On the **Undelete az104-10-vm0** blade, click **Undelete**. 
+1. **삭제취소 az104-10-vm0** 블레이드로 돌아가서 **삭제 취소**를 클릭한다. 
 
-1. Wait for the undelete operation to complete, refresh the browser page, if needed, navigate back to the **az104-10-vm0** Backup Item blade, and click **Delete backup data**.
+1. 삭제 취소 작업이 끝날 때까지 기다리십시오. 필요한 경우 브라우저 페이지를 새로고침하고, **az104-10-vm0** 백업 항목 블레이드에서 **백업 데이터 삭제**를 클릭한다.
 
-1. On the **Delete Backup Data** blade, specify the following settings and click **Delete**:
+1. **백업 데이터 삭제** 블레이드에서 다음 설정을 사용하고, **삭제**를 클릭한다.
 
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Type the name of Backup item | **az104-10-vm0** |
-    | Reason | **Others** |
-    | Comments | **az104 10 lab** |
+    | 백업 항목의 이름 입력 | **az104-10-vm0** |
+    | 이유 | **기타** |
+    | 설명 | **az104 10 lab** |
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+   >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-10*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
    ```pwsh
    Get-AzResourceGroup -Name 'az104-10*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-   >**Note**: Optionally, you might consider deleting the auto-generated resource group with the prefix **AzureBackupRG_** (there is no additional charge associated with its existence).
+   >**참고**: 추가로 **AzureBackupRG_**로 시작하는 자동 생성된 리소스 그룹을 삭제할 수도 있습니다. (이 리소스 그룹에 대한 추가 과금은 발생하지 않습니다)
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### Review
 
-In this lab, you have:
+#### 요약
 
-- Provisioned the lab environment
-- Created a Recovery Services vault
-- Implemented Azure virtual machine-level backup
-- Implemented File and Folder backup
-- Performed file recovery by using Azure Recovery Services agent
-- Performed file recovery by using Azure virtual machine snapshots
-- Reviewed the Azure Recovery Services soft delete functionality
+이 랩에서 우리는
+
+- 랩 환경을 프로비전 했습니다.
+- Recovery Services 자격 증명 모음을 생성했습니다.
+- Azure 가상 머신 레벨 백업을 구현했습니다. 
+- 파일 및 폴더 백업을 구현했습니다.
+- Azure Recovery Services agent를 사용하여 파일 복구를 수행했습니다.
+- Azure 가상 머신 스냅샷을 이용하여 파일 복구를 수행했습니다.
+- Azure Recovery Services 일시 삭제 기능을 검토했습니다.
