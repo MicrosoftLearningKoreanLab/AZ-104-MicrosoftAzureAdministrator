@@ -1,217 +1,217 @@
 ---
 lab:
-    title: '02b - Manage Governance via Azure Policy'
-    module: 'Module 02 - Governance and Compliance'
+    title: '02b - Azure 정책을 통한 거버넌스 관리'
+    module: '모듈 02 - 거버넌스 및 규정 준수'
 ---
 
-# Lab 02b - Manage Governance via Azure Policy
-# Student lab manual
+# 랩 02b - Azure 정책을 통한 거버넌스 관리
+# 학생 실습 매뉴얼
 
-## Lab scenario
+## 랩 시나리오
 
-In order to improve management of Azure resources in Contoso, you have been tasked with implementing the following functionality:
+Contoso에 있는 Azure 리소스 관리를 향상하기 위해 다음 기능을 구현합니다.
 
-- tagging resource groups that include only infrastructure resources (such as Cloud Shell storage accounts)
+- 인프라 리소스만 포함하는 리소스 그룹(예: Cloud Shell 스토리지 계정)에 태그 지정
 
-- ensuring that only properly tagged infrastructure resources can be added to infrastructure resource groups
+- 적절한 태그가 지정된 인프라 리소스만 리소스 그룹에 추가할 수 있도록 보장
 
-- remediating any non-compliant resources 
+- 규정 비준수 리소스 수정
 
-## Objectives
+## 목표
 
-In this lab, we will:
+이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
-+ Task 1: Create and assign tags via the Azure portal
-+ Task 2: Enforce tagging via an Azure policy
-+ Task 3: Apply tagging via an Azure policy
++ 작업 1: Azure 포털을 통한 태그 생성 및 할당
++ 작업 2: Azure 정책을 통한 태그 강제 할당
++ 작업 3: Azure 정책을 통한 태그 적용
 
-## Instructions
+## 설명
 
-### Exercise 1
+### 연습 1
 
-#### Task 1: Assign tags via the Azure portal
+#### 작업 1: Azure 포털을 통한 태그 할당
 
-In this task, you will create and assign a tag to an Azure resource group via the Azure portal.
+이 작업에서는 Azure 포털을 통해 Azure 리소스 그룹에 태그를 생성하고 할당합니다. 
 
-1. In the Azure portal, start a **PowerShell** session within the **Cloud Shell**.
+1. Azure 포털에서 **Cloud Shell** 내의 **PowerShell** 세션을 시작한다.
 
-    >**Note**: If this is the first time you are starting **Cloud Shell** and you are presented with the **You have no storage mounted** message, select the subscription you are using in this lab, and click **Create storage**. 
+    >**참고**: **Cloud Shell**을 처음 실행한 경우, **탑재된 스토리지가 없음** 메시지가 표시됩니다. 이 랩에서 사용하고 있는 구독을 선택하고 **스토리지 만들기**를 클릭하십시오.  
 
-1. From the Cloud Shell pane, run the following to identify the name of the storage account used by Cloud Shell:
+1. Cloud Shell 창에서 다음 명령을 실행하여 Cloud Shell에서 사용되는 스토리지 계정을 확인한다.  
 
    ```pwsh
    df
    ```
 
-1. In the output of the command, note the first part of the fully qualified path designating the Cloud Shell home drive mount (marked here as `xxxxxxxxxxxxxx`:
+1. 명령 결과에서 Cloud Shell 홈 드라이브 마운트를 지정하는 전체 경로의 첫 번째 부분을 기록해 둔다. (아래에서 `xxxxxxxxxxxxxx`로 표시된 부분): 
 
    ```
    //xxxxxxxxxxxxxx.file.core.windows.net/cloudshell   (..)  /usr/csuser/clouddrive
    ```
 
-1. In the Azure portal, search and select **Storage accounts** and, in the list of the storage accounts, click the entry representing the storage account you identified in the previous step.
+1. Azure 포털에서 **스토리지 계정**을 찾아 선택한다. 리스트에서 이전 단계에서 확인한 스토리지 계정을 클릭한다. 
 
-1. On the storage account blade, click the link representing the name of the resource group containing the storage account.
+1. 블레이드에서 스토리지 계정을 포함하고 있는 리소스 그룹의 링크를 클릭한다.
 
-1. On the resource group blade, click **Tags**.
+1. 리소스 그룹 블레이드에서 **태그**를 클릭한다.
 
-1. Create a tag with the following settings and save your change:
+1. 다음 설정을 사용하여 태그를 생성하고 변경 사항을 저장한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Name | **Role** |
-    | Value | **Infra** |
+    | 이름 | **Role** |
+    | 값 | **Infra** |
 
-1. Navigate back to the storage account blade. Review the **Overview** information and note that the new tag was not automatically assigned to the storage account. 
+1. 스토리지 계정 블레이드로 돌아가서 **개요** 정보를 확인한다. 새 태그가 스토리지 계정에 자동으로 할당되지 않은 것을 확인한다. 
 
-#### Task 2: Enforce tagging via an Azure policy
+#### 작업 2: Auzure 정책을 통한 태그 강제 할당
 
-In this task, you will assign the built-in *Require a tag and its value on resources* policy to the resource group and evaluate the outcome. 
+이 작업에서는 **리소스에 태그 및 값 필요** 기본 제공 정책을 리소스 그룹에 할당하고 결과를 검토합니다. 
 
-1. In the Azure portal, search for and select **Policy**. 
+1. Azure 포털에서 **정책**을 찾아 선택한다.
 
-1. In the **Authoring** section, click **Definitions**. Take a moment to browse through the list of built-in policy definitions that are available for you to use. List all built-in policies that involve the use of tags by selecting the **Tags** entry (and de-selecting all other entries) in the **Category** drop-down list. 
+1. **제작** 섹션에서 **정의**를 클릭한다. 사용할 수 있는 기본 제공 정책 정의 목록을 검토한다. **범주** 드롭다운 목록에서 **Tags** 항목만 선택하여 태그 사용이 포함된 모든 기본 제공 정책을 나열한다.
 
-1. Click the entry representing the **Require a tag and its value on resources** built-in policy and review its definition.
+1. **리소스에 태그 및 값 필요** 기본 제공 정책을 클릭하고, 정의를 확인한다.
 
-1. On the **Require a tag and its value on resources** built-in policy definition blade, click **Assign**.
+1. **리소스에 태그 및 값 필요** 기본 제공 정책 블레이드에서 **할당**을 클릭한다.
 
-1. Specify the **Scope** by clicking the ellipsis button and selecting the following values:
+1. 줄임말 버튼을 클릭하고, 다음 값을 사용하여 **범위**를 지정한다. 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | the name of the resource group containing the Cloud Shell account you identified in the previous task |
+    | 구독 | 이 랩에서 사용하는 구독 |
+    | 리소스 그룹 | 이전 단계에서 확인했던 Cloud Shell 계정을 포함하는 리소스 그룹의 이름 |
 
-    >**Note**: A scope determines the resources or resource groups where the policy assignment takes effect. You could assign policies on the management group, subscription, or resource group level. You also have the option of specifying exclusions, such as individual subscriptions, resource groups, or resources (depending on the assignment scope). 
+    >**참고**: 범위는 정책 할당이 적용되는 리소스 또는 리소스 그룹을 결정합니다. 관리 그룹, 구독 또는 리소스 그룹 수준에 대한 정책을 할당할 수 있습니다. 할당 범위에 따라 개별 구독, 리소스 그룹 또는 리소스와 같은 제외 항목을 지정할 수도 있습니다.
 
-1. Configure the **Basics** properties of the assignment by specifying the following settings (leave others with their defaults):
+1. **기본 사항** 탭에 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다. )
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Assignment name | **Require Role tag with Infra value**|
-    | Description | **Require Role tag with Infra value for all resources in the Cloud Shell resource group**|
-    | Policy enforcement | Enabled |
+    | 할당 이름 | **Require Role tag with Infra value**|
+    | 설명 | **Require Role tag with Infra value for all resources in the Cloud Shell resource group**|
+    | 정책 적용 | 사용 |
 
-    >**Note**: The **Assignment name** is automatically populated with the policy name you selected, but you can change it. You can also add an optional **Description**. **Assigned by** is automatically populated based on the user name creating the assignment. 
+    >**참고**: **할당 이름**은 선택한 정책 이름으로 자동으로 채워지지만 변경할 수 있습니다. **설명**(선택 사항)을 추가할 수도 있으며, **할당한 사람**은 할당을 생성하는 사용자 이름에 따라 자동으로 채워집니다.
 
-1. Click **Next** and set **Parameters** to the following values:
+1. **다음**을 클릭하고, 다음 값을 사용하여 **매개 변수** 를 지정한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Tag Name | **Role** |
-    | Tag Value | **Infra** |
+    | 태그 이름 | **Role** |
+    | 태그 값 | **Infra** |
 
-1. Click **Next** and review the **Remediation** tab. Leave the **Create a Managed Identity** checkbox unchecked. 
+1. **다음**을 클릭하고, and review the **재구성** 탭에서 **관리 ID 생성** 체크박스를 선택하지 않고 그대로 둔다. 
 
-    >**Note**: This setting can be used when the policy or initiative includes the **deployIfNotExists** or **Modify** effect.
+    >**참고**: 이 설정은 **deployIfNotExists** 및 **Modify** 유형이 있는 정책이나 이니셔티브에 사용된다. 
 
-1. Click **Review + Create** and then click **Create**.
+1. **검토 + 만들기**를 클릭하고, **만들기**를 클릭한다.
 
-    >**Note**: Now you will verify that the new policy assignment is in effect by attempting to create another Azure Storage account in the resource group without explicitly adding the required tag. 
+    >**참고**: 이제 리소스 그룹에 다른 Azure 스토리지 계정을 생성하여, 필요한 태그를 명시적으로 추가하지 않아도 새 정책 할당이 적용되고 있는지 확인하십시오.
     
-    >**Note**: It might take between 5 and 15 minutes for the policy to take effect.
+    >**참고**: 정책이 시행되는데 5분에서 15분 정도 걸릴 수 있습니다.
 
-1. Navigate back to the blade of the resource group hosting the storage account used for the Cloud Shell home drive, which you identified in the previous task.
+1. Cloud Shell 홈 드라이브에 사용된 스토리지 계정을 호스팅하는 리소스 그룹 블레이드로 다시 이동한다.
 
-1. On the resource group blade, click **+ Add**.
+1. 리소스 그룹 블레이드에서 **+ 추가**를 클릭한다.
 
-1. On the **New** blade, search for and select **Storage account - blob, file, table, queue**, and click **Create**. 
+1. **새로 만들기** 블레이드에서 **Storage account - blob, file, table, queue**를 찾아 선택하고, **만들기**를 클릭한다. 
 
-1. On the **Basics** tab of the **Create storage account** blade, specify the following settings (leave others with their defaults) and click **Review + create**:
+1. **기본 사항** 탭에 다음 설정을 사용하고, **검토 + 만들기**를 클릭한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Storage account name | any globally unique combination of between 3 and 24 lower case letters and digits, starting with a letter |
+    | 스토리지 계정 이름 | 소문자와 숫자로 구성된 고유한 이름(3~24자) |
 
-1. Note that the validation failed. Click the link **Validation failed. Click here to view details** to display the **Errors** blade and identify the reason for the failure. 
+1. 유효성 검사에 실패하면, **유효성을 검사하지 못했습니다. 자세한 내용을 보려면 여기를 클릭하세요** 링크를 클릭하여  **오류** 블레이드에서 원인을 확인한다. 
 
-    >**Note**: The error message states that the resource deployment was disallowed by the policy. 
+    >**참고**: 오류 메시지는 정책에서 리소스를 허용하지 않았음을 나타냅니다. 
 
-    >**Note**: By clicking the **Raw Error** tab, you can find more details about the error, including the name of the role definition **Require Role tag with Infra value**. The deployment failed because the storage account you attempted to create did not have a tag named **Role** with its value set to **Infra**.
+    >**참고**: **Raw 오류** 탭을 클릭하면, **Require Role tag with Infra value** 정책의 이름을 포함한 자세한 내용을 확인할 수 있습니다. 생성하려는 스토리지 계정에 **Infra**로 설정된 **Role**이라는 태그가 없기 때문에 배포에 실패하였습니다. 
 
-#### Task 3: Apply tagging via an Azure policy
+#### 작업 3: Azure 정책을 통한 태그 적용
 
-In this task, we will use a different policy definition to remediate any non-compliant resources. 
+이 작업에서는 다른 정책 정의를 사용하여 비준수 리소스에 태그를 적용합니다.
 
-1. In the Azure portal, search for and select **Policy**. 
+1. Azure 포털에서 **정책**을 찾아 선택한다. 
 
-1. In the **Authoring** section, click **Assignments**. 
+1. **제작** 섹션의 **할당**을 클릭한다. 
 
-1. In the list of assignments, right click the ellipsis icon in the row representing the **Require Role tag with Infra value** policy assignment and use the **Delete assignment** menu item to delete the assignment. 
+1. 목록에서 **Infra value** 정책 할당을 나타내는 행의 줄임표 아이콘을 마우스 오른쪽 버튼으로 누르고 **할당 삭제** 메뉴 항목을 사용하여 할당을 삭제한다.
 
-1. Click **Assign policy** and specify the **Scope** by clicking the ellipsis button and selecting the following values:
+1. **정책 할당**을 클릭한다. 줄임말 버튼을 클릭하고, 다음 값을 사용하여 **범위**를 지정한다. 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | the name of the resource group containing the Cloud Shell account you identified in the first task |
+    | 구독 | 이 랩에서 사용하는 Azure 구독의 이름 |
+    | 리소스 그룹 | 이전 작업에서 확인한 Cloud Shell 계정을 포함하는 리소스 그룹의 이름 |
 
-1. To specify the **Policy definition**, click the ellipsis button and then search for and select **Inherit a tag from the resource group if missing**.
+1. **정책 정의** 옆의 줄임말 버튼을 클릭하고, **없는 경우 리소스 그룹에서 태그 상속**을 찾아 선택한다.
 
-1. Configure the remaining **Basics** properties of the assignment by specifying the following settings (leave others with their defaults):
+1. **기본 사항** 탭에 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Assignment name | **Inherit the Role tag and its Infra value from the Cloud Shell resource group if missing**|
-    | Description | **Inherit the Role tag and its Infra value from the Cloud Shell resource group if missing**|
-    | Policy enforcement | Enabled |
+    | 할당 이름 | **Inherit the Role tag and its Infra value from the Cloud Shell resource group if missing**|
+    | 설명 | **Inherit the Role tag and its Infra value from the Cloud Shell resource group if missing**|
+    | 정책 적용 | 사용 |
 
-1. Click **Next** and set **Parameters** to the following values:
+1. **매개 변수** 탭에서 다음 설정을 사용한다.
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Tag Name | **Role** |
+    | 태그 이름 | **Role** |
 
-1. Click **Next** and, on the **Remediation** tab, configure the following settings (leave others with their defaults):
+1. **재구성** 탭에서 다음 설정을 사용한다. (다른 값은 기본 설정을 사용한다)
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Create a remediation task | enabled |
-    | Policy to remediate | **Inherit a tag from the resource group if missing** |
+    | 수정 작업 만들기 | (체크) |
+    | 수정할 정책 | **없는 경우 리소스 그룹에서 태그  상속** |
 
-    >**Note**: This policy definition includes the **Modify** effect.
+    >**참고**: 이 정책 정의는 **Modify** 효과를 포함합니다.
 
-1. Click **Review + Create** and then click **Create**.
+1. **검토 + 만들기**와 **만들기**를 차례로 클릭한다.
 
-    >**Note**: To verify that the new policy assignment is in effect, you will create another Azure Storage account in the same resource group without explicitly adding the required tag. 
+    >**참고**: 새 정책 할당이 유효한지 확인하려면 필요한 태그를 명시적으로 추가하지 않고, 동일한 리소스 그룹에 다른 Azure 스토리지 계정을 생성하십시오.
     
-    >**Note**: It might take between 5 and 15 minutes for the policy to take effect.
+    >**참고**: 정책이 시행되는데 5분에서 15분 정도 소요됩니다.
 
-1. Navigate back to the blade of the resource group hosting the storage account used for the Cloud Shell home drive, which you identified in the first task.
+1. Cloud Shell 홈 드라이브에 사용된 스토리지 계정을 호스팅하는 리소스 그룹의 블레이드로 다시 이동한다.
 
-1. On the resource group blade, click **+ Add**.
+1. 리소스 그룹 블레이드에서 **+ 추가**를 클릭한다.
 
-1. On the **New** blade, search for and select **Storage account - blob, file, table, queue**, and click **Create**. 
+1. **새로 만들기** 블레이드에서 **Storage account - blob, file, table, queue**를 찾아 선택하고, **만들기**를 클릭한다. 
 
-1. On the **Basics** tab of the **Create storage account** blade, specify the following settings (leave others with their defaults) and click **Review + create**:
+1. **기본 사항** 탭에 다음 설정을 사용하고, **검토 + 만들기**를 클릭한다. (다른 값은 기본 설정을 사용한다) 
 
-    | Setting | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Storage account name | any globally unique combination of between 3 and 24 lower case letters and digits, starting with a letter |
+    | 스토리지 계정 이름 | 소문자와 숫자로 구성된 고유한 이름(3~24자) |
 
-1. Verify that this time the validation passed and click **Create**.
+1. 이번에는 유효성 검사를 통과한 것을 확인하고 **만들기**를 클릭한다.
 
-1. Once the new storage account is provisioned, click **Go to resource** button and, on the **Overview** blade of the newly created storage account, note that the tag **Role** with the value **Infra** has been automatically assigned to the resource.
+1. 새 스토리지 계정이 프로비전되면 **리소스로 이동** 버튼을 클릭하고, 새로 생성된 스토리지 계정의 **개요** 블레이드에서 **Infra** 값이 있는 **Role** 태그가 리소스에 자동으로 할당된 것을 확인한다.
 
-#### Clean up resources
+#### 리소스 삭제
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. 
+   >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오.
 
-   >**Note**: Removing unused resources ensures you will not see unexpected charges, although keep in mind that Azure policies do not incur extra cost.
+   >**참고**: 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하는 것을 막을 수 있지만, 애저 정책은 추가 과금을 발생하지 않습니다. 
 
-1. In the portal, search for and select **Policy**.
+1. Azure 포털에서 **정책**을 찾아 선택한다.
 
-1. In the **Authoring** section, click **Assignments**, click the ellipsis icon to the right of the assignment you created in the previous task and click **Delete assignment**. 
+1. **제작** 섹션의 **할당**을 클릭한다. 이전 작업에서 생성한 할당 오른쪽의 줄임표 아이콘을 누르고 **할당 삭제**를 클릭한다.
 
-1. In the portal, search for and select **Storage accounts**.
+1. Azure 포털에서 **스토리지 계정**을 찾아 선택한다.
 
-1. In the list of storage accounts, select the storage account you created in the last task of this lab, click **Delete**, when prompted for the confirmation, in the **Confirm delete** type **yes** and click **Delete**. 
+1. 스토리지 계정 목록에서 이 랩의 마지막 작업에서 생성한 스토리지 계정을 선택하고, **삭제**를 클릭한다. 표시된 확인 메시지를 입력하여 삭제한다.
 
-#### Review
+#### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Created and assigned tags via the Azure portal
-- Enforced tagging via an Azure policy
-- Applied tagging via an Azure policy
+- Azure portal을 통해 태그를 생성하고 할당했습니다.
+- Azure 정책을 통해 태그를 강제로 할당했습니다.
+- Azure 정책을 통해 태그를 적용했습니다.
