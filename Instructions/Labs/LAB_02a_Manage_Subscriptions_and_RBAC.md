@@ -5,7 +5,7 @@ lab:
 ---
 
 # 랩 02a - 구독 및 RBAC 관리
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
@@ -27,11 +27,10 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 + 작업 2: 사용자 지정 RBAC 역할 생성 
 + 작업 3: RBAC 역할 할당
 
+
 ## 설명
 
-### 연습 1
-
-#### 작업 1: 관리 그룹 생성
+### 작업 1: 관리 그룹 생성
 
 이 작업에서는 관리 그룹을 생성하고 설정합니다. 
 
@@ -52,7 +51,8 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 
     >**참고**: Azure 구독의 ID를 클립보드에 복사합니다. 다음 작업에 사용할 예정입니다. 
 
-#### 작업 2: 사용자 지정 RBAC 역할 생성 
+
+### 작업 2: 사용자 지정 RBAC 역할 생성 
 
 이 작업에서는 사용자 정의 RBAC 역할을 생성합니다. 
 
@@ -88,13 +88,14 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 사용자 지정 역할 정의를 생성한다. 
 
-   ```pwsh
+   ```powershell
    New-AzRoleDefinition -InputFile $HOME/az104-02a-customRoleDefinition.json
    ```
 
 1. Cloud Shell 창을 닫는다.
 
-#### 작업 3: RBAC 역할 할당
+
+### 작업 3: RBAC 역할 할당
 
 이 작업에서는 Azure Active Directory 사용자를 생성하고, 이전 작업에서 생성한 RBAC 역할을 해당 사용자에게 할당하며, 사용자가 RBAC 역할 정의에 지정된 작업을 수행할 수 있는지 확인합니다.
 
@@ -133,7 +134,8 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 
 1. 지원 요청을 그만두고, 로그아웃한 뒤 InPrivate 브라우저 창을 닫는다. 
 
-#### 리소스 삭제
+
+### 리소스 삭제
 
    >**참고**: 더 이상 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 
 
@@ -149,7 +151,7 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 
 1. Cloud Shell 창에서 다음 설정을 사용하여 사용자 정의 역할 할당을 삭제한다. (`[object_ID]`를 이전 작업에서 복사한 **az104-02-aaduser1** 계정의 **object ID**로 대체한다):
 
-   ```pwsh
+   ```powershell
    $scope = (Get-AzRoleAssignment -RoleDefinitionName 'Support Request Contributor (Custom)').Scope
 
    Remove-AzRoleAssignment -ObjectId '[object_ID]' -RoleDefinitionName 'Support Request Contributor (Custom)' -Scope $scope
@@ -157,7 +159,7 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 사용자 정의 역할을 삭제한다. 
 
-   ```pwsh
+   ```powershell
    Remove-AzRoleDefinition -Name 'Support Request Contributor (Custom)' -Force
    ```
 
@@ -171,7 +173,8 @@ Contoso에 있는 Azure 리소스 관리를 향상하기 위해서 다음 기능
 
 1. **관리 그룹** 블레이드로 돌아가 **az104-02-mg1** 관리 그룹을 선택하고, **삭제**를 클릭한다.
 
-#### 요약
+
+### 요약
 
 이 랩에서 우리는
 

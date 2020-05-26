@@ -5,11 +5,12 @@ lab:
 ---
 
 # 랩 06 - 트래픽 관리 구현
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
 Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머신을 타겟팅하는 네트워크 트래픽 관리를 테스트합니다. 이 테스트는 트래픽이 허브를 통해 흐르도록 하는 사용자 정의 경로에 의존하여 스포크 간의 연결성을 구현하는 것은 물론, 4 계층 및 7 계층 부하 분산 장치를 사용하여 가상 머신에 걸친 트래픽 분배를 포함합니다. 이러한 목적을 위해 Azure 부하 분산 장치(4계층)와 Azure Application Gateway(7계층)를 사용합니다.
+
 
 ## 목표
 
@@ -22,11 +23,10 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 + 작업 5: Azure 부하 분산 장치 구현
 + 작업 6: Azure 애플리케이션 게이트웨이 구현
 
+
 ## 설명
 
-### 연습 1
-
-#### 작업 1: 랩 환경 프로비전
+### 작업 1: 랩 환경 프로비전
 
 이 작업에서는 같은 Azure 지역에 네 개의 가상 머신을 배포합니다. 처음 두개는 허브 가상 네트워크에, 나머지 두 가상 머신은 서로 다른 스포크 가상 네트워크에 각각 배치합니다. 
 
@@ -42,16 +42,17 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 첫 번째 가상 네트워크와 가상 머신들을 호스팅할 리소스 그룹을 생성한다. (`[Azure_region]` 부분을 Azure 가상 머신을 배포할 Azure 지역의 이름으로 대체한다) 
 
-   ```pwsh
+   ```powershell
    $location = '[Azure_region]'
 
    $rgName = 'az104-06-rg01'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 첫 번째 가상 네트워크를 만들고 한 쌍의 가상 머신을 배포한다. 
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-06-vms-template.json `
@@ -60,14 +61,16 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
    ```
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 두번째 가상 네트워크와 세번째 가상 머신을 배포할 두 번째 리소스 그룹을 생성한다.
-   ```pwsh
+
+   ```powershell
    $rgName = 'az104-06-rg2'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 두번째 가상 네트워크를 만들고 가상 머신을 배포한다.
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-06-vm-template.json `
@@ -75,15 +78,17 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
       -nameSuffix 2 `
       -AsJob
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 세번째 가상 네트워크와 네번째 가상 머신을 배포할 세번째 리소스 그룹을 생성한다. 
-   ```pwsh
+
+   ```powershell
    $rgName = 'az104-06-rg3'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
 1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 세번째 가상 네트워크를 만들고 가상 머신을 배포한다.
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-06-vm-template.json `
@@ -97,7 +102,8 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
 1. Cloud Shell 창을 닫는다. 
 
-#### 작업 2: 허브와 스포크 네트워크 토폴로지 구성
+
+### 작업 2: 허브와 스포크 네트워크 토폴로지 구성
 
 이 작업에서는 이전 작업에서 배포한 가상 네트워크 사이에 로컬 피어링을 구성하여 허브와 스포크 네트워크 토폴로지를 만듭니다.
 
@@ -153,7 +159,8 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
     >**참고**: **전달되는 트래픽 허용**은 스포크 가상 네트워크 사이 라우팅을 구현하기 위하여 사용됩니다. 이 랩의 다른 단계에서 구현할 예정입니다.
 
-#### 작업 3: 가상 네트워크 피어링의 전이성(Transitivity) 테스트
+
+### 작업 3: 가상 네트워크 피어링의 전이성(Transitivity) 테스트
 
 이 작업에서는 Networmk Watcher를 사용하여 가상 네트워크 피어링의 전이성을 조사합니다. 
 
@@ -219,7 +226,8 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
     > **참고**: 두 스포크 가상 네트워크는 서로 피어링되지 않았습니다. (가상 네트워크 피어링은 전이성(transitive)이 없습니다)
 
-#### 작업 4: 허브와 스포크 라우팅 구성
+
+### 작업 4: 허브와 스포크 라우팅 구성
 
 이 작업에서는 **az104-06-vm0** 가상 머신의 네트워크 인터페이스에서 IP 전달과 운영 체제 내의 라우팅을 활성화하며, 스포크 가상 네트워크에서 사용자 정의 경로를 구성하여 두 스포크 가상 네트워크 간의 라우팅을 구성하고 테스트합니다.
 
@@ -243,7 +251,7 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
 1. **Run Command Script** 블레이드에서 다음 명령을 입력하고 **실행**하여 Remote Access Windows Server role을 설치한다.
 
-   ```pwsh
+   ```powershell
    Install-WindowsFeature RemoteAccess -IncludeManagementTools
    ```
 
@@ -251,7 +259,7 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
 1. **실행 명령 스크립트** 블레이드에서 다음 명령을 **실행**하여 Routing role service를 설치한다.
 
-   ```pwsh
+   ```powershell
    Install-WindowsFeature -Name Routing -IncludeManagementTools -IncludeAllSubFeature
 
    Install-WindowsFeature -Name "RSAT-RemoteAccess-Powershell"
@@ -358,7 +366,8 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
     > **참고**: **Network Warcher**를 사용하여 네트워크 토폴로지를 확인할 수 있습니다. 
 
-#### 작업 5: Azure 부하 분산 장치 구현
+
+### 작업 5: Azure 부하 분산 장치 구현
 
 이 작업에서는 허브 가상 네트워크에 있는 두 Azure 가상 머신의 앞단에 Azure 부하 분산 장치를 구현합니다. 
 
@@ -438,7 +447,8 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
     > **참고**: 브라우저 창을 새로고침 하거나 InPrivate 모드를 사용해 브라우저 창을 다시 열어야 합니다. 
 
-#### 작업 6: Azure 애플리케이션 게이트웨이 구현
+
+### 작업 6: Azure 애플리케이션 게이트웨이 구현
 
  작업에서는 스포크 가상 네트워크의 두 Azure 가상 머신 앞단에 Azure 애플리케이션 게이트웨이를 구현합니다. 
 
@@ -552,7 +562,7 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
     > **참고**: 여러 가상 네트워크에서 가상 머신을 타겟팅하는 것은 일반적인 구성은 아닙니다. 이 랩의 과정은 Application Gateway가 같은 가상 네트워크 내의 가상 머신 간 부하를 분산하는 Azure 부하 분산 장치와는 달리, 여러 가상 네트워크의(다른 Azure 지역 또는 Azure 외부의 엔드포인트도 포함하여) 가상 머신도 타겟팅할 수 있다는 것을 설명하기 위한 것입니다.
 
 
-#### 리소스 삭제
+### 리소스 삭제
 
    >**Note**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -560,20 +570,21 @@ Consoto는 허브와 스포크 네트워크 토폴로지에서 Azure 가상 머�
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-06*'
    ```
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-06*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
    >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### 요약
+
+### 요약
 
 이 랩에서 우리는
 

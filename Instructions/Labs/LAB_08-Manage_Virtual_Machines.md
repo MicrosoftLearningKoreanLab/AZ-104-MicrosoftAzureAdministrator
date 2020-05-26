@@ -5,11 +5,12 @@ lab:
 ---
 
 # 랩 08 - 가상 머신 관리
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
 Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식별하는 작업을 수행합니다. 첫째, Azure 가상 머신을 사용할 때 구현할 수 있는 다양한 컴퓨팅 및 스토리지 복원력과 확장성 옵션을 결정해야 합니다. 다음으로 Azure 가상 시스템 확장 집합을 사용할 때 이용할 수 있는 컴퓨팅 및 스토리지 복원력 및 확장성 옵션을 조사합니다. 또한 Azure Virtual Machine Custom Script 확장 기능을 사용하여 가상 머신 및 가상 머신 확장 집합을 자동으로 구성하는 기능도 살펴보십시오.
+
 
 ## 목표
 
@@ -22,11 +23,10 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 + 작업 5: 가상 머신 확장 기능을 사용하여 Azure 가상 머신 확장 집합 구성
 + 작업 6: Azure 가상 머신 확장 집합을 위한 컴퓨트와 스토리지 확장 (선택 사항)
 
+
 ## 설명
 
-### 연습 1
-
-#### 작업 1: Azure 포털과 Azure 리소스 매니저 템플릿을 사용하여 가상 머신을 배포
+### 작업 1: Azure 포털과 Azure 리소스 매니저 템플릿을 사용하여 가상 머신을 배포
 
 이 작업에서는 Azure 포털과 portal and an Azure 리소스 매니저 템플릿을 사용하여 서로 다른 가용 영역에 Azure 가상 머신을 배포합니다.
 
@@ -112,7 +112,8 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
     >**참고**: 다음 작업을 시작하기 전에 가상 머신 배포가 모두 끝날 때까지 기다리십시오. 이 작업은 약 5분 소요됩니다.
 
-#### 작업 2: 가상 머신 확장 기능을 이용하여 Azure 가상 머신 설정
+
+### 작업 2: 가상 머신 확장 기능을 이용하여 Azure 가상 머신 설정
 
 이 작업에서는 사용자 지정 스크립트 가상 머신 확장 기능을 사용하여 이전 작업에서 배포한 두 Azure 가상 머신에  Windows Web Server role을 설치합니다.
 
@@ -153,7 +154,6 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
               }
             }
         },   
-
    ```
 
     >**참고**: 템플릿의 해당 섹션은 Azure PowerShell을 통해 첫 번째 가상 머신에 이전에 배포한 것과 동일한 Azure 가상 머신 사용자 지정 스크립트 확장을 정의합니다.
@@ -168,7 +168,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. **실행 명령 스크립트** 블레이드에서 다음 명령을 입력하고 **실행**을 클릭하여 **az104-08-vm0**에 호스팅된 웹 사이트에 접근한다.
 
-   ```pwsh
+   ```powershell
    Invoke-WebRequest -URI http://10.80.0.4 -UseBasicParsing
    ```
 
@@ -176,7 +176,8 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
     >**참고**: **az104-08-vm0**에 연결하고 `Invoke-WebRequest -URI http://10.80.0.5`를 실행하여 **az104-08-vm1**에 호스팅된 웹 사이트에 접근할 수도 있습니다. 
 
-#### 작업 3: Azure 가상 머신을 위한 컴퓨트와 스토리지 확장
+
+### 작업 3: Azure 가상 머신을 위한 컴퓨트와 스토리지 확장
 
 이 작업에서는 Azure 가상 시스템의 크기를 변경하여 컴퓨팅을 확장하고. 데이터 디스크를 연결 및 구성하여 가상 시스템의 스토리지를 확장합니다.
 
@@ -215,7 +216,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. **실행 명령 스크립트** 블레이드에서 다음 명령을 입력하고 **실행**을 클릭하여 단순한 레이아웃과 고정 프로비저닝을 사용하여 새로 연결된 두 개의 디스크로 구성된 Z 드라이브를 생성한다. 
 
-   ```pwsh
+   ```powershell
    New-StoragePool -FriendlyName storagepool1 -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
 
    New-VirtualDisk -StoragePoolFriendlyName storagepool1 -FriendlyName virtualdisk1 -Size 2046GB -ResiliencySettingName Simple -ProvisioningType Fixed
@@ -243,7 +244,6 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
    ```
 
     >**참고**: 해당 템플릿 섹션은 Azure 포털을 통해 구성한 첫 번째 가상 머신의 크기와 동일한 가상 머신 크기를 정의합니다.
-
 
 1. **템플릿 편집** 블레이드에서 스크립트의 **49**번째 줄 (`                    "dataDisks": [ ]`)을 다음 내용으로 교체한다.
 
@@ -278,7 +278,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. **실행 명령 스크립트** 블레이드에서 다음 명령을 입력하고 **실행**을 클릭하여 단순한 레이아웃과 고정 프로비저닝을 사용하여 새로 연결된 두 개의 디스크로 구성된 Z 드라이브를 생성한다. 
 
-   ```pwsh
+   ```powershell
    New-StoragePool -FriendlyName storagepool1 -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
 
    New-VirtualDisk -StoragePoolFriendlyName storagepool1 -FriendlyName virtualdisk1 -Size 2046GB -ResiliencySettingName Simple -ProvisioningType Fixed
@@ -289,7 +289,8 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
    ```
 >**참고** : **스크립트 실행 완료** 확인 메시지를 기다리십시오.
 
-#### 작업 4: Azure 포털을 사용하여 Azure 가상 머신 확장 집합 배포
+
+### 작업 4: Azure 포털을 사용하여 Azure 가상 머신 확장 집합 배포
 
 이 작업에서는 Azure 포털을 사용하여 가용성 영역에 가상 머신 확장 집합을 배포합니다.
 
@@ -383,13 +384,13 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
     | --- | --- |
     | 분산 알고리즘 | **고정 분산(영역에서 권장되지 않음)** |
 
->**참고**: **최대 분산** 설정은 현재 작동하지 않음. 
+    >**참고**: **최대 분산** 설정은 현재 작동하지 않음. 
 
-1.**가상 머신 확장 집합 만들기** 블레이드의 **검토 + 만들기** 탭에서 유효성 검사 통과를 확인하고 **만들기**를 클릭한다.
+1. **가상 머신 확장 집합 만들기** 블레이드의 **검토 + 만들기** 탭에서 유효성 검사 통과를 확인하고 **만들기**를 클릭한다.
 
->**참고**: 가상 머신 배포가 완료될 때까지 기다리십시오. 이 작업은 약 5분 소요됩니다. 
+    >**참고**: 가상 머신 배포가 완료될 때까지 기다리십시오. 이 작업은 약 5분 소요됩니다. 
 
-#### 작업 5: 가상 머신 확장 기능을 사용하여 Azure 가상 머신 확장 집합 구성
+### 작업 5: 가상 머신 확장 기능을 사용하여 Azure 가상 머신 확장 집합 구성
 
 이 작업에서는 사용자 지정 스크립트 가상 시스템 확장을 사용하여 이전 작업에서 배포한 Azure 가상 시스템 확장 집합의 인스턴스에 Windows Server Web Server role을 설치합니다.
 
@@ -415,7 +416,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
     >**참고**: 브라우저 페이지에 Azure 가상 머신 확장 집합 **az10408vmss0**의 인스턴스 이름이 나타나는 것을 확인하십시오.
 
 
-#### Task 6: Azure 가상 머신 확장 집합을 위한 컴퓨트와 스토리지 확장
+### Task 6: Azure 가상 머신 확장 집합을 위한 컴퓨트와 스토리지 확장
 
 이 작업에서는 가상 머신 확장 집합 인스턴스의 크기를 바꾸고 자동확장 설정을 구성하고 디스크를 연결합니다.
 
@@ -473,16 +474,17 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. Cloud Shell 창에서 다음을 실행하여 Azure 가상 머신 확장 집합 **az10408vmss0** 앞단의 로드 밸런서의 공용 IP 주소를 식별한다. 
 
-   ```pwsh
+   ```powershell
    $rgName = 'az104-08-rg02'
 
    $lbpipName = 'az10408vmss0-ip'
 
    $pip = (Get-AzPublicIpAddress -ResourceGroupName $rgName -Name $lbpipName).IpAddress
    ```
+
 1. Cloud Shell 창에서 다음을 실행하여 HTTP 요청을 Azure 가상 머신 확장 집합 **az10408vmss0**에 호스팅된 웹 사이트에 전송하는 무한 루프를 시작한다. 
 
-   ```pwsh
+   ```powershell
    while ($true) { Invoke-WebRequest -Uri "http://$pip" }
    ```
 
@@ -519,7 +521,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 스크립트 내용을 표시한다.
 
-   ```pwsh
+   ```powershell
    Set-Location -Path $HOME
 
    Get-Content -Path ./az104-08-configure_VMSS_disks.ps1
@@ -529,7 +531,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. Cloud Shell 창에서 다음을 명령으로 스크립트를 실행하고 Azure 가상 시스템 확장 집합의 디스크를 구성하십시오.
 
-   ```pwsh
+   ```powershell
    ./az104-08-configure_VMSS_disks.ps1
    ```
 
@@ -538,7 +540,7 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 1. **az10408vmss0** 블레이드의 **설정** 섹션에서 blade, click **인스턴스**를 클릭한다. 가상머신 확장 집합의 두 인스턴스를 선택하고 **업그레이드**를 클릭한다. 확인 창이 뜨면 **예**를 클릭한다. 
 
 
-#### 리소스 삭제
+### 리소스 삭제
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -546,19 +548,20 @@ Azure 가상 머신을 배포하고 구성하기 위한 다양한 옵션을 식�
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-08*'
    ```
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-08*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
     >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### 요약
+
+### 요약
 
 이 랩에서 우리는
 

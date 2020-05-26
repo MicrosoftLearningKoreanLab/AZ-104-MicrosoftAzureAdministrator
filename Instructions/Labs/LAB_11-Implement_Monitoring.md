@@ -5,11 +5,12 @@ lab:
 ---
 
 # Lab 11 - Implement Monitoring
-# Student lab manual
+
 
 ## Lab scenario
 
 You need to evaluate Azure functionality that would provide insight into performance and configuration of Azure resources, focusing in particular on Azure virtual machines. To accomplish this, you intend to examine the capabilities of Azure Monitor, including Log Analytics. 
+
 
 ## Objectives
 
@@ -22,11 +23,10 @@ In this lab, you will:
 + Task 5: Review Azure Monitor functionality
 + Task 6: Review Azure Log Analytics functionality
 
+
 ## Instructions
 
-### Exercise 1
-
-#### Task 1: Provision the lab environment
+### Task 1: Provision the lab environment
 
 In this task, you will deploy a virtual machine that will be used to test monitoring scenarios.
 
@@ -44,7 +44,7 @@ In this task, you will deploy a virtual machine that will be used to test monito
 
     >**Note**: Make sure to choose one of the regions listed as **Log Analytics Workspace Region** in the referenced in [Workspace mappings documentation](https://docs.microsoft.com/en-us/azure/automation/how-to/region-mappings)
 
-   ```pwsh
+   ```powershell
    $location = '[Azure_region]'
 
    $rgName = 'az104-11-rg0'
@@ -54,7 +54,7 @@ In this task, you will deploy a virtual machine that will be used to test monito
 
 1. From the Cloud Shell pane, run the following to create the first virtual network and deploy a virtual machine into it by using the template and parameter files you uploaded:
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-11-vm-template.json `
@@ -66,7 +66,8 @@ In this task, you will deploy a virtual machine that will be used to test monito
 
     >**Note**: Do not wait for the deployment to complete but instead proceed to the next task. The deployment should take about 3 minutes.
 
-#### Task 2: Create and configure an Azure Log Analytics workspace and Azure Automation-based solutions
+
+### Task 2: Create and configure an Azure Log Analytics workspace and Azure Automation-based solutions
 
 In this task, you will create and configure an Azure Log Analytics workspace and Azure Automation-based solutions
 
@@ -116,7 +117,8 @@ In this task, you will create and configure an Azure Log Analytics workspace and
 
     >**Note**: Wait for the installation to complete. This might take about 5 minutes.
 
-#### Task 3: Review default monitoring settings of Azure virtual machines
+
+### Task 3: Review default monitoring settings of Azure virtual machines
 
 In this task, you will review default monitoring settings of Azure virtual machines
 
@@ -134,7 +136,8 @@ In this task, you will review default monitoring settings of Azure virtual machi
 
 1. In the **METRICS** drop-down list, select **Percentage CPU**, in the **AGGREGATION** drop-down list, select **Avg**, and review the resulting chart. 
 
-#### Task 4: Configure Azure virtual machine diagnostic settings
+
+### Task 4: Configure Azure virtual machine diagnostic settings
 
 In this task, you will configure Azure virtual machine diagnostic settings.
 
@@ -172,7 +175,8 @@ In this task, you will configure Azure virtual machine diagnostic settings.
 
 1. In the **METRICS** drop-down list, select **Memory\Available Bytes**, in the **AGGREGATION** drop-down list, select **Avg**, and review the resulting chart. 
 
-#### Task 5: Review Azure Monitor functionality
+
+### Task 5: Review Azure Monitor functionality
 
 1. In the Azure portal, search for and select **Monitor** and, on the **Monitor - Overview** blade, click **Metrics**.
 
@@ -266,7 +270,8 @@ In this task, you will configure Azure virtual machine diagnostic settings.
 
 1. On the **All Alerts** blade, review generated alerts.
 
-#### Task 6: Review Azure Log Analytics functionality
+
+### Task 6: Review Azure Log Analytics functionality
 
 1. In the Azure portal, navigate back to the **Monitor** blade, click **Logs**. 
 
@@ -302,7 +307,8 @@ In this task, you will configure Azure virtual machine diagnostic settings.
 
 1. Click **Example queries** in the toolbar, in the **Get started with sample queries** pane, review each tab, locate **Virtual machine free disk space**, and click **Run**.
 
-#### Clean up resources
+
+### Clean up resources
 
    >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
 
@@ -310,19 +316,20 @@ In this task, you will configure Azure virtual machine diagnostic settings.
 
 1. List all resource groups created throughout the labs of this module by running the following command:
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-11*'
    ```
 
 1. Delete all resource groups you created throughout the labs of this module by running the following command:
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-11*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
     >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
 
-#### Review
+
+### Review
 
 In this lab, you have:
 

@@ -5,11 +5,12 @@ lab:
 ---
 
 # 랩 10 - 가상 머신 백업
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
 Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백업하고 복구하기 위하여 Azure Recovery Services의 사용을 검토합니다. 또한 우발적이거나 악의적인 데이터 손실로부터 Recovery Services vault에 저장된 데이터를 보호하기 위한 방법을 확인합니다. 
+
 
 ## 목표
 
@@ -23,11 +24,10 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 + 작업 6: Azure 가상 머신 스냅샷을 이용하여 파일 복구 수행 (선택 사항)
 + 작업 7: Azure Recovery Services 일시 삭제 기능 검토 (선택 사항) 
 
+
 ## 설명
 
-### 연습 1
-
-#### 작업 1: 랩 환경 프로비전
+### 작업 1: 랩 환경 프로비전
 
 이 작업에서는 다른 백업 시나리오를 테스트하는 데 사용할 두 개의 가상 머신을 배포합니다. 
 
@@ -43,16 +43,17 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. Cloud Shell 창에서 다음을 실행하여 가상 머신을 호스팅할 리소스 그룹을 생성한다. (replace the `[Azure_region]`을 Azure 가상 머신을 배포할 지역의 이름으로 대체한다)
 
-   ```pwsh
+   ```powershell
    $location = '[Azure_region]'
 
    $rgName = 'az104-10-rg0'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
+
 1. Cloud Shell 창에서 다음을 실행하여 업로드한 템플릿과 파라미터 파일을 사용하여 첫 번째 가상 네트워크를 생성하고 가상 머신을 배포한다. 
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-10-vms-template.json `
@@ -64,10 +65,10 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
     >**참고**: 배포가 끝날 때까지 기다리지 말고 다음 작업을 진행하십시오. 배포에는 약 5분 소요됩니다. 
 
-#### 작업 2: Recovery Services 자격 증명 모음 생성
+
+### 작업 2: Recovery Services 자격 증명 모음 생성
 
 이 작업에서는 Recovery Services 자격 증명 모음을 생성합니다. 
-
 
 1. Azure 포털에서 **Recovery Services 자격 증명 모음**을 선택하고, **+ 추가**를 클릭한다.
 
@@ -102,7 +103,8 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. **보안 설정** 블레이드를 닫고, **az104-10-rsv1**  Recovery Services 자격 증명 모음 블레이드로 돌아가 **개요**를 클릭한다.
 
-#### 작업 3: Azure 가상 머신 레벨 백업 구성
+
+### 작업 3: Azure 가상 머신 레벨 백업 구성
 
 이 작업에서는 Azure 가상 머신 레벨 백업을 구성합니다. 
 
@@ -145,7 +147,8 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
     >**참고**:  백업 작업이 끝날 때까지 기다리지 않고 다음 작업을 진행합니다.
 
-#### 작업 4: 파일 및 폴더 백업 구현
+
+### 작업 4: 파일 및 폴더 백업 구현
 
 이 작업에서는 Azure Recovery Services를 사용하여 파일 및 폴더 백업을 구현합니다. 
 
@@ -244,7 +247,8 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. **Backup Items (Azure Backup Agent)** 블레이드의 항목이 **az104-10-vm1.** 의 **C:\\** 드라이브를 참조하고 있는 것을 확인한다. 
 
-#### 작업 5: Azure Recovery Services agent를 이용하여 파일 복구 수행 (선택 사항)
+
+### 작업 5: Azure Recovery Services agent를 이용하여 파일 복구 수행 (선택 사항)
 
 이 작업에서는 Azure Recovery Services agent를 이용하여 파일 복구를 수행합니다. 
 
@@ -274,7 +278,8 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. 원격 데스크톱 세션을 종료한다. 
 
-#### 작업 6: Azure 가상 머신 스냅샷을 이용하여 파일 복구 수행 (선택 사항)
+
+### 작업 6: Azure 가상 머신 스냅샷을 이용하여 파일 복구 수행 (선택 사항)
 
 이 작업에서는 Azure 가상 머신 레벨 스냅샷 기반 백업을 이용하여 파일을 복구합니다. 
 
@@ -344,7 +349,8 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. 원격 데스크톱 세션을 종료한다.
 
-#### 작업 7: Azure Recovery Services 일시 삭제 기능 검토
+
+### 작업 7: Azure Recovery Services 일시 삭제 기능 검토
 
 1. 랩 컴퓨터의 Azure 포털에서 **Recovery Services 자격 증명 모음**을 찾아 선택한다. 목록에서 **az104-10-rsv1**를 클릭한다.
 
@@ -418,7 +424,8 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
     | 이유 | **기타** |
     | 설명 | **az104 10 lab** |
 
-#### 리소스 삭제
+
+### 리소스 삭제
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -426,13 +433,13 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-10*'
    ```
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-10*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
@@ -441,7 +448,7 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
     >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
 
-#### 요약
+### 요약
 
 이 랩에서 우리는
 
