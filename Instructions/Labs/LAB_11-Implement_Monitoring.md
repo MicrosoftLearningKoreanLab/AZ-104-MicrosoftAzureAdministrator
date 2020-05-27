@@ -9,22 +9,21 @@ lab:
 
 ## 랩 시나리오
 
-You need to evaluate Azure functionality that would provide insight into performance and configuration of Azure resources, focusing in particular on Azure virtual machines. To accomplish this, you intend to examine the capabilities of Azure Monitor, including Log Analytics. 
+Azure 가상 머신을 중심으로 Azure 리소스의 성능과 구성에 대한 통찰력을 제공하는 Azure 기능을 평가합니다. 이를 위해 Log Analytics를 비롯한 Azure Monitor의 기능을 살펴보십시오.
 
 ## 목표
 
 이 과정에서, 우리는 다음과 같은 실습을 합니다 :
 
 + 작업 1: 랩 환경 프로비전
-+ 작업 2: Create and configure an Azure Log Analytics workspace and Azure Automation-based solutions 
-+ 작업 3: Review default monitoring settings of Azure virtual machines
-+ 작업 4: Configure Azure virtual machine diagnostic settings
-+ 작업 5: Review Azure Monitor functionality
-+ 작업 6: Review Azure Log Analytics functionality
++ 작업 2: Azure Log Analytics 작업 영역, Azure Automation 기반 솔루션 생성 및 구성
++ 작업 3: Azure 가상 머신의 기본 모니터링 환경 검토
++ 작업 4: Azure 가상 머신 진단 설정 구성
++ 작업 5: Azure Monitor 기능 검토
++ 작업 6: Azure Log Analytics 기능 검토
 
 
 ## 설명
-
 
 ### 작업 1: 랩 환경 프로비전
 
@@ -62,15 +61,14 @@ You need to evaluate Azure functionality that would provide insight into perform
       -AsJob
    ```
 
-1. Cloud Shell 창을 최소화한 채 열어둔다.
+1. Cloud Shell 창을 최소화한다.
 
     >**참고**: 배포가 완료될 때까지 기다리지 않고 다음 작업을 진행하십시오. 배포에는 약 3분 소요됩니다.
 
 
 ### 작업 2: Create and configure an Azure Log Analytics workspace and Azure Automation-based solutions
 
-In this task, you will create and configure an Azure Log Analytics workspace and Azure Automation-based solutions 
-이 작업에서는 Azure Log Analytics 작업 영역과 
+이 작업에서는 Azure Log Analytics 작업 영역 및 Azure Automation 기반 솔루션을 생성하고 구성합니다.
 
 1. Azure 포털에서 **Log Analytics 작업 영역**읓 찾아 선택하고, 블레이드에서 **+ 추가**를 클릭한다.
 
@@ -121,7 +119,6 @@ In this task, you will create and configure an Azure Log Analytics workspace and
 
 ### 작업 3: Azure 가상 머신 기본 모니터링 환경 검토
 
-In this task, you will review default monitoring settings of Azure virtual machines
 이 작업에서는 Azure 가상 머신의 기본 모니터링 환경을 검토합니다. 
 
 1. Azure 포털에서 **가상 머신**을 찾아 선택하고, 목록에서 **az104-11-vm0**를 클릭한다.
@@ -130,213 +127,209 @@ In this task, you will review default monitoring settings of Azure virtual machi
 
 1. **az104-11-vm0 - 메트릭** 블레이드 기본 차트의 **메트릭 네임스페이스**에 **가상 머신 호스트**만 사용할 수 있는 것을 확인한다.
 
-    >**참고**: This is expected, since no guest-level diagnostic settings have been configured yet.
+    >**참고**: 이는 게스트 레벨 진단 설정이 아직 구성되지 않았기 때문입니다.
 
 1. **메트릭** 드롭다운 리스트에서 이용 가능한 메트릭 목록을 검토한다.
 
-    >**참고**: The list includes a range of CPU, disk, and network-related metrics that can be collected from the virtual machine host, without having access into guest-level metrics. 이 목록은 CPU의 범위, 디스크, 네트워크 관련 메트릭을 포함합니다. 
+    >**참고**: 목록은 게스트 레벨 메트릭에 액세스하지 않고도 가상 시스템 호스트에서 수집할 수 있는 다양한 CPU, 디스크 및 네트워크 관련 메트릭을 포함합니다.
 
-1. In the **METRICS** drop-down list, select **Percentage CPU**, in the **AGGREGATION** drop-down list, select **Avg**, and review the resulting chart. 
+1. **메트릭** 드롭다운 리스트에서 **Percentage CPU**를 선택한다. **집계** 드롭다운 리스트에서 **평균**을 선택하고 결과를 확인한다.
 
-### 작업 4: Configure Azure virtual machine diagnostic settings
 
-In this task, you will configure Azure virtual machine diagnostic settings.
+### 작업 4: Azure 가상 머신 진단 설정 구성
 
-1. On the **az104-11-vm0** blade, in the **Monitoring** section, click **Diagnostic settings**.
+이 작업에서는 Auzure 가상 머신 진단 설정을 구성합니다.
 
-1. On the **Overview** tab of the **az104-11-vm0 - Diagnostic settings** blade, click **Enable guest-level monitoring**.
+1. **az104-11-vm0** 블레이드에서 **모니터링** 섹션의 **진단 설정**을 클릭한다.
 
-    >**Note**: Wait for the operation to take effect. This might take about 3 minutes.
+1. **개요** 탭에서 **게스트 수준 모니터링 사용**을 클릭한다.
 
-1. Switch to the **Performance counters** tab of the **az104-11-vm0 - Diagnostic settings** blade and review the available counters.
+    >**참고**: 설정이 완료될 때까지 기다리십시오. 이 작업은 약 3분 소요됩니다.
 
-    >**Note**: By default, CPU, memory, disk, and network counters are enabled. You can switch to the **Custom** view for more detailed listing.
+1. **성능 카운터** 탭에서 사용 가능한 카운터를 검토한다. 
 
-1. Switch to the **Logs** tab of the **az104-11-vm0 - Diagnostic settings** blade and review the available event log collection options.
+    >**참고**: 기본적으로 메모리, 디스크 및 네트워크 카운터를 이용할 수 있습니다. **사용자 지정** 을 클릭하여 자세한 목록을 확인하십시오.
 
-    >**Note**: By default, log collection includes critical, error, and warning entries from the Application Log and System log, as well as Audit failure entries from the Security log. Here as well you can switch to the **Custom** view for more detailed configuration settings.
+1. **로그** 탭에서 사용 가능한 이벤트 로그 옵션을 검토한다. 
 
-1. On the **az104-11-vm0** blade, in the **Monitoring** section, click **Logs**. 
+    >**참고**: 기본적으로 로그 모음은 애플리케이션과 시스템으로부터 위험, 오류, 경고 로그를 수집하며, 보안 로그에서 감사 오류 항목을 수집합니다. 여기서도 **사용자 지정** 으로 전환하여 자세한 구성 설정을 확인하십시오.
 
-1. On the **az104-11-vm0 - Logs** blade, ensure that the Log Analytics workspace you created earlier in this lab is selected in the **Choose a Log Analytics Workspace** drop-down list and click **Enable**.
+1. **az104-11-vm0** 가상 머신 블레이드의 **모니터링** 섹션에서 **로그**를 클릭한다. 
 
-1. On the **az104-11-vm0 - Logs** blade, click **Enable**, select the Log Analytics workspace you created earlier in this lab from the **Choose a Log Analytics Workspace** drop-down list, and click **Enable** again.
+1. **az104-11-vm0 - 로그** 블레이드의 **Log Analytics 작업 영역 선택** 드롭다운 목록에서 이전 작업에서 만들었던 작업 영역을 선택하고 **사용**을 클릭한다.
 
-    >**Note**: Do not wait for the operation to complete but instead proceed to the next step. The operation might take about 5 minutes.
+    >**참고**: 배포가 끝날 때까지 기다리지 않고 다음 단계를 진행하십시오. 이 작업은 약 5분 소요됩니다.
 
-1. On the **az104-11-vm0 - Logs** blade, in the **Monitoring** section, click **Metrics**.
+1. **az104-11-vm0 - 로그** 블레이드에서 **모니터링** 섹션의 **메트릭**을 클릭한다.
 
-1. On the **az104-11-vm0 - Metrics** blade, on the default chart, note that at this point, the **METRICS NAMESPACE** drop-down list, in addition to the **Virtual Machine Host** entry includes also the **Guest (classic)** entry.
+1. **az104-11-vm0 - 메트릭** 블레이드의 기본 차트에서, 이번에는 **메트릭 네임스페이스** 드롭다운 리스트에 **가상 머신 호스트**와 **게스트(클래식)**이 있는 것을 확인한다. 
 
-    >**Note**: This is expected, since you enabled guest-level diagnostic settings.
+    >**참고**: 게스트 레벨 진단 설정을 허용했기 때문입니다.
 
-1. In the **METRICS** drop-down list, review the list of available metrics.
+1. **메트릭** 드롭다운 리스트에서 사용할 수 있는 메트릭의 목록을 확인한다.
 
-    >**Note**: The list includes additional guest-level metrics not available when relying on the host-level monitoring only. 
+    >**참고**: 이 목록에는 호스트 수준 모니터링에만 의존하는 경우엔 사용할 수 없는 게스트 수준 메트릭이 포함되어 있다.
 
-1. In the **METRICS** drop-down list, select **Memory\Available Bytes**, in the **AGGREGATION** drop-down list, select **Avg**, and review the resulting chart. 
+1. **메트릭** 드롭다운 리스트에서 **Memory\Available Bytes**를 선택하고, **집계** 드롭다운 리스트에서 **평균**을 선택한 뒤, 결과로 나타나는 차트를 확인한다.  
 
-### 작업 5: Review Azure Monitor functionality
 
-1. In the Azure portal, search for and select **Monitor** and, on the **Monitor - Overview** blade, click **Metrics**.
+### 작업 5: Azure 모니터 기능 검토
 
-1. In the chart pane on the right side of the blade, in the **SCOPE** drop-down list, click **+ Select a scope**.
+1. Azure 포털에서 **모니터**를 찾아 선택하고, **모니터 - 개요** 블레이드에서 **메트릭**을 클릭한다.
 
-1. On the **Select a scope** blade, on the **Browse** tab, navigate to the **az104-11-rg0** resource group, expand it, select the **az104-11-vm0** virtual machine within that resource group, and click **Apply**.
+1. 차트의 **리소스** 드롭다운 리스트에서 **+ 리소스 선택**을 클릭한다.
 
-    >**Note**: This gives you the same view and options as those available from the **az104-11-vm0 - Metrics** blade.
+1. **범위 선택** 블레이드의 **찾아보기** 탭에서 **az104-11-rg0** 리소스 그룹 아래 **az104-11-vm0**을 선택하고, **적용**을 클릭한다.
 
-1. On the **Monitor - Metrics** blade, click **New alert rule**.
+    >**참고**: 이를 통해 **az104-11-vm0 - 메트릭** 블레이드에서 사용할 수 있는 것과 동일한 보기 및 옵션을 제공합니다.
 
-    >**Note**: Creating an alert rule from Metrics is not supported for metrics from the Guest (classic) metric namespace. This can be accomplished by using Azure Resource Manager templates, as described in the document [Send Guest OS metrics to the Azure Monitor metric store using a Resource Manager template for a Windows virtual machine](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/collect-custom-metrics-guestos-resource-manager-vm)
+1. **모니터 - 메트릭** 블레이드에서 **새로운 경고 규칙**을 클릭한다.
 
-1. On the **Create rule** blade, in the **RESOURCE** section, click **Select**, on the **Select a resource** blade, navigate to the **az104-11-vm0** virtual machine entry, select the checkbox next to it, and click **Done**. 
+    >**참고**: 게스트(클래식) 메트릭 네임스페이스의 메트릭에는 경고 규칙 생성이 지원되지 않습니다. 이 작업은 Azure Resource Manager 템플릿을 사용하여 수행할 수 있습니다. 자세한 내용은 다음 문서를 참고하십시오. [Send Guest OS metrics to the Azure Monitor metric store using a Resource Manager template for a Windows virtual machine](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/collect-custom-metrics-guestos-resource-manager-vm)
 
-1. On the **Create rule** blade, in the **CONDITION** section, click **Add**. 
+1. **경고 규칙 만들기** 블레이드에서 **리소스** 섹션의 **리소스 선택**을 클릭한다. **리소스 선택** 블레이드에서 **az104-11-vm0** 가상 머신을 찾아 체크박스를 선택하고, **완료**를 클릭한다. 
 
-1. On the **Configure signal logic** blade, in the list of signals, click **Percentage CPU**, in the **Alert logic** section, specify the following settings (leave others with their default values) and click **Done**:
+1. **조건** 섹션에서 **조건 선택**을 클릭한다. 
 
-    | Settings | Value |
+1. **신호 논리 구성** 블레이드에서 신호 목록 중 **Percentage CPU**를 선택하고, **경고 논리** 섹션에서 다음 설정을 사용한 후 **완료**를 클릭한다. (다른 값은 기본 설정을 사용한다) 
+
+    | 설정 | 값 |
     | --- | --- |
-    | Threshold | **Static** |
-    | Operator | **Greater than** |
-    | Aggregation type | **Average** |
-    | Threshold value | **2** |
-    | Aggregation granularity (Period) | **1 minute** |
-    | Frequency of evaluation | **Every 1 Minute** |
+    | 임계값 | **정적** |
+    | 연산자 | **보다 큼** |
+    | 집계 유형 | **평균** |
+    | 임계값 | **2** |
+    | 집계 세분성(기간) | **1분** |
+    | 평가 빈도 | **1분마다** |
 
-1. On the **Create rule** blade, in the **ACTION GROUPS (optional)** section, click **Create**.
+1.  **경고 규칙 만들기** 블레이드의 **작업 그룹 (선택 사항)** 섹션에서 **작업 그룹 선택**을 클릭한다.
 
-1. On the **Add action group** blade, specify the following settings (leave others with their default values):
+1. **작업 그룹 만들기** 블레이드에서 다음 설정을 사용한다.(다른 값은 기본 설정을 사용한다) 
 
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Action group name | **az104-11-ag1** |
-    | Short name | **az104-11-ag1** |
-    | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **az104-11-rg1** |
+    | 작업 그룹 이름 | **az104-11-ag1** |
+    | 표시 이름 | **az104-11-ag1** |
+    | 구독 | 이 랩에서 사용하는 Azure 구독의 이름 |
+    | 리소스 그룹 | **az104-11-rg1** |
 
-1. On the **Add action group** blade, in the **Actions** section, specify the following settings (leave others with their default values):
+1. **작업 그룹 만들기** 블레이드의 blade, in the **작업** 탭에서 다음 설정을 사용한다.
 
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Action group name | **az104-11-ag1 email** |
-    | Action Type | **Email/SMS/Push/Voice** |
+    | 작업 유형 | **이메일/SMS 메시지/푸시/음성** |
+    | 이름 | **az104-11-ag1 email** |
 
-1. In the **az104-11-ag1 email** action row, click **Edit details**
+1. **이메일/SMS 메시지/푸시/음성** 블레이드에서 **이메일** 체크박스를 선택하고, 이메일 주소를 입력한다. 다른 값은 기본 설정으로 두고 **확인**을 클릭한 뒤, **작업 그룹 만들기** 블레이드로 돌아와 **만들기**를 클릭한다.
 
-1. On the **Email/SMS/Push/Voice** blade, select the **Email** checkbox, type your email address in the **Email** textbox, leave others with their default values, click **OK**, and back on the **Add action group** blade, click **OK** again.
+1. **경고 규칙 만들기** 블레이드로 돌아가 다음 설정을 사용한다.(다른 값은 기본 설정을 사용한다) 
 
-1. Back on the **Create rule** blade, specify the following settings (leave others with their default values):
-
-    | Settings | Value |
+    | 설정 | 값 |
     | --- | --- |
-    | Alert rule name | **CPU Percentage above the test threshold** |
-    | Description | **CPU Percentage above the test threshold** |
-    | Severity | **Sev 3** |
-    | Enable rule upon creation | **Yes** |
+    | 경고 규칙 이름 | **CPU Percentage above the test threshold** |
+    | 설명 | **CPU Percentage above the test threshold** |
+    | 심각도 | **Sev 3** |
+    | 경고 규칙을 만들면 바로 사용 | **Yes** |
 
-1. Click **Create alert rule** and close the **Create rule** blade.
+1. **경고 규칙 만들기**를 클릭하고 블레이드를 닫는다. 
 
-    >**Note**: It can take up to 10 minutes for a metric alert rule to become active.
+    >**참고**: 메트릭 경고 규칙을 활성화하는 데 최대 10분 소요됩니다.
 
-1. In the Azure portal, search for and select **Virtual machines**, and on the **Virtual machines** blade, click **az104-11-vm0**.
+1. Azure 포털에서 **가상 머신**을 찾아 선택하고, **az104-11-vm0**을 클릭한다.
 
-1. On the **az104-11-vm0** blade, click **Connect**, in the drop-down menu, click **RDP**, on the **Connect with RDP** blade, click **Download RDP File** and follow the prompts to start the Remote Desktop session.
+1. **az104-11-vm0** 블레이드에서 **연결**을 클릭하고, **RDP**를 선택한다. **RDP를 사용하여 연결** 블레이드에서 **RDP 파일 다운로드**를 클릭하고 원격 데스크톱 세션을 시작한다.
 
-    >**Note**: This step refers to connecting via Remote Desktop from a Windows computer. On a Mac, you can use Remote Desktop Client from the Mac App Store and on Linux computers you can use an open source RDP client software.
+    >**참고**: 이 단계는 Windows 컴퓨터에서 원격 데스크톱을 통해 연결하는 것을 말합니다. Mac에서는 Mac App Store에서 Remote Desktop Client를 사용할 수 있으며, Linux 컴퓨터에서는 오픈 소스 RDP 클라이언트 소프트웨어를 사용할 수 있습니다.
 
-    >**Note**: You can ignore any warning prompts when connecting to the target virtual machines.
+    >**참고**: 가상 머신에 연결할 때 생기는 경고 메시지는 무시할 수 있습니다.
 
-1. When prompted, sign in by using the **Student** username and **Pa55w.rd1234** password.
+1. 원격 데스크톱에 연결되면 **Student** 계정과 **Pa55w.rd1234** 패스워드를 사용하여 로그인한다.
 
-1. Within the Remote Desktop session, click **Start**, expand the **Windows System** folder, and click **Command Prompt**.
+1. 원격 데스크톱 세션에서 **Start**를 클릭하고, **Windows System** 폴더에서 **Command Prompt** 를 실행한다.
 
-1. From the Command Prompt, run the following to copy the restore the **hosts** file to the original location:
+1. 명령 프롬프트 창에서 다음을 실행하여 **host** 파일을 원래 위치에 복사하여 복구한다. 
 
    ```
    for /l %a in (0,0,1) do echo a
    ```
 
-    >**Note**: This will initiate the infinite loop that should increase the CPU utilization above the threshold of the newly created alert rule.
+    >**참고**: 이 작업은 무한 루프를 시작하여, CPU 사용량이 새로운 경고 규칙의 임계값을 초과하도록 유도합니다.
 
-1. Leave the Remote Desktop session open and switch back to the browser window displaying the Azure portal on your lab computer.
+1. 원격 데스크톱 세션을 열어두고, 랩 컴퓨터의 Azure 포털로 돌아간다.
 
-1. In the Azure portal, navigate back to the **Monitor** blade and click **Alerts**.
+1. Azure 포털에서 **모니터** 블레이드로 돌아가 **경고**를 클릭한다.
 
-1. Note the number of **Sev 3** alerts and then click the **Sev 3** row.
+1. **Sev 3** 경고를 확인하고 클릭한다.
 
-    >**Note**: You might need to wait for a few minutes and click **Refresh**.
+    >**참고**: 결과가 나타날 때까지 몇 분 기다렸다가 **새로 고침** 하십시오. 
 
-1. On the **All Alerts** blade, review generated alerts.
-
-
-### 작업 6: Review Azure Log Analytics functionality
+1. **모든 경고** 블레이드에서 생성된 경고를 확인한다. 
 
 
-1. In the Azure portal, navigate back to the **Monitor** blade, click **Logs**. 
+### 작업 6: Azure Log Analytics 기능 검토
 
-    >**Note**: You might need to click **Get Started** if this is the first time you access Log Analytics.
+1. Azure 포털에서 **모니터** 블레이드로 돌아가 **로그**를 클릭한다. 
 
-1. On the **Select a scope** blade, navigate to the **az104-11-rg0** resource group, expand it, select **a104-11-vm0**, and click **Apply**.
+    >**참고**: Log Analytics에 최초로 접근하는 경우라면, **시작**을 클릭합니다.
 
-1. Click **Example queries** in the toolbar, in the **Get started with sample queries** pane, review each tab, locate **Virtual machine available memory**, and click **Run**.
+1. **범위 선택** 블레이드에서 **az104-11-rg0** 리소스 그룹을 확장하여 **a104-11-vm0**을 선택하고 **적용**을 클릭한다.
 
-1. Review the resulting chart and remove the line containing the following text:
+1. 툴바에서 **예제 쿼리**를 클릭한다. **예제 쿼리** 창에서 **Virtual machine available memory**를 찾아 **실행**을 클릭한다.
+
+1. 결과 차트를 검토하고, 다음 내용을 포함하는 줄을 삭제한다. 
 
    ```
    | where TimeGenerated > ago(1h)
    ```
 
-    >**Note**: As the result, the **Time range** entry in the toolbar changed from **Set in query** to **Last 24 hours**. 
+    >**참고**: 그 결과, 도구 모음의 **시간 범위** 항목이 **쿼리설정**에서 **지난 24시간**으로 변경됩니다.
 
-1. Rerun the query and examine the resulting chart.
+1. 쿼리를 재실행하고 결과 차트를 검토한다.
 
-1. On the **New Query 1** tab, on the **Tables** tab, review the list of **Virtual machines** tables.
+1. **새 쿼리 1** 탭의 **테이블** 탭에서 **Virtual machines** 테이블의 목록을 검토한다.
 
-1. In the list of tables in the **Virtual machines** section. 
+    >**참고**: 몇몇 테이블의 이름은 이 랩의 이전 작업에서 설치한 솔루션의 이름과 일치합니다.
 
-    >**Note**: The names of several tables correspond to the solutions you installed earlier in this lab.
+1. 마우스를 **VMComputer** 항목 위로 가져가서 **데이터 미리보기** 아이콘을 클릭한다.
 
-1. Hover the mouse over the **VMComputer** entry and click the **Preview data** icon.  
+1. 사용 가능한 데이터가 있는 경우, **쿼리 편집기에서 보기**를 클릭한다.
 
-1. If any data is available, in the **Update** pane, click **See in query editor**.
+    >**참고**: 업데이트 데이터를 사용할 수 있으려면 몇 분 정도 기다리십시오.
 
-    >**Note**: You might need to wait a few minutes before the update data becomes available.
+1. 쿼리 결과에 표시된 출력을 검토한다.
 
-1. Examine output displayed in the query results.
-
-1. Click **Example queries** in the toolbar, in the **Get started with sample queries** pane, review each tab, locate **Virtual machine free disk space**, and click **Run**.
+1. 툴바에서 **예제 쿼리**를 클릭하고, **예제 쿼리** 창에서 **Virtual machine free disk space**를 선택하고 **실행**을 클릭한다.
 
 
-### Clean up resources
+### 리소스 삭제
 
-   >**Note**: Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not see unexpected charges.
+   >**Note**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
-1. In the Azure portal, open the **PowerShell** session within the **Cloud Shell** pane.
+1. Azure 포털에서 **Cloud Shell**의 **PowerShell** 세션을 시작한다.
 
-1. List all resource groups created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
    ```powershell
    Get-AzResourceGroup -Name 'az104-11*'
    ```
 
-1. Delete all resource groups you created throughout the labs of this module by running the following command:
+1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
    ```powershell
    Get-AzResourceGroup -Name 'az104-11*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
-    >**Note**: The command executes asynchronously (as determined by the -AsJob parameter), so while you will be able to run another PowerShell command immediately afterwards within the same PowerShell session, it will take a few minutes before the resource groups are actually removed.
+    >**Note**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
 
-### Review
+### 요약
 
-In this lab, you have:
+이 랩에서 우리는
 
-- Provisioned the lab environment
-- Created and configured an Azure Log Analytics workspace and Azure Automation-based solutions
-- Reviewed default monitoring settings of Azure virtual machines
-- Configured Azure virtual machine diagnostic settings
-- Reviewed Azure Monitor functionality
-- Reviewed Azure Log Analytics functionality
+- 랩 환경을 프로비전 했습니다.
+- Azure Log Analytics 작업 영역과 Azure Automation 기반 솔루션을 생성 및 구성했습니다.
+- Azure 가상 머신의 기본 모니터링 환경을 검토했습니다.
+- Azure 가상 머신 진단 설정을 구성했습니다.
+- Azure Monitor 기능을 검토했습니다.
+- Azure Log Analytics 기능을 검토했습니다.
+
