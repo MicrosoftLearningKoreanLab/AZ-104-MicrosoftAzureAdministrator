@@ -5,11 +5,12 @@ lab:
 ---
 
 # 랩 09c - Azure Kubernetes Service 구현
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
 Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 멀티 티어 애플리케이션을 보유합니다. 컨테이너화된 워크로드를 동작시킬 수 있는지 확인하기 위해 컨테이너 오케스트레이션 도구로 쿠버네티스를 사용할 수 있는지 평가합니다. 관리 오버헤드를 더 줄이기 위해 배포와 확장이 편리한 Azure Kubernetes Service를 테스트합니다.
+
 
 ## 목표
 
@@ -19,11 +20,10 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
 + 작업 2: Azure Kubernetes Service 클러스터에 파드 배포
 + 작업 3: Azure Kubernetes service 클러스터의 컨테이너화된 워크로드 확장
 
+
 ## 설명
 
-### 연습 1
-
-#### 작업 1: Azure Kubernetes Service 클러스터 배포
+### 작업 1: Azure Kubernetes Service 클러스터 배포
 
 이 작업에서는 Azure 포털을 사용하여 Azure Kubernetes Services 클러스터를 배포합니다.
 
@@ -74,7 +74,7 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
     >**참고**: 배포가 끝날 때까지 기다리십시오. 이 작업은 약 10분 소요됩니다. 
 
 
-#### 작업 2: Azure Kubernetes Service 클러스터에 파드 배포
+### 작업 2: Azure Kubernetes Service 클러스터에 파드 배포
 
 이 작업에서는 Azure Kubernetes Service 클러스터에 파드를 배포합니다.
 
@@ -144,7 +144,8 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
 
 1. 브라우저 창을 열어서 기록해 둔 공용 IP 주소로 접속한다. 브라우저 페이지에 **Welcome to nginx!** 메시지가 출력되는 것을 확인한다. 
 
-#### 작업 3: Azure Kubernetes service 클러스터의 컨테이너화된 워크로드 확장
+
+### 작업 3: Azure Kubernetes service 클러스터의 컨테이너화된 워크로드 확장
 
 이 작업에서는 파드와 클러스터 노드의 개수를 확장합니다. 
 
@@ -209,7 +210,7 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
 1. **Cloud Shell** 창을 닫는다. 
 
 
-#### 리소스 삭제
+### 리소스 삭제
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -229,7 +230,8 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
 
     >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### 요약
+
+### 요약
 
 이 랩에서 우리는
 

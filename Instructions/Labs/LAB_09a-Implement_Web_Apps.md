@@ -5,11 +5,12 @@ lab:
 ---
 
 # 랩 09a - Web Apps 구현
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
 현재 온 프레미스 데이터 센터에서 호스팅되고 있는 Contoso의 웹 사이트를 호스팅하기 위한 Azure Web Apps의 사용을 평가해야 합니다. 이 웹 사이트들은 PHP 런타임 스택을 사용하여 윈도우 서버에서 실행되고 있습니다. Azure Web Apps 배포 슬롯을 활용하여 DevOps Practice를 구현할 수 있는 방법도 결정해야 합니다.
+
 
 ## 목표
 
@@ -22,11 +23,10 @@ lab:
 + 작업 5: staging 슬롯 교환
 + 작업 6: Azure web app의 자동 확장 구성 및 테스트
   
+
 ## 설명
 
-### 연습 1
-
-#### 작업 1: Azure web app 생성
+### 작업 1: Azure web app 생성
 
 이 작업에서는 Azure web app을 생성합니다. 
 
@@ -55,10 +55,10 @@ lab:
 
 1. 배포 블레이드에서 **리소스로 이동**을 클릭한다. 
 
-#### 작업 2: staging 배포 슬롯 생성
+
+### 작업 2: staging 배포 슬롯 생성
 
 이 작업에서는 staging 배포 슬롯을 생성합니다. 
-
 
 1. 새로 배포된 web app의 블레이드에서 **URL**을 클릭하여 새 브라우저 탭에서 기본 웹 페이지를 띄운다.  
 
@@ -79,7 +79,8 @@ lab:
 
 1. staging 슬롯의 블레이드를 검토하고 **프로덕션**에 할당된 URL과 다른 것을 확인한다. 
 
-#### 작업 3: web app 배포 설정 구성
+
+### 작업 3: web app 배포 설정 구성
 
 이 작업에서는 web app 배포 설정을 구성합니다. 
 
@@ -108,7 +109,8 @@ lab:
 
     >**참고:** 이 랩의 다음 작업에서 해당 자격 증명이 필요합니다. 
 
-#### 작업 4: staging 배포 슬롯에 코드 배포
+
+### 작업 4: staging 배포 슬롯에 코드 배포
 
 이 작업에서는 staging 배포 슬롯에 코드를 배포합니다. 
 
@@ -120,19 +122,19 @@ lab:
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 web app을 위한 코드가 있는 원격 저장소를 클론한다. 
 
-   ```pwsh
+   ```sh
    git clone https://github.com/Azure-Samples/php-docs-hello-world
    ```
  
 1. Cloud Shell 창에서 다음 명령을 실행하여 현재 위치를 새로 생성된 샘플 web app 코드의 로컬 저장소로 지정한다. 
 
-   ```
+   ```powershell
    Set-Location -Path $HOME/php-docs-hello-world/
    ```
 
 1. Cloud Shell 창에서 다음 명령을 입력하여 원격 git을 추가한다. (`[deployment_user_name]` 과 `[git_clone_url]`을 각각 이전 작업에서 저장해둔 **배포 자격**과 **Git Clone Url**로 대체한다)
 
-   ```
+   ```sh
    git remote add [deployment_user_name] [git_clone_url]
    git remote add krazure123 https://krazure-staging.scm.azurewebsites.net:443/krazure.git
    ```
@@ -141,7 +143,7 @@ lab:
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 로컬 저장소에 있는 샘플 web app 코드를 Azure web app staging 배포 슬롯에 푸시한다.(`[deployment_user_name]`을 이전 작업에서 사용한 **배포 자격**으로 대체한다)
 
-   ```
+   ```sh
    git push [deployment_user_name] master
    git push krazure123 master
    ```
@@ -154,7 +156,8 @@ lab:
 
 1. 브라우저 페이지에 **Hello World!** 메시지가 표시되는 것을 확인하고 탭을 닫는다. 
 
-#### 작업 5: staging 슬롯 교환
+
+### 작업 5: staging 슬롯 교환
 
 이 작업에서는 staging 슬롯을 **프로덕션** 슬롯과 교환합니다. 
 
@@ -168,7 +171,8 @@ lab:
 
 1. 기본 웹 페이지가 **Hello World!** 페이지로 바뀐 것을 확인한다.
 
-#### 작업 6: Azure web app 자동 확장 구성 및 테스트
+
+### 작업 6: Azure web app 자동 확장 구성 및 테스트
 
 이 작업에서는 Azure web app의 자동 확장을 구성하고 테스트합니다.  
 
@@ -214,7 +218,7 @@ lab:
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 Azure web app의 URL을 식별한다. 
 
-   ```pwsh
+   ```powershell
    $rgName = 'az104-09a-rg1'
 
    $webapp = Get-AzWebApp -ResourceGroupName $rgName
@@ -222,7 +226,7 @@ lab:
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 web app에 HTTP 요청을 보내는 무한 루프를 시작한다. 
 
-   ```pwsh
+   ```powershell
    while ($true) { Invoke-WebRequest -Uri $webapp.DefaultHostName }
    ```
 
@@ -238,7 +242,8 @@ lab:
 
 1. Cloud Shell 창을 닫는다. 
 
-#### 리소스 삭제
+
+### 리소스 삭제
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -246,19 +251,20 @@ lab:
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-09a*'
    ```
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-09a*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
     >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 PowerShell 세션 내에서 즉시 다른 PowerShell 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### 요약
+
+### 요약
 
 이 랩에서 우리는
 

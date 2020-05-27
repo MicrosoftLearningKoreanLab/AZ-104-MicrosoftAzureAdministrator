@@ -1,15 +1,16 @@
 ---
 lab:
-    title: '05 - Implement Intersite Connectivity'
-    module: '모듈 05 - Intersite Connectivity'
+    title: '05 - 사이트 간 연결 구현'
+    module: '모듈 05 - 사이트 간 연결'
 ---
 
 # 랩 05 - 사이트 간 연결 구현
-# 학생 실습 매뉴얼
+
 
 ## 랩 시나리오
 
 Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결된 데이터 센터를 보유합니다. 이들은 완전히 연결되어 있습니다. Contoso의 온프레미스 네트워크 토폴로지를 반영하는 실험 환경을 구현하고 그 기능을 검증해야 합니다.
+
 
 ## 목표
 
@@ -19,7 +20,10 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 + 작업 2: 로컬 및 글로벌 가상 네트워크 피어링 구성
 + 작업 3: 사이트 간 연결 테스트
 
-#### 작업 1: 랩 환경 프로비전
+
+## 설명
+
+### 작업 1: 랩 환경 프로비전
 
 이 작업에서는 세 개의 가상 머신을 분리된 네트워크에 배포합니다. 두개는 같은 Azure 지역에, 나머지 하나는 다른 Azure 지역에 배포합니다. 
 
@@ -35,16 +39,17 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 
 1. Cloud Shell 창에서 다음 명령을 실행하여 첫 번째 가상 네트워크와 가상 머신들을 호스팅할 리소스 그룹을 생성한다. (`[Azure_region_1]` 부분을 Azure 가상 머신을 배포할 Azure 지역의 이름으로 대체한다)
 
-   ```pwsh
+   ```powershell
    $location = '[Azure_region_1]'
 
    $rgName = 'az104-05-rg0'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 첫 번째 가상 네트워크를 만들고 가상 머신을 배포한다. 
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-05-vnetvm-template.json `
@@ -52,16 +57,18 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
       -nameSuffix 0 `
       -AsJob
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 두번째 가상 네트워크와 가상 머신을 배포할 두 번째 리소스 그룹을 생성한다.
 
-   ```pwsh
+   ```powershell
    $rgName = 'az104-05-rg1'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 두 번째 가상 네트워크를 만들고 가상 머신을 배포한다.  
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-05-vnetvm-template.json `
@@ -69,18 +76,20 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
       -nameSuffix 1 `
       -AsJob
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 세번째 가상 네트워크와 가상 머신을 배포할 세번째 리소스 그룹을 생성한다. (`[Azure_region_2]` 부분을 Azure 가상 머신을 배포할 Azure 지역의 이름으로 대체한다. 다른 가상 머신을 배포했던 지역과 다른 지역을 사용한다):
 
-   ```pwsh
+   ```powershell
    $location = '[Azure_region_2]'
 
    $rgName = 'az104-05-rg2'
 
    New-AzResourceGroup -Name $rgName -Location $location
    ```
+
 1. Cloud Shell 창에서 다음 명령을 실행하여 업로드한 템플릿과 파라미터 파일로 세 번째 가상 네트워크를 만들고 가상 머신을 배포한다.
 
-   ```pwsh
+   ```powershell
    New-AzResourceGroupDeployment `
       -ResourceGroupName $rgName `
       -TemplateFile $HOME/az104-05-vnetvm-template.json `
@@ -91,11 +100,11 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
     >**참고**: 다음 작업을 시작하기 전에 배포가 끝날 때까지 기다리십시오. 이 작업은 약 2분 소요됩니다. 
 
     >**참고**: 배포 상태를 확인하려면 이 작업에서 생성했던 리소스 그룹의 속성을 검토하십시오.
-    
 
 1. Cloud Shell 창을 닫는다. 
 
-#### 작업 2: 로컬 및 글로벌 가상 네트워크 피어링 구성
+
+### 작업 2: 로컬 및 글로벌 가상 네트워크 피어링 구성
 
 이 작업에서는 이전 작업에서 배포했던 가상 네트워크 사이에 로컬 및 글로벌 피어링을 구성합니다. 
 
@@ -166,7 +175,8 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 
     >**참고**:  이 과정은 두개의 글로벌 피어링을 설정합니다. - az104-05-vnet1 에서 az104-05-vnet2 로 향하는 피어링, az104-05-vnet2 에서 az104-05-vnet1로 향하는 피어링
 
-#### 작업 3: 사이트 간 연결 테스트
+
+### 작업 3: 사이트 간 연결 테스트
 
 이 작업에서는 앞선 작업에서 로컬 및 글로벌 피어링을 통해 연결한 세 개의 가상 네트워크에 있는 가상 머신 사이의 연결성을 테스트합니다.
 
@@ -187,7 +197,7 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 
 1. Windows PowerShell 콘솔 창에서 다음 명령을 사용하여 TCP 포트 3389를 통해 **az104-05-vm1**에 대한 연결성을 테스트한다. (사설 IP 주소 **10.51.0.4**)
 
-   ```pwsh
+   ```powershell
    Test-NetConnection -ComputerName 10.51.0.4 -Port 3389 -InformationLevel 'Detailed'
    ```
     >**참고**: 테스트에 사용되는 TCP 3389 포트는 운영 체제 방화벽에 의해 기본적으로 허용됩니다.
@@ -196,7 +206,7 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 
 1. Windows PowerShell 콘솔 창에서 다음 명령을 사용하여 **az104-05-vm2**에 대한 연결성을 확인한다. (사설 IP 주소 **10.52.0.4**)
 
-   ```pwsh
+   ```powershell
    Test-NetConnection -ComputerName 10.51.0.4 -Port 3389 -InformationLevel 'Detailed'
    ```
 1. Azure 포털의 **가상 머신** 블레이드로 돌아간다. 
@@ -215,14 +225,15 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 
 1. Windows PowerShell 콘솔 창에서 다음 명령을 사용하여 TCP 포트 3389를 통해 **az104-05-vm2**에 대한 연결성을 테스트한다. (사설 IP 주소 **10.52.0.4**)
 
-   ```pwsh
+   ```powershell
    Test-NetConnection -ComputerName 10.52.0.4 -Port 3389 -InformationLevel 'Detailed'
    ```
     >**참고**: 테스트에 사용되는 TCP 3389 포트는 운영 체제 방화벽에 의해 기본적으로 허용됩니다.
 
 1. 명령의 결과를 검토하고, 연결에 성공했음을 확인한다.
 
-#### 리소스 삭제
+
+### 리소스 삭제
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -230,19 +241,20 @@ Contoso는 보스턴, 뉴욕, 시애틀에 광역 메쉬 네트워크로 연결�
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성된 모든 리소스 그룹을 나열한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-05*'
    ```
 
 1. 다음 명령을 실행하여 이 모듈의 실습에서 생성한 모든 리소스 그룹을 삭제한다.
 
-   ```pwsh
+   ```powershell
    Get-AzResourceGroup -Name 'az104-05*' | Remove-AzResourceGroup -Force -AsJob
    ```
 
     >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### 요약
+
+### 요약
 
 이 랩에서 우리는
 

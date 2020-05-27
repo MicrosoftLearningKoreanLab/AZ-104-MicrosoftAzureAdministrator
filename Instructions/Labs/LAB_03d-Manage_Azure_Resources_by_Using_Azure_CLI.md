@@ -5,7 +5,6 @@ lab:
 ---
 
 # 랩 03d - Azure CLI를 사용해 Azure 리소스 관리
-# 학생 실습 매뉴얼
 
 ## 랩 시나리오
 
@@ -21,9 +20,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
 
 ## 설명
 
-### 연습 1
-
-#### 작업 1: Azure Cloud Shell에서 Bash 세션을 시작
+### 작업 1: Azure Cloud Shell에서 Bash 세션을 시작
 
 이 작업에서는 Cloud Shell의 Bash 세션을 이용합니다.
 
@@ -38,7 +35,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
 1. 왼쪽 위의 드롭다운 메뉴에 **Bash**가 표시되는지 확인한다.
 
 
-#### 작업 2:  Azure CLI를 사용하여 리소스 그룹과 Azure 관리 디스크 생성
+### 작업 2:  Azure CLI를 사용하여 리소스 그룹과 Azure 관리 디스크 생성
 
 이 작업에서는 Cloud Shell 내의 Azure CLI 세션을 사용해 리소스 그룹과 Azure 관리 디스크를 생성할 것입니다. 
 
@@ -75,7 +72,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
    az disk show --resource-group $RGNAME --name $DISKNAME
    ```
 
-#### 작업 3: Azure CLI를 사용하여 리소스 그룹과 Azure 관리 디스크 생성
+### 작업 3: Azure CLI를 사용하여 리소스 그룹과 Azure 관리 디스크 생성
 
 이 작업에서는 Cloud Shell 내의 Azure CLI 세션을 사용해 Azure 관리 디스크의 구성을 관리할 것입니다. 
 
@@ -103,7 +100,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
    az disk show --resource-group $RGNAME --name $DISKNAME --query sku
    ```
 
-#### 리소스 삭제
+### 리소스 삭제
 
    >**참고**: 사용하지 않는 새로 생성된 Azure 리소스를 제거하십시오. 사용하지 않는 리소스를 제거해야 예상치 못한 비용이 발생하지 않습니다.
 
@@ -123,7 +120,7 @@ Azure 포털, Azure Resource Manager 템플릿, Azure PowerShell을 사용하여
 
 >**참고**: 이 명령은 비동기적으로 실행되므로( --nowait 매개 변수로 결정됨) 동일한 Bash 세션 내에서 즉시 다른 Azure CLI 명령을 실행할 수 있지만, 리소스 그룹이 실제로 제거되기까지는 몇 분 정도 소요됩니다.
 
-#### 요약
+### 요약
 
 이 랩에서 우리는
 
