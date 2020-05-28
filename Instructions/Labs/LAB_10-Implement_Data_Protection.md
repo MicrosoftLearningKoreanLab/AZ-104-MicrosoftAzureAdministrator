@@ -41,7 +41,7 @@ Azure 가상 머신과 온프레미스 컴퓨터에 호스팅된 파일을 백�
 
 1. Cloud Shell 창의 툴바에서 **파일 업로드/다운로드** 아이콘을 클릭한다. 드롭다운 메뉴에서 **업로드**를 클릭하고, **\\Allfiles\\Labs\\10\\az104-10-vms-template.json** 와 **\\Allfiles\\Labs\\10\\az104-10-vms-parameters.json**을 Cloud Shell의 홈 디렉토리에 업로드한다. 
 
-1. Cloud Shell 창에서 다음을 실행하여 가상 머신을 호스팅할 리소스 그룹을 생성한다. (replace the `[Azure_region]`을 Azure 가상 머신을 배포할 지역의 이름으로 대체한다)
+1. Cloud Shell 창에서 다음을 실행하여 가상 머신을 호스팅할 리소스 그룹을 생성한다. (`[Azure_region]`을 Azure 가상 머신을 배포할 지역의 이름으로 대체한다)
 
    ```powershell
    $location = '[Azure_region]'
