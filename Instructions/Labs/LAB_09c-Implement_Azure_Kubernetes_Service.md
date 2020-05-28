@@ -40,7 +40,7 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
     | Kubernetes 클러스터 이름 | **az104-9c-aks1** |
     | 지역 | 쿠버네티스 클러스터를 프로비전할 수 있는 지역의 이름 |
     | Kubernetes 버전 | 기본 값 사용 |
-    | DNS name prefix | any valid, globally unique DNS host name |
+    | DNS name prefix | 고유한 DNS host 이름 |
     | 노드 크기 | 기본값 사용 |
     | 노드 개수 | **1** |
 
@@ -140,7 +140,7 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
     kubectl get service
     ```
 
-1. **nginx-deployment** 항목의 **EXTERNAL-IP** 열의 값이 **\<pending\>**에서 공용 IP 주소로 변경될 때까지 명령을 다시 실행한다. **EXTERNAL-IP** 열의 공용 IP 주소를 기록해 둔다.
+1. **nginx-deployment** 항목의 **EXTERNAL-IP** 열의 값이 **\<pending\>** 에서 공용 IP 주소로 변경될 때까지 명령을 다시 실행한다. **EXTERNAL-IP** 열의 공용 IP 주소를 기록해 둔다.
 
 1. 브라우저 창을 열어서 기록해 둔 공용 IP 주소로 접속한다. 브라우저 페이지에 **Welcome to nginx!** 메시지가 출력되는 것을 확인한다. 
 
@@ -149,7 +149,7 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
 
 이 작업에서는 파드와 클러스터 노드의 개수를 확장합니다. 
 
-1. From the **Cloud Shell** 창에서 다음을 실행하여 파드의 개수를 2로 증가시켜서 배포를 확장한다. 
+1. **Cloud Shell** 창에서 다음을 실행하여 파드의 개수를 2로 증가시켜서 배포를 확장한다. 
 
     ```sh
     kubectl scale --replicas=2 deployment/nginx-deployment
@@ -163,7 +163,7 @@ Contoso는 Azure Container Instances에서 동작하는데 적합한 다수의 �
 
     > **참고**: 명령의 결과를 확인하고 파드 개수가 2개로 증가한 것을 확인합니다.
 
-1. From the **Cloud Shell** 창에서 다음을 실행하여 노드 수를 2로 증가시켜서 클러스터를 확장한다.  
+1. **Cloud Shell** 창에서 다음을 실행하여 노드 수를 2로 증가시켜서 클러스터를 확장한다.  
 
     ```sh
     az aks scale --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER --node-count 2
