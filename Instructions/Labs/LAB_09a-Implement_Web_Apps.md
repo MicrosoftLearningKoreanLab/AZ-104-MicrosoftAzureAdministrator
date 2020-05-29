@@ -136,7 +136,6 @@ lab:
 
    ```sh
    git remote add [deployment_user_name] [git_clone_url]
-   git remote add krazure123 https://krazure-staging.scm.azurewebsites.net:443/krazure.git
    ```
 
 >**참고**: `git remote add` 값은 고유한 값이기만 하면 **배포 자격**의 사용자 이름과 같지 않아도 됩니다.
@@ -145,7 +144,6 @@ lab:
 
    ```sh
    git push [deployment_user_name] master
-   git push krazure123 master
    ```
 
 1. 인증 창이 뜨면 `[deployment_user_name]`과 패스워드(**Pa55w0rd1234**)를 입력한다. 
@@ -198,7 +196,7 @@ lab:
     | 시간 조직 통계 | **최대값** |
     | 작업 | **다음을 기준으로 개수 늘이기** |
     | 인스턴스 수 | **1** |
-    | 휴지 기간(분)) | **5** |
+    | 휴지 기간(분) | **5** |
 
     >**참고**: 이 값은 대기 시간 없이 가능한 빨리 자동 확장을 트리거하려는 목적이기 때문에 실제 구성과는 차이가 있습니다. 
 
